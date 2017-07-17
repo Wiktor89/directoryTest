@@ -21,7 +21,7 @@ public class Main {
 
     public void goo()  {
         try (ConsoleReader reader = new ConsoleReader()){
-            new ControllerImpl(new ContactServiceImpl(),reader,new GroupServiceImpl())
+            new ControllerImpl(reader)
                     .startPage();
         }catch (Exception e) {
             e.printStackTrace();

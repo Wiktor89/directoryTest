@@ -1,8 +1,10 @@
 package controller;
 
+import dao.DirectoryDaoImpl;
 import models.Contact;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
+import storage.RefBook;
 import utilits.ConsoleReader;
 import views.View;
 
@@ -18,9 +20,17 @@ public class ControllerImpl implements Controller{
      */
     private View view = null;
     private ContactServiceImpl serviceContact = null;
-    private ConsoleReader consol = null;
     private GroupServiceImpl serviceGroup = null;
+    private ConsoleReader consol = null;
+    private RefBook refBook  = null;
+    private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
+    public RefBook getRefBook() {
+        return refBook;
+    }
+    public void setRefBook(RefBook refBook) {
+        this.refBook = refBook;
+    }
     public GroupServiceImpl getServiceGroup() {
         return serviceGroup;
     }
@@ -46,9 +56,10 @@ public class ControllerImpl implements Controller{
         this.view = view;
     }
 
-    public ControllerImpl(ContactServiceImpl serviceContact, ConsoleReader reader, GroupServiceImpl serviceGroup) {
-        this.serviceContact = serviceContact;
-        this.serviceGroup = serviceGroup;
+    public ControllerImpl(ConsoleReader reader) {
+        this.refBook = this.dao.load();
+        this.serviceContact = new ContactServiceImpl(this.refBook);
+        this.serviceGroup = new GroupServiceImpl(this.refBook);
         this.view = new View();
         this.consol = reader;
     }

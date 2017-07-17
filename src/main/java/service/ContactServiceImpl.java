@@ -28,8 +28,8 @@ public class ContactServiceImpl implements ContactService{
     private Set<Group> groups = null;
     private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
-    public ContactServiceImpl() {
-        this.refBook = this.dao.load();
+    public ContactServiceImpl(RefBook refBook) {
+        this.refBook = refBook;
         this.contacts = this.refBook.getContacts();
         this.groups = this.refBook.getGroups();
         this.consol = new ConsoleReader();
@@ -80,6 +80,7 @@ public class ContactServiceImpl implements ContactService{
         String email = this.consol.readString();
         if (fioContact.trim().length() > 0){
             Contact contact = new Contact(fioContact,phone,email);
+            contact.setGroup(new Group("нет группы"));
             this.contacts.add(contact);
             System.out.println("Контакт успешно добавлен");
             this.dao.save(refBook);

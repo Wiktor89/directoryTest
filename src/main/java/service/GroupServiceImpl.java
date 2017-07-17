@@ -28,8 +28,8 @@ public class GroupServiceImpl implements GroupService {
     private Set<Group> groups = null;
     private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
-    public GroupServiceImpl() {
-        this.refBook = this.dao.load();
+    public GroupServiceImpl(RefBook refBook) {
+        this.refBook = refBook;
         this.contacts = this.refBook.getContacts();
         this.groups = this.refBook.getGroups();
         this.consol = new ConsoleReader();
@@ -115,6 +115,7 @@ public class GroupServiceImpl implements GroupService {
             if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
                 iterator.remove();
                 for (Contact contact : this.contacts){
+                    System.out.println(contact);
                     group = contact.getGroup();
                     if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
                         group.setNameGroup("Нет группы");
