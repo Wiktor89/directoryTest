@@ -1,5 +1,6 @@
 package controller;
 
+import models.Contact;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
 import utilits.ConsoleReader;
@@ -71,7 +72,12 @@ public class ControllerImpl implements Controller{
     @Override
     public void updateContact() {
         System.out.println("Введите ФИО контакта который хотите обновить");
-        this.serviceContact.updateContact(this.consol.readString());
+        try {
+            this.serviceContact.updateContact(this.consol.readString());
+        } catch (IOException e) {
+            System.out.println("Вы не ввели Ф И О");
+            updateContact();
+        }
         view.pageActionContact();
     }
 

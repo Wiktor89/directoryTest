@@ -92,30 +92,35 @@ public class ContactServiceImpl implements ContactService{
      *Обновление контакта
      */
     @Override
-    public void updateContact(String fioContact) {
+    public void updateContact(String fioContact) throws IOException {
        for (Contact contact : this.contacts){
            if (contact.getFio().equalsIgnoreCase(fioContact)){
                System.out.println(contact);//Возможно будит полезным видить старые данные
                System.out.println("Введите новое ФИО");
-               contact.setFio(this.consol.readString());
-               System.out.println("Введите новый phone");
-               contact.setPhone(this.consol.readString());
-               System.out.println("Введите новый email");
-               contact.setEmail(this.consol.readString());
-               boolean result = true;
-               while (result){
-                   System.out.println("Доступные группы");
-                   for (Group group : this.groups){
-                       System.out.println(group.getNameGroup());
-                   }
-                   System.out.println("Введите название группы");
-                   String nameGroup = this.consol.readString();
-                   for (Group group : this.groups){
-                       if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
-                           contact.setGroup(new Group(nameGroup));
-                           result = false;
+               String newFio = this.consol.readString();
+               if (newFio.trim().length() != 0){
+                   contact.setFio(newFio);
+                   System.out.println("Введите новый phone");
+                   contact.setPhone(this.consol.readString());
+                   System.out.println("Введите новый email");
+                   contact.setEmail(this.consol.readString());
+                   boolean result = true;
+                   while (result){
+                       System.out.println("Доступные группы");
+                       for (Group group : this.groups){
+                           System.out.println(group.getNameGroup());
+                       }
+                       System.out.println("Введите название группы");
+                       String nameGroup = this.consol.readString();
+                       for (Group group : this.groups){
+                           if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
+                               contact.setGroup(new Group(nameGroup));
+                               result = false;
+                           }
                        }
                    }
+               }else {
+                   throw new IOException();
                }
            }
        }
