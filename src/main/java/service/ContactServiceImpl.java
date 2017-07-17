@@ -112,8 +112,7 @@ public class ContactServiceImpl implements ContactService{
                    String nameGroup = this.consol.readString();
                    for (Group group : this.groups){
                        if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
-                           Group group1 = contact.getGroup();
-                           group1.setNameGroup(nameGroup);
+                           contact.setGroup(new Group(nameGroup));
                            result = false;
                        }
                    }
