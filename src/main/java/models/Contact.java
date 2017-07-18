@@ -1,9 +1,12 @@
 package models;
 
+import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  *Модель контакта
  */
-public class Contact extends IdentifiedEntity {
+public class Contact implements Serializable {
 
     /**
      * fio
@@ -11,13 +14,15 @@ public class Contact extends IdentifiedEntity {
       email
       group
      */
+    private int id;
     private String fio;
     private String phone;
     private String email;
     private Group group;
+    private final static AtomicInteger COUNT = new AtomicInteger(0);
 
     public Contact(String fio, String phone, String email) {
-        super();
+        this.id = COUNT.incrementAndGet();
         this.fio = fio;
         this.phone = phone;
         this.email = email;
@@ -25,6 +30,14 @@ public class Contact extends IdentifiedEntity {
 
     public Contact(String fio) {
         this(fio,"нет информации","нет информации");
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFio() {
@@ -60,24 +73,19 @@ public class Contact extends IdentifiedEntity {
     }
 
     /**
-     *
      * @return Ф.И.О контакта
      */
     public String informationContact(){
         return  " Ф И О  "+getFio();
     }
 
-    /**
-     *
-     * @return всю инф. о контакте
-     */
     @Override
     public String toString() {
-        return " Contact{" +
+        return "id "+ getId()+" Contact{" +
                 "Ф И О = " + fio   +
                 ", телефон = " + phone +
                 ", email = " + email +
-                ", группа = " + group +
+                ", группа = " + group.informationGroup() +
                 "} ";
     }
 }

@@ -9,10 +9,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class IdentifiedEntity implements Serializable {
 
     private int id;
-    private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(0);
+
 
     public IdentifiedEntity() {
-        this.id = ATOMIC_INTEGER.incrementAndGet();
+
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -22,7 +26,6 @@ public abstract class IdentifiedEntity implements Serializable {
     @Override
     public String toString() {
         return
-                "id= " + id +
-                '}';
+                "id = " + id;
     }
 }

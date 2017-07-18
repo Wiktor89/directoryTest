@@ -1,36 +1,82 @@
 package controller;
 
 /**
- *Описание, что контроллер должен уметь делать
- * добавлять, обновлять, удалять,добавлять группу контакту,удалять группу у контакта,
- * инф. о контакте, список контактов
+ *Интерфейс для контроллера
  */
 public interface Controller {
 
     /**
-     * Все что к контакту
+     *Добавление контакта
      */
     void addContact ();
+
+    /**
+     *Обновление контакта
+     */
     void updateContact();
+
+    /**
+     *Удаление контакта
+     */
     void removeContact();
+
+    /**
+     *Добавить контакту группу
+     */
     void appGroupContact();
+
+    /**
+     *Удаление группы у контакта контакта
+     */
     void removeGroupContact();
+
+    /**
+     *Инф. по контакту
+     */
     void informationContact ();
+
+    /**
+     *Список контактов
+     */
     void listContacts();
 
     /**
-     * Все что к группам
+     *Список контактов опр. группы
      */
     void listGroupContact();
+
+    /**
+     *Список групп
+     */
     void listGroup();
+
+    /**
+     *Добавление группы
+     */
     void addGroup();
+
+    /**
+     *Удаление группы
+     */
     void removeGroup();
+
+    /**
+     *Обновление  группы
+     */
     void updateGroup();
 
     /**
-     * Page and actions
+     * Стартовая страница
      */
     void startPage();
+
+    /**
+     * Действия для контакта
+     */
     void actionContacts();
+
+    /**
+     * Действия для группы
+     */
     void actionGroup();
 }

@@ -5,7 +5,6 @@ import models.Contact;
 import models.Group;
 import storage.RefBook;
 import utilits.ConsoleReader;
-
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
@@ -24,14 +23,10 @@ public class GroupServiceImpl implements GroupService {
      */
     private ConsoleReader consol = null;
     private RefBook refBook = null;
-    private Set<Contact> contacts = null;
-    private Set<Group> groups = null;
     private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
     public GroupServiceImpl(RefBook refBook,ConsoleReader reader) {
         this.refBook = refBook;
-        this.contacts = this.refBook.getContacts();
-        this.groups = this.refBook.getGroups();
         this.consol = reader;
     }
 
@@ -40,18 +35,6 @@ public class GroupServiceImpl implements GroupService {
     }
     public void setDao(DirectoryDaoImpl dao) {
         this.dao = dao;
-    }
-    public Set<Contact> getContacts() {
-        return contacts;
-    }
-    public void setContacts(Set<Contact> contacts) {
-        this.contacts = contacts;
-    }
-    public Set<Group> getGroups() {
-        return groups;
-    }
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
     }
     public ConsoleReader getConsol() {
         return consol;
@@ -66,27 +49,23 @@ public class GroupServiceImpl implements GroupService {
         this.refBook = refBook;
     }
 
-    /**
-     *Список контактов опр. группы
-     */
     @Override
     public void listGroupContact(String nameGroup) {
-        for (Contact contact : this.contacts){
+        Set<Contact> contacts = refBook.getContacts();
+        for (Contact contact : contacts){
             Group group = contact.getGroup();
-            if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
+            if (group.getName().equalsIgnoreCase(nameGroup)){
                 System.out.println(contact.informationContact());
             }
         }
     }
 
-    /**
-     *Список групп
-     */
     @Override
     public void listGroup() throws Exception {
-        if (!this.groups.isEmpty()){
-            for (Group group : this.groups){
-                System.out.println(group.getNameGroup());
+        Set<Group> groups = refBook.getGroups();
+        if (!groups.isEmpty()){
+            for (Group group : groups){
+                System.out.println(group);
             }
         }else {
             throw  new Exception();
@@ -94,34 +73,34 @@ public class GroupServiceImpl implements GroupService {
 
     }
 
-    /**
-     *Добавление группы
-     */
     @Override
     public void addGroup(String nameGroup) throws IOException {
+        Set<Group> groups = refBook.getGroups();
+        Group group = null;
         if (nameGroup.trim().length() > 0){
-            groups.add(new Group(nameGroup));
+            group = new Group(nameGroup);
+            groups.add(group);
             System.out.println("Группа успешно добавлена");
         }else {
             throw new IOException();
         }
+        refBook.setId(group.getId());
         this.dao.save(refBook);
     }
 
-    /**
-     *Удаление группы
-     */
     @Override
     public void removeGroup(String nameGroup) {
-        Iterator<Group> iterator = this.groups.iterator();
+        Set<Contact> contacts = refBook.getContacts();
+        Set<Group> groups = refBook.getGroups();
+        Iterator<Group> iterator = groups.iterator();
         while (iterator.hasNext()){
             Group group = iterator.next();
-            if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
+            if (group.getName().equalsIgnoreCase(nameGroup)){
                 iterator.remove();
-                for (Contact contact : this.contacts){
+                for (Contact contact : contacts){
                     group = contact.getGroup();
-                    if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
-                        group.setNameGroup("нет группы");
+                    if (group.getName().equalsIgnoreCase(nameGroup)){
+                        group.setName("нет группы");
                     }
                 }
             }
@@ -129,20 +108,19 @@ public class GroupServiceImpl implements GroupService {
         this.dao.save(refBook);
     }
 
-    /**
-     *Обновление  группы
-     */
     @Override
     public void updateGroup(String nameGroup) throws IOException {
-        for (Group group : this.groups){
-            if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
+        Set<Contact> contacts = refBook.getContacts();
+        Set<Group> groups = refBook.getGroups();
+        for (Group group : groups){
+            if (group.getName().equalsIgnoreCase(nameGroup)){
                 System.out.println("Введите имя новой группы");
                 String nameNewGroup = this.consol.readString();
                 if (nameNewGroup.trim().length() > 0){
-                    group.setNameGroup(nameNewGroup);
-                    for (Contact contact : this.contacts){
+                    group.setName(nameNewGroup);
+                    for (Contact contact : contacts){
                         group = contact.getGroup();
-                        group.setNameGroup(group.getNameGroup());
+                        group.setName(group.getName());
                 }
                 }else {
                     throw new IOException();
@@ -152,14 +130,12 @@ public class GroupServiceImpl implements GroupService {
         this.dao.save(refBook);
     }
 
-    /**
-     *Смотрим есть группа в списке
-     */
     @Override
     public boolean existGroups(String nameGroup){
+        Set<Group> groups = refBook.getGroups();
         boolean result = false;
-        for (Group group : this.groups){
-            if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
+        for (Group group : groups){
+            if (group.getName().equalsIgnoreCase(nameGroup)){
                 result = true;
             }
         }

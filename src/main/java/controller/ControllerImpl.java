@@ -1,7 +1,6 @@
 package controller;
 
 import dao.DirectoryDaoImpl;
-import models.Contact;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
 import storage.RefBook;
@@ -11,12 +10,12 @@ import views.View;
 import java.io.IOException;
 
 /**
- *Реализация контроллера.
- * Контроллер дергает сервис в котором вся логика
+ *Реализация контроллера
  */
 public class ControllerImpl implements Controller{
+
     /**
-     * Поля инициализируются в контарукторе
+     * Поля инициализируются в конcтрукторе
      */
     private View view = null;
     private ContactServiceImpl serviceContact = null;
@@ -64,9 +63,6 @@ public class ControllerImpl implements Controller{
         this.consol = reader;
     }
 
-    /**
-     * Добавляем контакт
-     */
     @Override
     public void addContact() {
         try {
@@ -77,9 +73,6 @@ public class ControllerImpl implements Controller{
         }
     }
 
-    /**
-     * Обновляем контакт
-     */
     @Override
     public void updateContact() {
         System.out.println("Введите ФИО контакта который хотите обновить");
@@ -92,9 +85,6 @@ public class ControllerImpl implements Controller{
         view.pageActionContact();
     }
 
-    /**
-     * Удаляем контакт
-     */
     @Override
     public void removeContact() {
 
@@ -102,9 +92,6 @@ public class ControllerImpl implements Controller{
         view.pageActionContact();
     }
 
-    /**
-     * Добавляем группу контакту
-     */
     @Override
     public void appGroupContact() {
         System.out.println("Введите ФИО контакта которому хотите присвоить группу");
@@ -116,44 +103,29 @@ public class ControllerImpl implements Controller{
         }
     }
 
-    /**
-     * Удаляем группу у контакта
-     */
     @Override
     public void removeGroupContact() {
         System.out.println("Введите контакт у которого хотите удалить группу");
         this.serviceContact.removeGroupContact(this.consol.readString());
     }
 
-    /**
-     * Инф. о контакте
-     */
     @Override
     public void informationContact() {
         System.out.println("Введите ФИО контакта по которому хотите инф.");
         this.serviceContact.informationContact(this.consol.readString());
     }
 
-    /**
-     * Список контактов
-     */
     @Override
     public void listContacts() {
         this.serviceContact.listContacts();
     }
 
-    /**
-     * Список контактов опр. группы
-     */
     @Override
     public void listGroupContact() {
         System.out.println("Введите группу для просмотра контактов");
         this.serviceGroup.listGroupContact(this.consol.readString());
     }
 
-    /**
-     * Список групп
-     */
     @Override
     public void listGroup() {
         try {
@@ -165,9 +137,6 @@ public class ControllerImpl implements Controller{
 
     }
 
-    /**
-     * Добавление группы
-     */
     @Override
     public void addGroup() {
         System.out.println("Введите имя группы");
@@ -185,9 +154,6 @@ public class ControllerImpl implements Controller{
         this.serviceGroup.removeGroup(this.consol.readString());
     }
 
-    /**
-     * Обновление группы
-     */
     @Override
     public void updateGroup() {
         System.out.println("Введите имя группы которую хотите обновить");
@@ -199,9 +165,6 @@ public class ControllerImpl implements Controller{
         }
     }
 
-    /**
-     * Стартовая страница
-     */
     @Override
     public void startPage() {
         String command = view.startPage();
@@ -219,9 +182,6 @@ public class ControllerImpl implements Controller{
         }
     }
 
-    /**
-     * Действия для контакта
-     */
     @Override
     public void actionContacts(){
         String command = view.pageActionContact();
@@ -246,9 +206,6 @@ public class ControllerImpl implements Controller{
         }
     }
 
-    /**
-     * Действия для группы
-     */
     @Override
     public void actionGroup(){
         String command = view.pageActionGroup();

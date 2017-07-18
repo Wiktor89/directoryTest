@@ -1,27 +1,41 @@
 package models;
 
+import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  *Модель группы
  */
-public class Group extends IdentifiedEntity  {
+public class Group implements Serializable {
+
     /**
-     * nameGroup
+     * name
      * contact
      */
-    private String nameGroup;
+    private int id;
+    private String name;
     private Contact contact;
+    private final static AtomicInteger COUNT = new AtomicInteger(0);
 
-    public Group(String nameGroup) {
-        super();
-        this.nameGroup = nameGroup;
+    public Group(String name) {
+        this.id = COUNT.incrementAndGet();
+        this.name = name;
     }
 
-    public String getNameGroup() {
-        return nameGroup;
+    public int getId() {
+        return id;
     }
 
-    public void setNameGroup(String nameGroup) {
-        this.nameGroup = nameGroup;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Contact getContact() {
@@ -32,14 +46,15 @@ public class Group extends IdentifiedEntity  {
         this.contact = contact;
     }
 
-    /**
-     *
-     * @return имя группы
-     */
     @Override
     public String toString() {
-        return nameGroup;
+        return "id "+ getId()+" имя группы - "+ name;
+    }
 
-
+    /**
+     * @return имя группы
+     */
+    public String informationGroup(){
+        return name;
     }
 }

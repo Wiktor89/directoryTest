@@ -1,12 +1,11 @@
 package sorted;
 
 import models.Contact;
-
 import java.io.Serializable;
 import java.util.Comparator;
 
 /**
- *Задаем сортировку для контакта
+ *Сортировка для контакта
  */
 public class ContactFioComparator implements Comparator<Contact>,Serializable {
     @Override

@@ -10,12 +10,21 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- *Класс который будим серелизовать
+ *Серелизуемый объект
  */
 public class RefBook implements  Serializable {
 
+    private int id;
     private Set<Contact> contacts = new TreeSet<>(new ContactFioComparator());
     private Set<Group> groups = new TreeSet<>(new GroupNameComparator());
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Set<Contact> getContacts() {
         return contacts;

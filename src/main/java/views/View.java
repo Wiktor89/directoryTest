@@ -3,7 +3,7 @@ package views;
 import utilits.ConsoleReader;
 
 /**
- *Посмотреть
+ *Отображение
  */
 public class View {
 

@@ -5,7 +5,6 @@ import models.Contact;
 import models.Group;
 import storage.RefBook;
 import utilits.ConsoleReader;
-
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
@@ -24,35 +23,18 @@ public class ContactServiceImpl implements ContactService{
      */
     private ConsoleReader consol = null;
     private RefBook refBook = null;
-    private Set<Contact> contacts = null;
-    private Set<Group> groups = null;
     private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
     public ContactServiceImpl(RefBook refBook,ConsoleReader reader) {
         this.refBook = refBook;
-        this.contacts = this.refBook.getContacts();
-        this.groups = this.refBook.getGroups();
         this.consol = reader;
     }
-
 
     public DirectoryDaoImpl getDao() {
         return dao;
     }
     public void setDao(DirectoryDaoImpl dao) {
         this.dao = dao;
-    }
-    public Set<Contact> getContacts() {
-        return contacts;
-    }
-    public void setContacts(Set<Contact> contacts) {
-        this.contacts = contacts;
-    }
-    public Set<Group> getGroups() {
-        return groups;
-    }
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
     }
     public ConsoleReader getConsol() {
         return consol;
@@ -67,11 +49,9 @@ public class ContactServiceImpl implements ContactService{
             this.refBook = refBook;
     }
 
-    /**
-     *Добавление контакта
-     */
     @Override
     public void addContact() throws IOException {
+        Set<Contact> contacts = refBook.getContacts();
         Contact contact = null;
         System.out.println("Введите ФИО");
         String fioContact = this.consol.readString();
@@ -89,16 +69,14 @@ public class ContactServiceImpl implements ContactService{
         }
         contact.setGroup(new Group("нет группы"));
         System.out.println("Контакт успешно добавлен");
-        this.contacts.add(contact);
+        contacts.add(contact);
         this.dao.save(refBook);
     }
 
-    /**
-     *Обновление контакта
-     */
     @Override
     public void updateContact(String fioContact) throws IOException {
-       for (Contact contact : this.contacts){
+        Set<Contact> contacts = refBook.getContacts();
+       for (Contact contact : contacts){
            if (contact.getFio().equalsIgnoreCase(fioContact)){
                System.out.println(contact);//Возможно будит полезным видить старые данные
                System.out.println("Введите новое ФИО");
@@ -112,13 +90,14 @@ public class ContactServiceImpl implements ContactService{
                    boolean result = true;
                    while (result){
                        System.out.println("Доступные группы");
-                       for (Group group : this.groups){
-                           System.out.println(group.getNameGroup());
+                       Set<Group> groups = refBook.getGroups();
+                       for (Group group : groups){
+                           System.out.println(group.getName());
                        }
                        System.out.println("Введите название группы");
                        String nameGroup = this.consol.readString();
-                       for (Group group : this.groups){
-                           if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
+                       for (Group group : groups){
+                           if (group.getName().equalsIgnoreCase(nameGroup)){
                                contact.setGroup(new Group(nameGroup));
                                result = false;
                            }
@@ -132,17 +111,15 @@ public class ContactServiceImpl implements ContactService{
         this.dao.save(refBook);
     }
 
-    /**
-     *Удаление контакта
-     */
     @Override
     public void removeContact() {
-        for (Contact contact : this.contacts){
+        Set<Contact> contacts = refBook.getContacts();
+        for (Contact contact : contacts){
             System.out.println(contact.informationContact());
         }
         System.out.println("Введите ФИО контакта для удаления");
         String fioContact = this.consol.readString();
-        Iterator<Contact> iterator = this.contacts.iterator();
+        Iterator<Contact> iterator = contacts.iterator();
         while (iterator.hasNext()){
             Contact contact = iterator.next();
             if (contact.getFio().equalsIgnoreCase(fioContact)){
@@ -152,23 +129,22 @@ public class ContactServiceImpl implements ContactService{
         this.dao.save(refBook);
     }
 
-    /**
-     *Добавить контакту группу
-     */
     @Override
     public void appGroupContact(String fioContact) throws Exception {
-        if (!this.groups.isEmpty()){
+        Set<Contact> contacts = refBook.getContacts();
+        Set<Group> groups = refBook.getGroups();
+        if (!groups.isEmpty()){
             System.out.println("Доступные группы");
-            for (Group group : this.groups){
+            for (Group group : groups){
                 System.out.println(group);
             }
-            for (Contact contact : this.contacts){
+            for (Contact contact : contacts){
                 if (contact.getFio().equalsIgnoreCase(fioContact)){
                     System.out.println("Введите имя группы");
                     String nameGroup = this.consol.readString();
                     if (existGroups(nameGroup)){
                         Group group = contact.getGroup();
-                        group.setNameGroup(nameGroup);
+                        group.setName(nameGroup);
                     }else {
                         throw new Exception();
                     }
@@ -180,58 +156,50 @@ public class ContactServiceImpl implements ContactService{
         this.dao.save(refBook);
     }
 
-    /**
-     *Удаление группы у контакта контакта
-     */
     @Override
     public void removeGroupContact(String nameContact) {
-        for (Contact contact : this.contacts) {
+        Set<Contact> contacts = refBook.getContacts();
+        for (Contact contact : contacts) {
             if (contact.getFio().equalsIgnoreCase(nameContact)) {
                 System.out.println(contact.toString());
                 System.out.println("Введите имя удаляемой группы");
                 String nameGroup = this.consol.readString();
                 Group group = contact.getGroup();
-                if (group.getNameGroup().equalsIgnoreCase(nameGroup)) {
-                    group.setNameGroup("нет группы");
+                if (group.getName().equalsIgnoreCase(nameGroup)) {
+                    group.setName("нет группы");
                 }
             }
             this.dao.save(refBook);
         }
     }
 
-    /**
-     *Инф. по контакту
-     */
     @Override
     public void informationContact(String fioContact) {
-        for (Contact contact : this.contacts){
+        Set<Contact> contacts = refBook.getContacts();
+        for (Contact contact : contacts){
             if (contact.getFio().equalsIgnoreCase(fioContact)){
                 System.out.println(contact);
             }
         }
     }
 
-    /**
-     *Список контактов
-     */
     @Override
     public void listContacts() {
-        for (Contact contact : this.contacts){
+        Set<Contact> contacts = refBook.getContacts();
+        for (Contact contact : contacts){
             System.out.println(contact.informationContact());
         }
     }
 
     @Override
     public boolean existGroups(String nameGroup){
+        Set<Group> groups = refBook.getGroups();
         boolean result = false;
-        for (Group group : this.groups){
-            if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
+        for (Group group : groups){
+            if (group.getName().equalsIgnoreCase(nameGroup)){
                 result = true;
             }
         }
         return result;
     }
-
-
-
 }
