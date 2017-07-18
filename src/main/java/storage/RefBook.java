@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- *Серелизуемый объект
+ *Модель для справочника контактов
  */
 public class RefBook implements  Serializable {
 

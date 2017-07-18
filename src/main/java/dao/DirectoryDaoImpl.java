@@ -5,7 +5,7 @@ import storage.RefBook;
 import java.io.*;
 
 /**
- *Реализация dao
+ *Дао для работы со справочником контактов
  */
 public class DirectoryDaoImpl implements DirectoryDao {
     private static final Logger LOGGER = Logger.getLogger(DirectoryDaoImpl.class);

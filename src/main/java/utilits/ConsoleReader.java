@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Чтение консоли
+ * Утилитарный класс для работы с консолью
  */
 public class ConsoleReader implements AutoCloseable {
 
