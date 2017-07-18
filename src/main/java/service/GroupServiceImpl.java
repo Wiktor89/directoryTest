@@ -28,11 +28,11 @@ public class GroupServiceImpl implements GroupService {
     private Set<Group> groups = null;
     private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
-    public GroupServiceImpl(RefBook refBook) {
+    public GroupServiceImpl(RefBook refBook,ConsoleReader reader) {
         this.refBook = refBook;
         this.contacts = this.refBook.getContacts();
         this.groups = this.refBook.getGroups();
-        this.consol = new ConsoleReader();
+        this.consol = reader;
     }
 
     public DirectoryDaoImpl getDao() {
@@ -83,12 +83,16 @@ public class GroupServiceImpl implements GroupService {
      *Список групп
      */
     @Override
-    public void listGroup() {
-        for (Group group : this.groups){
+    public void listGroup() throws Exception {
+        if (!this.groups.isEmpty()){
+            for (Group group : this.groups){
                 System.out.println(group.getNameGroup());
             }
+        }else {
+            throw  new Exception();
         }
 
+    }
 
     /**
      *Добавление группы
@@ -115,10 +119,9 @@ public class GroupServiceImpl implements GroupService {
             if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
                 iterator.remove();
                 for (Contact contact : this.contacts){
-                    System.out.println(contact);
                     group = contact.getGroup();
                     if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
-                        group.setNameGroup("Нет группы");
+                        group.setNameGroup("нет группы");
                     }
                 }
             }
@@ -130,14 +133,19 @@ public class GroupServiceImpl implements GroupService {
      *Обновление  группы
      */
     @Override
-    public void updateGroup(String nameGroup) {
+    public void updateGroup(String nameGroup) throws IOException {
         for (Group group : this.groups){
             if (group.getNameGroup().equalsIgnoreCase(nameGroup)){
                 System.out.println("Введите имя новой группы");
-                group.setNameGroup(this.consol.readString());
-                for (Contact contact : this.contacts){
-                    Group group1 = contact.getGroup();
-                    group1.setNameGroup(group.getNameGroup());
+                String nameNewGroup = this.consol.readString();
+                if (nameNewGroup.trim().length() > 0){
+                    group.setNameGroup(nameNewGroup);
+                    for (Contact contact : this.contacts){
+                        group = contact.getGroup();
+                        group.setNameGroup(group.getNameGroup());
+                }
+                }else {
+                    throw new IOException();
                 }
             }
         }

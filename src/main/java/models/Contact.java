@@ -25,7 +25,6 @@ public class Contact extends IdentifiedEntity {
 
     public Contact(String fio) {
         this(fio,"нет информации","нет информации");
-
     }
 
     public String getFio() {

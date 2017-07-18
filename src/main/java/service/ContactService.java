@@ -13,7 +13,7 @@ public interface ContactService {
     void addContact () throws IOException;
     void updateContact(String fioContact) throws IOException;
     void removeContact();
-    void appGroupContact(String fioContact);
+    void appGroupContact(String fioContact) throws Exception;
     void removeGroupContact(String nameContact);
     void informationContact (String fioContact);
     void listContacts();

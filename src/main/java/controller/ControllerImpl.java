@@ -58,8 +58,8 @@ public class ControllerImpl implements Controller{
 
     public ControllerImpl(ConsoleReader reader) {
         this.refBook = this.dao.load();
-        this.serviceContact = new ContactServiceImpl(this.refBook);
-        this.serviceGroup = new GroupServiceImpl(this.refBook);
+        this.serviceContact = new ContactServiceImpl(this.refBook, reader);
+        this.serviceGroup = new GroupServiceImpl(this.refBook, reader);
         this.view = new View();
         this.consol = reader;
     }
@@ -108,7 +108,12 @@ public class ControllerImpl implements Controller{
     @Override
     public void appGroupContact() {
         System.out.println("Введите ФИО контакта которому хотите присвоить группу");
-        this.serviceContact.appGroupContact(this.consol.readString());
+        try {
+            this.serviceContact.appGroupContact(this.consol.readString());
+        } catch (Exception e) {
+            System.out.println("нет групп");
+            actionContacts();
+        }
     }
 
     /**
@@ -151,7 +156,12 @@ public class ControllerImpl implements Controller{
      */
     @Override
     public void listGroup() {
-        this.serviceGroup.listGroup();
+        try {
+            this.serviceGroup.listGroup();
+        } catch (Exception e) {
+            System.out.println("нет групп");
+            actionGroup();
+        }
 
     }
 
@@ -181,7 +191,12 @@ public class ControllerImpl implements Controller{
     @Override
     public void updateGroup() {
         System.out.println("Введите имя группы которую хотите обновить");
-        this.serviceGroup.updateGroup(this.consol.readString());
+        try {
+            this.serviceGroup.updateGroup(this.consol.readString());
+        } catch (IOException e) {
+            System.out.println("Вы не ввели имя новой группы");
+            actionGroup();
+        }
     }
 
     /**
