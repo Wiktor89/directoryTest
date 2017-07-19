@@ -6,8 +6,11 @@ import models.Entity;
 import models.Group;
 import storage.RefBook;
 import utilits.ConsoleReader;
+import views.ViewImpl;
+
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,13 +25,12 @@ public class ContactServiceImpl implements ContactService{
      * groups
      * dao
      */
-    private ConsoleReader consol = null;
     private RefBook refBook = null;
     private DirectoryDaoImpl dao = new DirectoryDaoImpl();
+    private ViewImpl view = new ViewImpl();
 
-    public ContactServiceImpl(RefBook refBook,ConsoleReader reader) {
+    public ContactServiceImpl(RefBook refBook) {
         this.refBook = refBook;
-        this.consol = reader;
     }
 
     public DirectoryDaoImpl getDao() {
@@ -36,12 +38,6 @@ public class ContactServiceImpl implements ContactService{
     }
     public void setDao(DirectoryDaoImpl dao) {
         this.dao = dao;
-    }
-    public ConsoleReader getConsol() {
-        return consol;
-    }
-    public void setConsol(ConsoleReader consol) {
-        this.consol = consol;
     }
     public RefBook getRefBook() {
         return refBook ;
@@ -52,14 +48,12 @@ public class ContactServiceImpl implements ContactService{
 
     @Override
     public void addContact(Entity entity) throws IOException {
-        Contact contact = (Contact) entity;
+        Contact contact = null;
         Set<Contact> contacts = refBook.getContacts();
-        System.out.println("Введите ФИО");
-        String fioContact = this.consol.readString();
-        System.out.println("Введите телефон");
-        String phone = this.consol.readString();
-        System.out.println("Введите email");
-        String email = this.consol.readString();
+        List<String> list = view.addContact();
+        String fioContact = list.get(0);
+        String phone = list.get(1);
+        String email = list.get(2);
         if (fioContact.trim().length() > 0 && phone.trim().length() > 0
                 && email.trim().length() > 0){
             contact = new Contact(fioContact,phone,email);
@@ -68,35 +62,31 @@ public class ContactServiceImpl implements ContactService{
         }else {
             throw new IOException();
         }
-        contact.setGroup(new Group("нет группы"));
+        contact.setGroup(new Group(view.noGroup()));//Наблюдатель
         System.out.println("Контакт успешно добавлен");
-        contacts.add(contact);
         this.dao.save(refBook);
     }
 
     @Override
-    public void updateContact(String fioContact) throws IOException {
+    public void updateContact() throws IOException {
+        String fioContact = view.entContact();
         Set<Contact> contacts = refBook.getContacts();
        for (Contact contact : contacts){
            if (contact.getFio().equalsIgnoreCase(fioContact)){
-               System.out.println(contact);//Возможно будит полезным видить старые данные
-               System.out.println("Введите новое ФИО");
-               String newFio = this.consol.readString();
+               view.informationContact(contact);//Возможно будит полезным видить старые данные
+               List<String> contactsNew = view.updateContact();
+               String newFio = contactsNew.get(0);
                if (newFio.trim().length() != 0){
                    contact.setFio(newFio);
-                   System.out.println("Введите новый phone");
-                   contact.setPhone(this.consol.readString());
-                   System.out.println("Введите новый email");
-                   contact.setEmail(this.consol.readString());
+                   contact.setPhone(contactsNew.get(1));
+                   contact.setEmail(contactsNew.get(2));
                    boolean result = true;
                    while (result){
-                       System.out.println("Доступные группы");
                        Set<Group> groups = refBook.getGroups();
                        for (Group group : groups){
-                           System.out.println(group.getName());
+                           view.listGroup(group);
                        }
-                       System.out.println("Введите название группы");
-                       String nameGroup = this.consol.readString();
+                       String nameGroup = view.entGroup();
                        for (Group group : groups){
                            if (group.getName().equalsIgnoreCase(nameGroup)){
                                contact.setGroup(new Group(nameGroup));
@@ -116,10 +106,9 @@ public class ContactServiceImpl implements ContactService{
     public void removeContact() {
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
-            System.out.println(contact.informationContact());
+            view.listContacts(contact);
         }
-        System.out.println("Введите ФИО контакта для удаления");
-        String fioContact = this.consol.readString();
+        String fioContact = view.entContact();
         Iterator<Contact> iterator = contacts.iterator();
         while (iterator.hasNext()){
             Contact contact = iterator.next();
@@ -131,18 +120,17 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void appGroupContact(String fioContact) throws Exception {
+    public void appGroupContact() throws Exception {
         Set<Contact> contacts = refBook.getContacts();
         Set<Group> groups = refBook.getGroups();
         if (!groups.isEmpty()){
-            System.out.println("Доступные группы");
             for (Group group : groups){
-                System.out.println(group);
+                view.listGroup(group);
             }
+            String name = view.entContact();
             for (Contact contact : contacts){
-                if (contact.getFio().equalsIgnoreCase(fioContact)){
-                    System.out.println("Введите имя группы");
-                    String nameGroup = this.consol.readString();
+                if (contact.getFio().equalsIgnoreCase(name)){
+                    String nameGroup = view.entGroup();
                     if (existGroups(nameGroup)){
                         Group group = contact.getGroup();
                         group.setName(nameGroup);
@@ -158,16 +146,16 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void removeGroupContact(String nameContact) {
+    public void removeGroupContact() {
+        String nameContact = view.entContact();
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts) {
             if (contact.getFio().equalsIgnoreCase(nameContact)) {
-                System.out.println(contact.toString());
-                System.out.println("Введите имя удаляемой группы");
-                String nameGroup = this.consol.readString();
+                view.informationContact(contact);
+                String nameGroup = view.entGroup();;
                 Group group = contact.getGroup();
                 if (group.getName().equalsIgnoreCase(nameGroup)) {
-                    group.setName("нет группы");
+                    group.setName(view.noGroup());//Наблюдатель
                 }
             }
             this.dao.save(refBook);
@@ -175,11 +163,12 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void informationContact(String fioContact) {
+    public void informationContact() {
+        String fioContact = view.entContact();
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
             if (contact.getFio().equalsIgnoreCase(fioContact)){
-                System.out.println(contact);
+                view.informationContact(contact);
             }
         }
     }
@@ -188,7 +177,7 @@ public class ContactServiceImpl implements ContactService{
     public void listContacts() {
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
-            System.out.println(contact.informationContact());
+            view.listContacts(contact);
         }
     }
 

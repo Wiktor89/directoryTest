@@ -17,7 +17,7 @@ public interface ContactService {
     /**
      *Обновление контакта
      */
-    void updateContact(String fioContact) throws IOException;
+    void updateContact() throws IOException;
 
     /**
      *Удаление контакта
@@ -27,17 +27,17 @@ public interface ContactService {
     /**
      *Добавить контакту группу
      */
-    void appGroupContact(String fioContact) throws Exception;
+    void appGroupContact() throws Exception;
 
     /**
      *Удаление группы у контакта контакта
      */
-    void removeGroupContact(String nameContact);
+    void removeGroupContact();
 
     /**
      *Инф. по контакту
      */
-    void informationContact (String fioContact);
+    void informationContact ();
 
     /**
      *Список контактов

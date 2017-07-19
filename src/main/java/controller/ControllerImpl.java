@@ -4,14 +4,12 @@ import dao.DirectoryDaoImpl;
 import factory.ContactsFactory;
 import factory.EntityFactory;
 import factory.GroupFactory;
-import models.Contact;
 import models.Entity;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
 import storage.RefBook;
-import utilits.ConsoleReader;
 import utilits.TeamList;
-import views.View;
+import views.ViewImpl;
 
 import java.io.IOException;
 
@@ -23,10 +21,9 @@ public class ControllerImpl implements Controller{
     /**
      * Поля инициализируются в конcтрукторе
      */
-    private View view = null;
+    private ViewImpl view  = new ViewImpl();
     private ContactServiceImpl serviceContact = null;
     private GroupServiceImpl serviceGroup = null;
-    private ConsoleReader consol = null;
     private RefBook refBook  = null;
     private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
@@ -42,73 +39,54 @@ public class ControllerImpl implements Controller{
     public void setServiceGroup(GroupServiceImpl serviceGroup) {
         this.serviceGroup = serviceGroup;
     }
-    public ConsoleReader getConsol() {
-        return consol;
-    }
-    public void setConsol(ConsoleReader consol) {
-        this.consol = consol;
-    }
     public ContactServiceImpl getServiceContact() {
         return serviceContact;
     }
     public void setServiceContact(ContactServiceImpl serviceContact) {
         this.serviceContact = serviceContact;
     }
-    public View getView() {
-        return view;
-    }
-    public void setView(View view) {
-        this.view = view;
-    }
 
-    public ControllerImpl(ConsoleReader reader) {
+    public ControllerImpl() {
         this.refBook = this.dao.load();
-        this.serviceContact = new ContactServiceImpl(this.refBook, reader);
-        this.serviceGroup = new GroupServiceImpl(this.refBook, reader);
-        this.view = new View();
-        this.consol = reader;
+        this.serviceContact = new ContactServiceImpl(this.refBook);
+        this.serviceGroup = new GroupServiceImpl(this.refBook);
     }
 
     @Override
     public void updateContact() {
-        System.out.println("Введите ФИО контакта который хотите обновить");
         try {
-            this.serviceContact.updateContact(this.consol.readString());
+            this.serviceContact.updateContact();
         } catch (IOException e) {
-            System.out.println("Вы не ввели Ф И О");
-            updateContact();
+            System.out.println("Вы не ввели Ф И О");//Это будит делать наблюдатель
+            view.pageActionContact();
         }
         view.pageActionContact();
     }
 
     @Override
     public void removeContact() {
-
         this.serviceContact.removeContact();
         view.pageActionContact();
     }
 
     @Override
     public void appGroupContact() {
-        System.out.println("Введите ФИО контакта которому хотите присвоить группу");
         try {
-            this.serviceContact.appGroupContact(this.consol.readString());
+            this.serviceContact.appGroupContact();
         } catch (Exception e) {
             System.out.println("нет групп");
-            actionContacts();
+            view.pageActionContact();
         }
     }
 
     @Override
     public void removeGroupContact() {
-        System.out.println("Введите контакт у которого хотите удалить группу");
-        this.serviceContact.removeGroupContact(this.consol.readString());
+        this.serviceContact.removeGroupContact();
     }
 
     @Override
     public void informationContact() {
-        System.out.println("Введите ФИО контакта по которому хотите инф.");
-        this.serviceContact.informationContact(this.consol.readString());
+        this.serviceContact.informationContact();
     }
 
     @Override
@@ -118,8 +96,7 @@ public class ControllerImpl implements Controller{
 
     @Override
     public void listGroupContact() {
-        System.out.println("Введите группу для просмотра контактов");
-        this.serviceGroup.listGroupContact(this.consol.readString());
+        this.serviceGroup.listGroupContact();
     }
 
     @Override
@@ -128,70 +105,28 @@ public class ControllerImpl implements Controller{
             this.serviceGroup.listGroup();
         } catch (Exception e) {
             System.out.println("нет групп");
-            actionGroup();
+            view.pageActionGroup();
         }
 
     }
 
     @Override
     public void removeGroup() {
-        System.out.println("Введите имя удаляемой группы");
-        this.serviceGroup.removeGroup(this.consol.readString());
+        this.serviceGroup.removeGroup();
     }
 
     @Override
     public void updateGroup() {
-        System.out.println("Введите имя группы которую хотите обновить");
         try {
-            this.serviceGroup.updateGroup(this.consol.readString());
+            this.serviceGroup.updateGroup();
         } catch (IOException e) {
-            System.out.println("Вы не ввели имя новой группы");
-            actionGroup();
+            System.out.println("Вы не ввели имя новой группы");//Наблюдатель
+            view.actionGroup();
         }
     }
 
     @Override
-    public void startPage() {
-        String command = view.startPage();
-        while (true){
-            if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))actionContacts();
-            if (command.equalsIgnoreCase(String.valueOf(TeamList.gro)))actionGroup();
-            if (command.equalsIgnoreCase(String.valueOf(TeamList.exit)))System.exit(0);
-            System.out.println("Команда не поддерживается");
-            startPage();
-        }
-    }
-
-    @Override
-    public void actionContacts(){
-        String command = view.pageActionContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.addc)))addEntity();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.remc)))removeContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.listc)))listContacts();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.addcatg)))appGroupContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.remcofg)))removeGroup();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))informationContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
-        System.out.println("Команда не поддерживается");
-        actionContacts();
-    }
-
-    @Override
-    public void actionGroup(){
-        String command = view.pageActionGroup();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))addEntity();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))removeGroup();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.updc)))updateGroup();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.listg)))listGroup();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.listcofg)))listGroupContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
-        System.out.println("Команда не поддерживается");
-        actionGroup();
-    }
-
-    @Override
-    public void addEntity() {
-        String command = this.consol.readString();
+    public void addEntity(String command) {
         try {
             EntityFactory factory = creatingEntityFactory(command);
             Entity entity = factory.creatingEntity();
@@ -200,12 +135,11 @@ public class ControllerImpl implements Controller{
             if (command.equalsIgnoreCase(String.valueOf(TeamList.gro)))
                 this.serviceGroup.addGroup(entity);
         } catch (IOException e) {
-            System.out.println("не поддерживается");
+            System.out.println("ERROR");
         }
-
     }
 
-    static EntityFactory creatingEntityFactory (String entity) throws IOException{
+    public EntityFactory creatingEntityFactory (String entity) throws IOException{
         if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new ContactsFactory();
         if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new GroupFactory();
         throw new IOException();

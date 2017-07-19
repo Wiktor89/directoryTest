@@ -1,30 +1,25 @@
 package models;
 
 import controller.ControllerImpl;
-import factory.ContactsFactory;
-import factory.EntityFactory;
-import factory.GroupFactory;
 import utilits.ConsoleReader;
 import utilits.TeamList;
-
-import java.io.IOException;
+import views.ViewImpl;
 
 
 /**
  *
  */
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         new Main().goo();
     }
-    public void goo()  {
-        try (ConsoleReader reader = new ConsoleReader()){
-            new ControllerImpl(reader)
-                    .startPage();
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
 
+    public void goo() {
+
+//        new ViewImpl().startPage();
+//        }
+        ControllerImpl controller = new ControllerImpl();
+        controller.addEntity("gro");
 
 
         //Это фабричный метод
@@ -42,11 +37,12 @@ public class Main {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-    }
 
-    static EntityFactory  creatingEntityFactory (String entity) throws IOException{
-        if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new ContactsFactory();
-        if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new GroupFactory();
-        throw new IOException();
+
+//    static EntityFactory  creatingEntityFactory (String entity) throws IOException{
+//        if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new ContactsFactory();
+//        if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new GroupFactory();
+//        throw new IOException();
+//    }
     }
 }

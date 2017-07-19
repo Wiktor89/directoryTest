@@ -12,7 +12,7 @@ public interface GroupService {
     /**
      *Список контактов опр. группы
      */
-    void listGroupContact(String nameGroup);
+    void listGroupContact();
 
     /**
      *Список групп
@@ -22,17 +22,17 @@ public interface GroupService {
     /**
      *Добавление группы
      */
-    void addGroup(Entity entity) throws IOException;
+    void addGroup(Entity entity) throws Exception;
 
     /**
      *Удаление группы
      */
-    void removeGroup(String nameGroup);
+    void removeGroup();
 
     /**
      *Обновление  группы
      */
-    void updateGroup(String nameGroup) throws IOException;
+    void updateGroup() throws IOException;
 
     /**
      *Смотрим есть группа в списке

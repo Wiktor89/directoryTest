@@ -56,19 +56,7 @@ public interface Controller {
     void updateGroup();
 
     /**
-     * Стартовая страница
+     * Создание сущности
      */
-    void startPage();
-
-    /**
-     * Действия для контакта
-     */
-    void actionContacts();
-
-    /**
-     * Действия для группы
-     */
-    void actionGroup();
-
-    void addEntity ();
+    void addEntity (String command);
 }
