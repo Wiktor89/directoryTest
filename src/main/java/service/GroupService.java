@@ -1,5 +1,7 @@
 package service;
 
+import models.Entity;
+
 import java.io.IOException;
 
 /**
@@ -20,7 +22,7 @@ public interface GroupService {
     /**
      *Добавление группы
      */
-    void addGroup(String nameGroup) throws IOException;
+    void addGroup(Entity entity) throws IOException;
 
     /**
      *Удаление группы

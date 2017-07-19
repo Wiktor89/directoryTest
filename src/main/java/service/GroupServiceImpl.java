@@ -2,6 +2,7 @@ package service;
 
 import dao.DirectoryDaoImpl;
 import models.Contact;
+import models.Entity;
 import models.Group;
 import storage.RefBook;
 import utilits.ConsoleReader;
@@ -74,11 +75,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void addGroup(String nameGroup) throws IOException {
+    public void addGroup(Entity entity) throws IOException {
+        Group group = (Group) entity;
         Set<Group> groups = refBook.getGroups();
-        Group group = null;
-        if (nameGroup.trim().length() > 0){
-            group = new Group(nameGroup);
+        String name = this.consol.readString();
+        if (name.trim().length() > 0){
+            group = new Group(name);
             groups.add(group);
             System.out.println("Группа успешно добавлена");
         }else {

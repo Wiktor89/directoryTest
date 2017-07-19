@@ -6,11 +6,6 @@ package controller;
 public interface Controller {
 
     /**
-     *Добавление контакта
-     */
-    void addContact ();
-
-    /**
      *Обновление контакта
      */
     void updateContact();
@@ -51,11 +46,6 @@ public interface Controller {
     void listGroup();
 
     /**
-     *Добавление группы
-     */
-    void addGroup();
-
-    /**
      *Удаление группы
      */
     void removeGroup();
@@ -79,4 +69,6 @@ public interface Controller {
      * Действия для группы
      */
     void actionGroup();
+
+    void addEntity ();
 }

@@ -1,10 +1,16 @@
 package controller;
 
 import dao.DirectoryDaoImpl;
+import factory.ContactsFactory;
+import factory.EntityFactory;
+import factory.GroupFactory;
+import models.Contact;
+import models.Entity;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
 import storage.RefBook;
 import utilits.ConsoleReader;
+import utilits.TeamList;
 import views.View;
 
 import java.io.IOException;
@@ -61,16 +67,6 @@ public class ControllerImpl implements Controller{
         this.serviceGroup = new GroupServiceImpl(this.refBook, reader);
         this.view = new View();
         this.consol = reader;
-    }
-
-    @Override
-    public void addContact() {
-        try {
-            this.serviceContact.addContact();
-        } catch (IOException e) {
-            System.out.println("Вы не ввели Ф И О");
-            addContact();
-        }
     }
 
     @Override
@@ -138,17 +134,6 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void addGroup() {
-        System.out.println("Введите имя группы");
-        try {
-            this.serviceGroup.addGroup(this.consol.readString());
-        } catch (IOException e) {
-            System.out.println("Вы не ввели имя группы");
-            addGroup();
-        }
-    }
-
-    @Override
     public void removeGroup() {
         System.out.println("Введите имя удаляемой группы");
         this.serviceGroup.removeGroup(this.consol.readString());
@@ -169,61 +154,61 @@ public class ControllerImpl implements Controller{
     public void startPage() {
         String command = view.startPage();
         while (true){
-            if (command.equalsIgnoreCase("con")){
-                actionContacts();
-            }else if (command.equalsIgnoreCase("gro")){
-                actionGroup();
-            }else if (command.equalsIgnoreCase("exit")){
-                System.exit(0);
-            }else {
-                System.out.println("Команда не поддерживается");
-                startPage();
-            }
+            if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))actionContacts();
+            if (command.equalsIgnoreCase(String.valueOf(TeamList.gro)))actionGroup();
+            if (command.equalsIgnoreCase(String.valueOf(TeamList.exit)))System.exit(0);
+            System.out.println("Команда не поддерживается");
+            startPage();
         }
     }
 
     @Override
     public void actionContacts(){
         String command = view.pageActionContact();
-        if (command.equalsIgnoreCase("addc")){
-            addContact();
-        }else if (command.equalsIgnoreCase("remc")){
-            removeContact();
-        }else if (command.equalsIgnoreCase("updc")){
-            updateContact();
-        }else if (command.equalsIgnoreCase("listc")){
-            listContacts();
-        }else if (command.equalsIgnoreCase("addcatg")){
-            appGroupContact();
-        }else if (command.equalsIgnoreCase("remcofg")){
-            removeGroupContact();
-        }else if (command.equalsIgnoreCase("inf")){
-            informationContact();
-        }else if (command.equalsIgnoreCase("up")){
-            startPage();
-        }else {
-            System.out.println("Не поддерживается");
-        }
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.addc)))addEntity();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.remc)))removeContact();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.listc)))listContacts();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.addcatg)))appGroupContact();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.remcofg)))removeGroup();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))informationContact();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
+        System.out.println("Команда не поддерживается");
+        actionContacts();
     }
 
     @Override
     public void actionGroup(){
         String command = view.pageActionGroup();
-        if (command.equalsIgnoreCase("addg")){
-            addGroup();
-        }else if (command.equalsIgnoreCase("remg")){
-            removeGroup();
-        }else if (command.equalsIgnoreCase("updg")){
-            updateGroup();
-        }else  if (command.equalsIgnoreCase("listg")){
-            listGroup();
-        }else if (command.equalsIgnoreCase("listcofg")){
-            listGroupContact();
-        }else if (command.equalsIgnoreCase("up")){
-            startPage();
-        }else {
-            System.out.println("Команда не поддерживается");
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))addEntity();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))removeGroup();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.updc)))updateGroup();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.listg)))listGroup();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.listcofg)))listGroupContact();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
+        System.out.println("Команда не поддерживается");
+        actionGroup();
+    }
+
+    @Override
+    public void addEntity() {
+        String command = this.consol.readString();
+        try {
+            EntityFactory factory = creatingEntityFactory(command);
+            Entity entity = factory.creatingEntity();
+            if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
+                this.serviceContact.addContact(entity);
+            if (command.equalsIgnoreCase(String.valueOf(TeamList.gro)))
+                this.serviceGroup.addGroup(entity);
+        } catch (IOException e) {
+            System.out.println("не поддерживается");
         }
+
+    }
+
+    static EntityFactory creatingEntityFactory (String entity) throws IOException{
+        if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new ContactsFactory();
+        if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new GroupFactory();
+        throw new IOException();
     }
 
 }

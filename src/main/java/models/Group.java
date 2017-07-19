@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  *Модель группы
  */
-public class Group implements Serializable {
+public class Group  implements Serializable,Entity {
 
     /**
      * name
@@ -16,6 +16,9 @@ public class Group implements Serializable {
     private String name;
     private Contact contact;
     private final static AtomicInteger COUNT = new AtomicInteger(0);
+
+    public Group() {
+    }
 
     public Group(String name) {
         this.id = COUNT.incrementAndGet();

@@ -2,6 +2,7 @@ package service;
 
 import dao.DirectoryDaoImpl;
 import models.Contact;
+import models.Entity;
 import models.Group;
 import storage.RefBook;
 import utilits.ConsoleReader;
@@ -50,9 +51,9 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void addContact() throws IOException {
+    public void addContact(Entity entity) throws IOException {
+        Contact contact = (Contact) entity;
         Set<Contact> contacts = refBook.getContacts();
-        Contact contact = null;
         System.out.println("Введите ФИО");
         String fioContact = this.consol.readString();
         System.out.println("Введите телефон");

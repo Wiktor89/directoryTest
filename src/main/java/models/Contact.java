@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  *Модель контакта
  */
-public class Contact implements Serializable {
+public class Contact implements Serializable,Entity {
 
     /**
      * fio
@@ -20,6 +20,9 @@ public class Contact implements Serializable {
     private String email;
     private Group group;
     private final static AtomicInteger COUNT = new AtomicInteger(0);
+
+    public Contact() {
+    }
 
     public Contact(String fio, String phone, String email) {
         this.id = COUNT.incrementAndGet();

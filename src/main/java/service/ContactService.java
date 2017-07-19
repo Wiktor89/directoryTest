@@ -1,5 +1,7 @@
 package service;
 
+import models.Entity;
+
 import java.io.IOException;
 
 /**
@@ -10,7 +12,7 @@ public interface ContactService {
     /**
      *Добавление контакта
      */
-    void addContact () throws IOException;
+    void addContact (Entity entity) throws IOException;
 
     /**
      *Обновление контакта
