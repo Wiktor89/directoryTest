@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.IOException;
+
 /**
  *Интерфейс для контроллера
  */
@@ -8,7 +10,7 @@ public interface Controller {
     /**
      *Обновление контакта
      */
-    void updateContact();
+    void updateContact() throws IOException;
 
     /**
      *Удаление контакта
@@ -18,7 +20,7 @@ public interface Controller {
     /**
      *Добавить контакту группу
      */
-    void appGroupContact();
+    void appGroupContact() throws IOException;
 
     /**
      *Удаление группы у контакта контакта
@@ -43,7 +45,7 @@ public interface Controller {
     /**
      *Список групп
      */
-    void listGroup();
+    void listGroup() throws IOException;
 
     /**
      *Удаление группы
@@ -53,10 +55,10 @@ public interface Controller {
     /**
      *Обновление  группы
      */
-    void updateGroup();
+    void updateGroup() throws IOException;
 
     /**
      * Создание сущности
      */
-    void addEntity (String command);
+    void addEntity (String command) throws IOException;
 }

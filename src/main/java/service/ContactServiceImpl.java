@@ -39,6 +39,7 @@ public class ContactServiceImpl implements ContactService{
     public void setDao(DirectoryDaoImpl dao) {
         this.dao = dao;
     }
+
     public RefBook getRefBook() {
         return refBook ;
     }
@@ -48,7 +49,7 @@ public class ContactServiceImpl implements ContactService{
 
     @Override
     public void addContact(Entity entity) throws IOException {
-        Contact contact = null;
+        Contact contact = (Contact) entity;
         Set<Contact> contacts = refBook.getContacts();
         List<String> list = view.addContact();
         String fioContact = list.get(0);
@@ -56,14 +57,17 @@ public class ContactServiceImpl implements ContactService{
         String email = list.get(2);
         if (fioContact.trim().length() > 0 && phone.trim().length() > 0
                 && email.trim().length() > 0){
-            contact = new Contact(fioContact,phone,email);
+            contact.setFio(fioContact);
+            contact.setPhone(phone);
+            contact.setEmail(email);
         }else if (fioContact.trim().length() > 0){
-            contact = new Contact(fioContact);
+            contact.setFio(fioContact);
         }else {
             throw new IOException();
         }
+        contacts.add(contact);
         contact.setGroup(new Group(view.noGroup()));//Наблюдатель
-        System.out.println("Контакт успешно добавлен");
+        view.succesAdd();
         this.dao.save(refBook);
     }
 
@@ -120,7 +124,7 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void appGroupContact() throws Exception {
+    public void appGroupContact() throws IOException {
         Set<Contact> contacts = refBook.getContacts();
         Set<Group> groups = refBook.getGroups();
         if (!groups.isEmpty()){
@@ -135,12 +139,12 @@ public class ContactServiceImpl implements ContactService{
                         Group group = contact.getGroup();
                         group.setName(nameGroup);
                     }else {
-                        throw new Exception();
+                        throw new IOException();
                     }
                 }
             }
         }else {
-            throw new Exception();
+            throw new IOException();
         }
         this.dao.save(refBook);
     }
@@ -152,7 +156,7 @@ public class ContactServiceImpl implements ContactService{
         for (Contact contact : contacts) {
             if (contact.getFio().equalsIgnoreCase(nameContact)) {
                 view.informationContact(contact);
-                String nameGroup = view.entGroup();;
+                String nameGroup = view.entGroup();
                 Group group = contact.getGroup();
                 if (group.getName().equalsIgnoreCase(nameGroup)) {
                     group.setName(view.noGroup());//Наблюдатель

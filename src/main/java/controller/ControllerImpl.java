@@ -1,15 +1,13 @@
 package controller;
 
 import dao.DirectoryDaoImpl;
-import factory.ContactsFactory;
-import factory.EntityFactory;
-import factory.GroupFactory;
+import models.Contact;
 import models.Entity;
+import models.Group;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
 import storage.RefBook;
 import utilits.TeamList;
-import views.ViewImpl;
 
 import java.io.IOException;
 
@@ -21,7 +19,6 @@ public class ControllerImpl implements Controller{
     /**
      * Поля инициализируются в конcтрукторе
      */
-    private ViewImpl view  = new ViewImpl();
     private ContactServiceImpl serviceContact = null;
     private GroupServiceImpl serviceGroup = null;
     private RefBook refBook  = null;
@@ -53,30 +50,18 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void updateContact() {
-        try {
+    public void updateContact() throws IOException {
             this.serviceContact.updateContact();
-        } catch (IOException e) {
-            System.out.println("Вы не ввели Ф И О");//Это будит делать наблюдатель
-            view.pageActionContact();
-        }
-        view.pageActionContact();
     }
 
     @Override
     public void removeContact() {
         this.serviceContact.removeContact();
-        view.pageActionContact();
     }
 
     @Override
-    public void appGroupContact() {
-        try {
+    public void appGroupContact() throws IOException {
             this.serviceContact.appGroupContact();
-        } catch (Exception e) {
-            System.out.println("нет групп");
-            view.pageActionContact();
-        }
     }
 
     @Override
@@ -100,14 +85,8 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void listGroup() {
-        try {
+    public void listGroup() throws IOException {
             this.serviceGroup.listGroup();
-        } catch (Exception e) {
-            System.out.println("нет групп");
-            view.pageActionGroup();
-        }
-
     }
 
     @Override
@@ -116,32 +95,22 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void updateGroup() {
-        try {
+    public void updateGroup() throws IOException {
             this.serviceGroup.updateGroup();
-        } catch (IOException e) {
-            System.out.println("Вы не ввели имя новой группы");//Наблюдатель
-            view.actionGroup();
-        }
     }
 
     @Override
-    public void addEntity(String command) {
-        try {
-            EntityFactory factory = creatingEntityFactory(command);
-            Entity entity = factory.creatingEntity();
+    public void addEntity(String command) throws IOException {
+            Entity entity = creatingEntity(command);
             if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
                 this.serviceContact.addContact(entity);
             if (command.equalsIgnoreCase(String.valueOf(TeamList.gro)))
                 this.serviceGroup.addGroup(entity);
-        } catch (IOException e) {
-            System.out.println("ERROR");
-        }
     }
 
-    public EntityFactory creatingEntityFactory (String entity) throws IOException{
-        if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new ContactsFactory();
-        if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new GroupFactory();
+     Entity creatingEntity(String entity) throws IOException{
+        if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new Contact();
+        if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new Group();
         throw new IOException();
     }
 

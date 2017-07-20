@@ -25,8 +25,8 @@ public class GroupServiceImpl implements GroupService {
      * dao
      */
     private RefBook refBook = null;
-    private DirectoryDaoImpl dao = new DirectoryDaoImpl();
     private ViewImpl view = new ViewImpl();
+    private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
     public GroupServiceImpl(RefBook refBook) {
         this.refBook = refBook;
@@ -38,6 +38,7 @@ public class GroupServiceImpl implements GroupService {
     public void setDao(DirectoryDaoImpl dao) {
         this.dao = dao;
     }
+
     public RefBook getRefBook() {
         return refBook ;
     }
@@ -58,14 +59,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void listGroup() throws Exception {
+    public void listGroup() throws IOException {
         Set<Group> groups = refBook.getGroups();
         if (!groups.isEmpty()){
             for (Group group : groups){
                 System.out.println(group);
             }
         }else {
-            throw  new Exception();
+            throw  new IOException();
         }
 
     }
@@ -76,9 +77,9 @@ public class GroupServiceImpl implements GroupService {
         Set<Group> groups = refBook.getGroups();
         String name = view.entGroup();
         if (name.trim().length() > 0){
-            group = new Group(name);
+            group.setName(name);
             groups.add(group);
-            System.out.println("Группа успешно добавлена");
+            view.succesAdd();
         }else {
             throw new IOException();
         }

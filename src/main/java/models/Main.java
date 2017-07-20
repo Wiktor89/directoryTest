@@ -16,10 +16,11 @@ public class Main {
 
     public void goo() {
 
-//        new ViewImpl().startPage();
-//        }
-        ControllerImpl controller = new ControllerImpl();
-        controller.addEntity("gro");
+            ControllerImpl controller = new ControllerImpl();
+            ViewImpl view = new ViewImpl();
+            view.setController(controller);
+            view.startPage();
+
 
 
         //Это фабричный метод
@@ -27,7 +28,7 @@ public class Main {
 //        String command = "gro";
 //        try {
 //            //введите что хотите создать
-//            EntityFactory factory = creatingEntityFactory(command);
+//            EntityFactory factory = creatingEntity(command);
 //            if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
 //                System.out.println("контакт"); //Введите FIO контакта;
 //
@@ -39,7 +40,7 @@ public class Main {
 //        }
 
 
-//    static EntityFactory  creatingEntityFactory (String entity) throws IOException{
+//    static EntityFactory  creatingEntity (String entity) throws IOException{
 //        if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new ContactsFactory();
 //        if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new GroupFactory();
 //        throw new IOException();

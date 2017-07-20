@@ -3,6 +3,7 @@ package views;
 import models.Contact;
 import models.Group;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -28,12 +29,12 @@ public interface View {
     /**
      * Действия с контакта
      */
-    void actionContacts();
+    void actionContacts() throws IOException;
 
     /**
      * Действия с группой
      */
-    void actionGroup();
+    void actionGroup() throws IOException;
 
     /**
      * Добавление контакта
@@ -75,4 +76,8 @@ public interface View {
      */
     String noGroup();
 
+    /**
+     * Контакт успешно добавлен
+     */
+    void succesAdd();
 }

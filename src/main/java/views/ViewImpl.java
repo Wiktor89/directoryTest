@@ -6,6 +6,7 @@ import models.Group;
 import utilits.ConsoleReader;
 import utilits.TeamList;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class ViewImpl implements View {
 
 
     public ViewImpl() {
+
     }
 
     public ControllerImpl getController() {
@@ -71,7 +73,12 @@ public class ViewImpl implements View {
         stringBuilder.append("Вверх                           --up\n");
         System.out.println(stringBuilder);
         System.out.println("==========================================\n");
-        actionContacts();
+        try {
+            actionContacts();
+        } catch (IOException e) {
+            System.out.println("Вы не ввели Ф И О");
+            pageActionContact();
+        }
     }
     
     @Override
@@ -85,11 +92,16 @@ public class ViewImpl implements View {
         stringBuilder.append("Вверх                               --up\n");
         System.out.println(stringBuilder);
         System.out.println("==========================================\n");
-        actionGroup();
+        try {
+            actionGroup();
+        } catch (IOException e) {
+            System.out.println("нет группы/ или не ввели имя новой группы");
+            pageActionGroup();
+        }
     }
 
     @Override
-    public void actionContacts() {
+    public void actionContacts() throws IOException {
         String command = this.consol.readString();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.addc)))controller
                 .addEntity("con");
@@ -107,12 +119,12 @@ public class ViewImpl implements View {
             controller.informationContact();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
             startPage();
-        System.out.println("Команда не поддерживается");
+//        System.out.println("Команда не поддерживается");
         pageActionContact();
     }
     
     @Override
-    public void actionGroup() {
+    public void actionGroup() throws IOException {
         String command = this.consol.readString();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
             controller.addEntity("gro");
@@ -125,15 +137,14 @@ public class ViewImpl implements View {
         if (command.equalsIgnoreCase(String.valueOf(TeamList.listcofg)))
             controller.listGroupContact();//Наблюдатель
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
-        System.out.println("Команда не поддерживается");
-        actionGroup();
+//        System.out.println("Команда не поддерживается");
+        pageActionGroup();
     }
 
     @Override
     public List<String> addContact() {
         List<String> attContact = new ArrayList<>();
-        System.out.println("Введите Ф И О");
-        attContact.add(this.consol.readString());
+        attContact.add(entContact());
         System.out.println("Введите телефон");
         attContact.add(this.consol.readString());
         System.out.println("Введите email");
@@ -145,8 +156,7 @@ public class ViewImpl implements View {
     @Override
     public List<String> updateContact() {
         List<String> contacts = new ArrayList<>();
-        System.out.println("Введите новое Ф И О");
-        contacts.add(this.consol.readString());
+        contacts.add(entContact());
         System.out.println("Введите новый телефон");
         contacts.add(this.consol.readString());
         System.out.println("Введите новый email");
@@ -172,13 +182,13 @@ public class ViewImpl implements View {
 
     @Override
     public String entContact() {
-        System.out.println("Введите Ф И О контакта");
+        System.out.println("Введите Ф И О контакта (обязательное поле)");
         return this.consol.readString();
     }
 
     @Override
     public String entGroup() {
-        System.out.println("Введите имя группы");
+        System.out.println("Введите имя группы (обязательное поле)");
         return this.consol.readString();
     }
 
@@ -186,4 +196,10 @@ public class ViewImpl implements View {
     public String noGroup() {
         return "нет группы";
     }
+
+    @Override
+    public void succesAdd() {
+        System.out.println("успешно добавлено");
+    }
+
 }

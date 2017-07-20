@@ -17,7 +17,7 @@ public interface GroupService {
     /**
      *Список групп
      */
-    void listGroup() throws Exception;
+    void listGroup() throws IOException;
 
     /**
      *Добавление группы

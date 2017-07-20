@@ -27,7 +27,7 @@ public interface ContactService {
     /**
      *Добавить контакту группу
      */
-    void appGroupContact() throws Exception;
+    void appGroupContact() throws IOException;
 
     /**
      *Удаление группы у контакта контакта
