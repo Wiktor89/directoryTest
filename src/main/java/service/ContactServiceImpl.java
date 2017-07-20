@@ -5,9 +5,9 @@ import models.Contact;
 import models.Entity;
 import models.Group;
 import storage.RefBook;
-import utilits.ConsoleReader;
 import views.ViewImpl;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -66,18 +66,18 @@ public class ContactServiceImpl implements ContactService{
             throw new IOException();
         }
         contacts.add(contact);
-        contact.setGroup(new Group(view.noGroup()));//Наблюдатель
-        view.succesAdd();
+        contact.setGroup(new Group(view.getNoGroup()));//Наблюдатель
+        view.getSuc();
         this.dao.save(refBook);
     }
 
     @Override
-    public void updateContact() throws IOException {
-        String fioContact = view.entContact();
+    public void updContact() throws IOException {
+        String fioContact = view.getEntContact();
         Set<Contact> contacts = refBook.getContacts();
        for (Contact contact : contacts){
            if (contact.getFio().equalsIgnoreCase(fioContact)){
-               view.informationContact(contact);//Возможно будит полезным видить старые данные
+               view.getContactInfo(contact);//Возможно будит полезным видить старые данные
                List<String> contactsNew = view.updateContact();
                String newFio = contactsNew.get(0);
                if (newFio.trim().length() != 0){
@@ -88,9 +88,9 @@ public class ContactServiceImpl implements ContactService{
                    while (result){
                        Set<Group> groups = refBook.getGroups();
                        for (Group group : groups){
-                           view.listGroup(group);
+                           view.getListGroup(group);
                        }
-                       String nameGroup = view.entGroup();
+                       String nameGroup = view.getEntGroup();
                        for (Group group : groups){
                            if (group.getName().equalsIgnoreCase(nameGroup)){
                                contact.setGroup(new Group(nameGroup));
@@ -107,17 +107,18 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void removeContact() {
+    public void remContact() {
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
-            view.listContacts(contact);
+            view.getListContacts(contact);
         }
-        String fioContact = view.entContact();
+        String fioContact = view.getEntContact();
         Iterator<Contact> iterator = contacts.iterator();
         while (iterator.hasNext()){
             Contact contact = iterator.next();
             if (contact.getFio().equalsIgnoreCase(fioContact)){
                 iterator.remove();
+                view.getSuc();
             }
         }
         this.dao.save(refBook);
@@ -125,41 +126,43 @@ public class ContactServiceImpl implements ContactService{
 
     @Override
     public void appGroupContact() throws IOException {
-        Set<Contact> contacts = refBook.getContacts();
+        Set<Contact> contacts  = refBook.getContacts();
         Set<Group> groups = refBook.getGroups();
         if (!groups.isEmpty()){
             for (Group group : groups){
-                view.listGroup(group);
-            }
-            String name = view.entContact();
-            for (Contact contact : contacts){
-                if (contact.getFio().equalsIgnoreCase(name)){
-                    String nameGroup = view.entGroup();
-                    if (existGroups(nameGroup)){
-                        Group group = contact.getGroup();
-                        group.setName(nameGroup);
-                    }else {
-                        throw new IOException();
-                    }
-                }
+                view.getListGroup(group);
             }
         }else {
-            throw new IOException();
+            throw new EOFException();
+        }
+        String name = view.getEntContact();
+        for (Contact contact : contacts){
+            if (contact.getFio().equalsIgnoreCase(name)){
+                name = view.getEntGroup();
+                if (existGroups(name)){
+                    Group group = contact.getGroup();
+                    group.setName(name);
+                }else {
+                    throw new IOException();
+                }
+            }
+            view.getSuc();
         }
         this.dao.save(refBook);
     }
 
     @Override
-    public void removeGroupContact() {
-        String nameContact = view.entContact();
+    public void remGroupContact() {
+        String nameContact = view.getEntContact();
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts) {
             if (contact.getFio().equalsIgnoreCase(nameContact)) {
-                view.informationContact(contact);
-                String nameGroup = view.entGroup();
+                view.getContactInfo(contact);
+                String nameGroup = view.getEntGroup();
                 Group group = contact.getGroup();
                 if (group.getName().equalsIgnoreCase(nameGroup)) {
-                    group.setName(view.noGroup());//Наблюдатель
+                    group.setName(view.getNoGroup());//Наблюдатель
+                    view.getSuc();
                 }
             }
             this.dao.save(refBook);
@@ -167,12 +170,12 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void informationContact() {
-        String fioContact = view.entContact();
+    public void contactInf() {
+        String fioContact = view.getEntContact();
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
             if (contact.getFio().equalsIgnoreCase(fioContact)){
-                view.informationContact(contact);
+                view.getContactInfo(contact);
             }
         }
     }
@@ -181,7 +184,7 @@ public class ContactServiceImpl implements ContactService{
     public void listContacts() {
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
-            view.listContacts(contact);
+            view.getListContacts(contact);
         }
     }
 

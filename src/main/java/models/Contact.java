@@ -22,6 +22,7 @@ public class Contact implements Serializable,Entity {
     private final static AtomicInteger COUNT = new AtomicInteger(0);
 
     public Contact() {
+        this("нет информации","нет информации","нет информации");
     }
 
     public Contact(String fio, String phone, String email) {
@@ -29,10 +30,6 @@ public class Contact implements Serializable,Entity {
         this.fio = fio;
         this.phone = phone;
         this.email = email;
-    }
-
-    public Contact(String fio) {
-        this(fio,"нет информации","нет информации");
     }
 
     public int getId() {
@@ -79,7 +76,7 @@ public class Contact implements Serializable,Entity {
      * @return Ф.И.О контакта
      */
     public String informationContact(){
-        return  " Ф И О  "+getFio();
+        return  "Ф И О  "+getFio();
     }
 
     @Override

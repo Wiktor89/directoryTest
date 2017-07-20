@@ -17,12 +17,12 @@ public interface ContactService {
     /**
      *Обновление контакта
      */
-    void updateContact() throws IOException;
+    void updContact() throws IOException;
 
     /**
      *Удаление контакта
      */
-    void removeContact();
+    void remContact();
 
     /**
      *Добавить контакту группу
@@ -32,12 +32,12 @@ public interface ContactService {
     /**
      *Удаление группы у контакта контакта
      */
-    void removeGroupContact();
+    void remGroupContact();
 
     /**
      *Инф. по контакту
      */
-    void informationContact ();
+    void contactInf();
 
     /**
      *Список контактов

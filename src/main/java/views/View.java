@@ -29,7 +29,7 @@ public interface View {
     /**
      * Действия с контакта
      */
-    void actionContacts() throws IOException;
+    void actionContact() throws IOException;
 
     /**
      * Действия с группой
@@ -49,35 +49,35 @@ public interface View {
     /**
      * Список контактов
      */
-    void listContacts(Contact contact);
+    void getListContacts(Contact contact);
 
     /**
      * Список групп
      */
-    void listGroup (Group group);
+    void getListGroup(Group group);
 
     /**
      * Полная инф. о контакте
      */
-    void informationContact(Contact contact);
+    void getContactInfo(Contact contact);
 
     /**
      * Ввод контакта
      */
-    String entContact();
+    String getEntContact();
 
     /**
      * Ввод группы
      */
-    String entGroup();
+    String getEntGroup();
 
     /**
      * Нет групп
      */
-    String noGroup();
+    String getNoGroup();
 
     /**
      * Контакт успешно добавлен
      */
-    void succesAdd();
+    void getSuc();
 }

@@ -6,6 +6,7 @@ import models.Group;
 import utilits.ConsoleReader;
 import utilits.TeamList;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +75,11 @@ public class ViewImpl implements View {
         System.out.println(stringBuilder);
         System.out.println("==========================================\n");
         try {
-            actionContacts();
-        } catch (IOException e) {
+            actionContact();
+        } catch (EOFException e) {
+            System.out.println("нет доступных групп");
+            pageActionContact();
+        }catch (IOException e){
             System.out.println("Вы не ввели Ф И О");
             pageActionContact();
         }
@@ -95,13 +99,13 @@ public class ViewImpl implements View {
         try {
             actionGroup();
         } catch (IOException e) {
-            System.out.println("нет группы/ или не ввели имя новой группы");
+            System.out.println("нет групп");
             pageActionGroup();
         }
     }
 
     @Override
-    public void actionContacts() throws IOException {
+    public void actionContact() throws IOException {
         String command = this.consol.readString();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.addc)))controller
                 .addEntity("con");
@@ -119,7 +123,6 @@ public class ViewImpl implements View {
             controller.informationContact();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
             startPage();
-//        System.out.println("Команда не поддерживается");
         pageActionContact();
     }
     
@@ -137,14 +140,13 @@ public class ViewImpl implements View {
         if (command.equalsIgnoreCase(String.valueOf(TeamList.listcofg)))
             controller.listGroupContact();//Наблюдатель
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
-//        System.out.println("Команда не поддерживается");
         pageActionGroup();
     }
 
     @Override
     public List<String> addContact() {
         List<String> attContact = new ArrayList<>();
-        attContact.add(entContact());
+        attContact.add(getEntContact());
         System.out.println("Введите телефон");
         attContact.add(this.consol.readString());
         System.out.println("Введите email");
@@ -156,7 +158,7 @@ public class ViewImpl implements View {
     @Override
     public List<String> updateContact() {
         List<String> contacts = new ArrayList<>();
-        contacts.add(entContact());
+        contacts.add(getEntContact());
         System.out.println("Введите новый телефон");
         contacts.add(this.consol.readString());
         System.out.println("Введите новый email");
@@ -165,41 +167,41 @@ public class ViewImpl implements View {
     }
 
     @Override
-    public void listContacts(Contact contact) {
+    public void getListContacts(Contact contact) {
         System.out.println(contact.informationContact());
     }
 
     @Override
-    public void listGroup(Group group) {
+    public void getListGroup(Group group) {
         System.out.println("Список доступных групп");
         System.out.println(group);
     }
 
     @Override
-    public void informationContact(Contact contact) {
+    public void getContactInfo(Contact contact) {
         System.out.println(contact);
     }
 
     @Override
-    public String entContact() {
+    public String getEntContact() {
         System.out.println("Введите Ф И О контакта (обязательное поле)");
         return this.consol.readString();
     }
 
     @Override
-    public String entGroup() {
+    public String getEntGroup() {
         System.out.println("Введите имя группы (обязательное поле)");
         return this.consol.readString();
     }
 
     @Override
-    public String noGroup() {
+    public String getNoGroup() {
         return "нет группы";
     }
 
     @Override
-    public void succesAdd() {
-        System.out.println("успешно добавлено");
+    public void getSuc() {
+        System.out.println("успешно");
     }
 
 }

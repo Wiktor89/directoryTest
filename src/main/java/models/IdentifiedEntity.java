@@ -1,7 +1,6 @@
 package models;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *Общий класс для группы и контакта

@@ -1,8 +1,6 @@
 package models;
 
 import controller.ControllerImpl;
-import utilits.ConsoleReader;
-import utilits.TeamList;
 import views.ViewImpl;
 
 

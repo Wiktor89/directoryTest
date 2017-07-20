@@ -5,7 +5,6 @@ import models.Contact;
 import models.Entity;
 import models.Group;
 import storage.RefBook;
-import utilits.ConsoleReader;
 import views.ViewImpl;
 
 import java.io.IOException;
@@ -32,13 +31,6 @@ public class GroupServiceImpl implements GroupService {
         this.refBook = refBook;
     }
 
-    public DirectoryDaoImpl getDao() {
-        return dao;
-    }
-    public void setDao(DirectoryDaoImpl dao) {
-        this.dao = dao;
-    }
-
     public RefBook getRefBook() {
         return refBook ;
     }
@@ -48,7 +40,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void listGroupContact() {
-        String nameGroup = view.entGroup();
+        String nameGroup = view.getEntGroup();
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
             Group group = contact.getGroup();
@@ -75,11 +67,11 @@ public class GroupServiceImpl implements GroupService {
     public void addGroup(Entity entity) throws IOException {
         Group group = (Group) entity;
         Set<Group> groups = refBook.getGroups();
-        String name = view.entGroup();
+        String name = view.getEntGroup();
         if (name.trim().length() > 0){
             group.setName(name);
             groups.add(group);
-            view.succesAdd();
+            view.getSuc();
         }else {
             throw new IOException();
         }
@@ -88,19 +80,27 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void removeGroup() {
-        String nameGroup = view.entGroup();
+    public void remGroup() throws IOException {
         Set<Contact> contacts = refBook.getContacts();
         Set<Group> groups = refBook.getGroups();
+        if (!groups.isEmpty()){
+            for (Group group : groups){
+                view.getListGroup(group);
+            }
+        }else {
+            throw  new IOException();
+        }
+        String nameGroup = view.getEntGroup();
         Iterator<Group> iterator = groups.iterator();
         while (iterator.hasNext()){
             Group group = iterator.next();
             if (group.getName().equalsIgnoreCase(nameGroup)){
                 iterator.remove();
+                view.getSuc();
                 for (Contact contact : contacts){
                     group = contact.getGroup();
                     if (group.getName().equalsIgnoreCase(nameGroup)){
-                        group.setName(view.noGroup());
+                        group.setName(view.getNoGroup());
                     }
                 }
             }
@@ -109,13 +109,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void updateGroup() throws IOException {
-        String nameGroup = view.entGroup();
+    public void updGroup() throws IOException {
+        String nameGroup = view.getEntGroup();
         Set<Contact> contacts = refBook.getContacts();
         Set<Group> groups = refBook.getGroups();
         for (Group group : groups){
             if (group.getName().equalsIgnoreCase(nameGroup)){
-                String nameNewGroup = view.entGroup();
+                String nameNewGroup = view.getEntGroup();
                 if (nameNewGroup.trim().length() > 0){
                     group.setName(nameNewGroup);
                     for (Contact contact : contacts){
@@ -141,6 +141,4 @@ public class GroupServiceImpl implements GroupService {
         }
         return result;
     }
-
-
 }

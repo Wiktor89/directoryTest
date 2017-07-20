@@ -51,27 +51,27 @@ public class ControllerImpl implements Controller{
 
     @Override
     public void updateContact() throws IOException {
-            this.serviceContact.updateContact();
+            this.serviceContact.updContact();
     }
 
     @Override
     public void removeContact() {
-        this.serviceContact.removeContact();
+        this.serviceContact.remContact();
     }
 
     @Override
-    public void appGroupContact() throws IOException {
+    public void appGroupContact() throws IOException{
             this.serviceContact.appGroupContact();
     }
 
     @Override
     public void removeGroupContact() {
-        this.serviceContact.removeGroupContact();
+        this.serviceContact.remGroupContact();
     }
 
     @Override
     public void informationContact() {
-        this.serviceContact.informationContact();
+        this.serviceContact.contactInf();
     }
 
     @Override
@@ -90,13 +90,13 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void removeGroup() {
-        this.serviceGroup.removeGroup();
+    public void removeGroup() throws IOException {
+        this.serviceGroup.remGroup();
     }
 
     @Override
     public void updateGroup() throws IOException {
-            this.serviceGroup.updateGroup();
+            this.serviceGroup.updGroup();
     }
 
     @Override

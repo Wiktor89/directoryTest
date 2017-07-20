@@ -50,7 +50,7 @@ public interface Controller {
     /**
      *Удаление группы
      */
-    void removeGroup();
+    void removeGroup() throws IOException;
 
     /**
      *Обновление  группы

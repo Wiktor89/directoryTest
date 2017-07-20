@@ -27,12 +27,12 @@ public interface GroupService {
     /**
      *Удаление группы
      */
-    void removeGroup();
+    void remGroup() throws IOException;
 
     /**
      *Обновление  группы
      */
-    void updateGroup() throws IOException;
+    void updGroup() throws IOException;
 
     /**
      *Смотрим есть группа в списке
