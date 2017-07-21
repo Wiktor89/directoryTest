@@ -62,10 +62,12 @@ public class ContactServiceImpl implements ContactService{
     public void updContact(List<String> attContact) {
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
-            if (contact.getFio().equalsIgnoreCase(attContact.get(4))){
-                contact.setFio(attContact.get(0));
-                contact.setPhone(attContact.get(1));
-                contact.setEmail(attContact.get(2));
+            contact.setEmail("нет информации");
+            contact.setPhone("нет информации");
+            if (contact.getFio().equalsIgnoreCase(attContact.get(0))){
+                contact.setFio(attContact.get(1));
+                if (attContact.get(2).trim().length() > 0) contact.setPhone(attContact.get(2));
+                if (attContact.get(3).trim().length() > 0) contact.setEmail(attContact.get(3));
                 this.dao.save(refBook);
             }
         }

@@ -56,7 +56,7 @@ public interface Controller {
     /**
      *Обновление  группы
      */
-    void updGroup(Group group,String name) ;
+    void updGroup(List<String> attGoup) ;
 
     /**
      * Создание сущности

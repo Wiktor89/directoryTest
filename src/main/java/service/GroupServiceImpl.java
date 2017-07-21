@@ -57,8 +57,9 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void addGroup(Entity entity)  {
+    public void addGroup(List<String> attrEntity,Entity entity)  {
         Group group = (Group) entity;
+        group.setName(attrEntity.get(0));
         Set<Group> groups = refBook.getGroups();
         groups.add(group);
         refBook.setId(group.getId());
@@ -88,15 +89,18 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void updGroup(Group group,String oldName) {
+    public void updGroup(List<String> attGroup) {
         Set<Group> groups = refBook.getGroups();
-        groups.add(group);
-        String newName = group.getName();
+        for (Group group : groups){
+            if (group.getName().equalsIgnoreCase(attGroup.get(0))){
+                group.setName(attGroup.get(1));
+            }
+        }
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
-            Group group1 = contact.getGroup();
-            if (group1.getName().equalsIgnoreCase(oldName)){
-                group1.setName(newName);
+            Group group = contact.getGroup();
+            if (group.getName().equalsIgnoreCase(attGroup.get(0))){
+                group.setName(attGroup.get(1));
             }
         }
         this.dao.save(refBook);

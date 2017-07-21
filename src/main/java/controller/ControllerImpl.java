@@ -9,6 +9,7 @@ import service.GroupServiceImpl;
 import storage.RefBook;
 import utilits.TeamList;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -59,13 +60,13 @@ public class ControllerImpl implements Controller{
 
 
         if (command.equalsIgnoreCase(String.valueOf(TeamList.gro)))
-            this.serviceGroup.addGroup(entity);
+            this.serviceGroup.addGroup(attrEntity,entity);
     }
 
     Entity creatingEntity(String entity) throws IOException{
         if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new Contact();
         if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new Group();
-        throw new IOException();
+        throw new EOFException();
     }
 
 
@@ -147,8 +148,8 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void updGroup(Group group,String oldName)  {
-            this.serviceGroup.updGroup(group,oldName);
+    public void updGroup(List<String> attGroup)  {
+            this.serviceGroup.updGroup(attGroup);
     }
 
 

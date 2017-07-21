@@ -1,5 +1,6 @@
 package views;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import models.Contact;
 import models.Group;
 
@@ -30,7 +31,7 @@ public interface View {
     /**
      * Действия с контакта
      */
-    void actionContact() ;
+    void actionContact() throws IOException ;
 
     /**
      * Действия с группой
@@ -40,7 +41,7 @@ public interface View {
     /**
      * Добавление контакта
      */
-    void addContact(String command) ;
+    void addContact(String command) throws IOException;
 
     /**
      * Действия для группы
