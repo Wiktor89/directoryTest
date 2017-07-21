@@ -10,6 +10,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  *Отображение
@@ -60,7 +61,7 @@ public class ViewImpl implements View {
             System.out.println("Команда не поддерживается");
         }
     }
-    
+
     @Override
     public void pageActionContact(){
         StringBuilder stringBuilder = new StringBuilder("Выберите действие для контакта\n");
@@ -84,7 +85,113 @@ public class ViewImpl implements View {
             pageActionContact();
         }
     }
-    
+
+    @Override
+    public void actionContact() throws IOException {
+        String command = this.consol.readString();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.addc)))
+            addContact("con");//Ввел добавить контакт
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.remc)))
+            remContact();//Наблюдатель Удаление контакта...
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.updc)))
+            updContact();//Обновление контакта...
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.listc)))
+            getContacts();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.addcatg)))
+            appGroupContact();//Наблюдатель
+
+
+
+
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.remcofg)))
+            controller.remGroupContact();//Наблюдатель
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))
+            controller.contactInf();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
+            startPage();
+        pageActionContact();
+    }
+
+    @Override
+    public void addContact(String command) throws IOException {
+        List<String> attContact = new ArrayList<>();
+        do {
+            attContact.add(getEntContact());
+            System.out.println("Введите телефон");
+            attContact.add(this.consol.readString());
+            System.out.println("Введите email");
+            attContact.add(this.consol.readString());
+            attContact.add("нет группы");
+        }while (attContact.get(0).trim().length() > 0);
+        controller.addEntity(attContact,command);
+        getSuc();
+    }//***
+
+    public void remContact (){
+        getContacts();
+        controller.remContact(getEntContact());
+    }//***
+
+    @Override
+    public void updContact() {
+        Contact contact = this.controller.getContact(getEntContact());
+        String fio = getEntContact();
+        while (fio.trim().length() > 0){
+            contact.setFio(fio);
+            System.out.println("Введите новый телефон");
+            contact.setPhone(this.consol.readString());
+            System.out.println("Введите новый email");
+            contact.setEmail(this.consol.readString());
+        }
+        this.controller.updContact(contact);
+
+    }//***
+
+    void appGroupContact(){
+        Contact contact = this.controller.getContact(getEntContact());
+        getGroups();
+        Group group = contact.getGroup();
+        String name = getEntGroup();
+        if (name.trim().length() > 0){
+            group.setName(name);
+            this.controller.appGroupContact(contact);
+        }else {
+            System.out.println("нет имени группы");
+        }
+    }//***
+
+
+
+    @Override
+    public void actionGroup() throws IOException {
+        String command = this.consol.readString();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
+            controller.addEntity("gro");
+
+
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))
+            controller.remGroup();//Наблюдатель
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.updg)))
+            controller.updGroup();//Наблюдатель
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.listg)))
+            controller.getGroups();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.listcofg)))
+            controller.listGroupContact();//Наблюдатель
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
+        pageActionGroup();
+    }
+
+    @Override
+    public void getListGroup(Group group) {
+        System.out.println("Список доступных групп");
+        System.out.println(group);
+    }
+
+    @Override
+    public void getContactInfo(Contact contact) {
+        System.out.println(contact);
+    }
+
     @Override
     public void pageActionGroup() {
         StringBuilder stringBuilder = new StringBuilder("Выберите действие для группы\n");
@@ -102,84 +209,6 @@ public class ViewImpl implements View {
             System.out.println("нет групп");
             pageActionGroup();
         }
-    }
-
-    @Override
-    public void actionContact() throws IOException {
-        String command = this.consol.readString();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.addc)))controller
-                .addEntity("con");
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.remc)))
-            controller.removeContact();//Наблюдатель Удаление контакта...
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.updc)))
-            controller.updateContact();//Обновление контакта...
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.listc)))
-            controller.listContacts();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.addcatg)))
-            controller.appGroupContact();//Наблюдатель
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.remcofg)))
-            controller.removeGroupContact();//Наблюдатель
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))
-            controller.informationContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
-            startPage();
-        pageActionContact();
-    }
-    
-    @Override
-    public void actionGroup() throws IOException {
-        String command = this.consol.readString();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
-            controller.addEntity("gro");
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))
-            controller.removeGroup();//Наблюдатель
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.updg)))
-            controller.updateGroup();//Наблюдатель
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.listg)))
-            controller.listGroup();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.listcofg)))
-            controller.listGroupContact();//Наблюдатель
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
-        pageActionGroup();
-    }
-
-    @Override
-    public List<String> addContact() {
-        List<String> attContact = new ArrayList<>();
-        attContact.add(getEntContact());
-        System.out.println("Введите телефон");
-        attContact.add(this.consol.readString());
-        System.out.println("Введите email");
-        attContact.add(this.consol.readString());
-        return attContact;
-    }
-
-
-    @Override
-    public List<String> updateContact() {
-        List<String> contacts = new ArrayList<>();
-        contacts.add(getEntContact());
-        System.out.println("Введите новый телефон");
-        contacts.add(this.consol.readString());
-        System.out.println("Введите новый email");
-        contacts.add(this.consol.readString());
-        return contacts;
-    }
-
-    @Override
-    public void getListContacts(Contact contact) {
-        System.out.println(contact.informationContact());
-    }
-
-    @Override
-    public void getListGroup(Group group) {
-        System.out.println("Список доступных групп");
-        System.out.println(group);
-    }
-
-    @Override
-    public void getContactInfo(Contact contact) {
-        System.out.println(contact);
     }
 
     @Override
@@ -202,6 +231,26 @@ public class ViewImpl implements View {
     @Override
     public void getSuc() {
         System.out.println("успешно");
+    }
+
+    @Override
+    public void getContacts(){
+        Set<Contact> contacts = this.controller.getContacts();
+        for (Contact contact : contacts){
+            System.out.println(contact.contactInf());
+        }
+    }
+
+    public void getGroups(){
+        Set<Group> groups = this.controller.getGroups();
+        for (Group group : groups){
+            System.out.println(group);
+        }
+    }
+
+    public String getExit(){
+        System.out.println("для выхода exit");
+        return this.consol.readString();
     }
 
 }

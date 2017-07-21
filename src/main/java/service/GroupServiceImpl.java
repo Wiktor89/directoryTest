@@ -45,22 +45,15 @@ public class GroupServiceImpl implements GroupService {
         for (Contact contact : contacts){
             Group group = contact.getGroup();
             if (group.getName().equalsIgnoreCase(nameGroup)){
-                System.out.println(contact.informationContact());
+                System.out.println(contact.contactInf());
             }
         }
     }
 
     @Override
-    public void listGroup() throws IOException {
+    public Set<Group> getGroups(){
         Set<Group> groups = refBook.getGroups();
-        if (!groups.isEmpty()){
-            for (Group group : groups){
-                System.out.println(group);
-            }
-        }else {
-            throw  new IOException();
-        }
-
+        return groups;
     }
 
     @Override

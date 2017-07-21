@@ -16,6 +16,7 @@ public class DirectoryDaoImpl implements DirectoryDao {
         try (ObjectOutputStream stream  = new ObjectOutputStream(new FileOutputStream(
                 new File("RefBook.ser")))) {
             stream.writeObject(refBook);
+            refBook.notifyObserver();
         }catch (Exception e){
             e.printStackTrace();
         }

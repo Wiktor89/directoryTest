@@ -4,10 +4,11 @@ import models.Contact;
 import models.Group;
 import sorted.ContactFioComparator;
 import sorted.GroupNameComparator;
+import views.*;
+import views.Observer;
 
 import java.io.Serializable;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  *Модель для справочника контактов
@@ -17,6 +18,7 @@ public class RefBook implements  Serializable {
     private int id;
     private Set<Contact> contacts = new TreeSet<>(new ContactFioComparator());
     private Set<Group> groups = new TreeSet<>(new GroupNameComparator());
+    private List<Observer> subscriber = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -42,4 +44,17 @@ public class RefBook implements  Serializable {
         this.groups = groups;
     }
 
+    public List<Observer> getSubscriber() {
+        return subscriber;
+    }
+
+    public void setSubscriber(List<Observer> subscriber) {
+        this.subscriber = subscriber;
+    }
+
+    public void notifyObserver (){
+        for (Observer observer : subscriber){
+            observer.handle(getContacts(),getGroups());
+        }
+    }
 }

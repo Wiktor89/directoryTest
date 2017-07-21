@@ -39,17 +39,17 @@ public interface View {
     /**
      * Добавление контакта
      */
-    List<String> addContact();
+    void addContact(String command) throws IOException;
 
     /**
      * Действия для группы
      */
-    List<String> updateContact();
+    void updContact();
 
     /**
      * Список контактов
      */
-    void getListContacts(Contact contact);
+    void getContacts();
 
     /**
      * Список групп

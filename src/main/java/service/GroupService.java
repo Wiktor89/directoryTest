@@ -1,8 +1,10 @@
 package service;
 
 import models.Entity;
+import models.Group;
 
 import java.io.IOException;
+import java.util.Set;
 
 /**
  *Интерфейс для группы
@@ -17,7 +19,7 @@ public interface GroupService {
     /**
      *Список групп
      */
-    void listGroup() throws IOException;
+    Set<Group> getGroups();
 
     /**
      *Добавление группы

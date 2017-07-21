@@ -1,6 +1,11 @@
 package controller;
 
+import models.Contact;
+import models.Group;
+
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 /**
  *Интерфейс для контроллера
@@ -10,32 +15,32 @@ public interface Controller {
     /**
      *Обновление контакта
      */
-    void updateContact() throws IOException;
+    void updContact(Contact contact);
 
     /**
      *Удаление контакта
      */
-    void removeContact();
+    void remContact(String fio);
 
     /**
      *Добавить контакту группу
      */
-    void appGroupContact() throws IOException;
+    void appGroupContact(Contact contact);
 
     /**
      *Удаление группы у контакта контакта
      */
-    void removeGroupContact();
+    void remGroupContact();
 
     /**
      *Инф. по контакту
      */
-    void informationContact ();
+    void contactInf();
 
     /**
      *Список контактов
      */
-    void listContacts();
+    Set<Contact> getContacts();
 
     /**
      *Список контактов опр. группы
@@ -45,20 +50,20 @@ public interface Controller {
     /**
      *Список групп
      */
-    void listGroup() throws IOException;
+    Set<Group> getGroups();
 
     /**
      *Удаление группы
      */
-    void removeGroup() throws IOException;
+    void remGroup() throws IOException;
 
     /**
      *Обновление  группы
      */
-    void updateGroup() throws IOException;
+    void updGroup() throws IOException;
 
     /**
      * Создание сущности
      */
-    void addEntity (String command) throws IOException;
+    void addEntity (List<String> attrEntity,String command) throws IOException;
 }
