@@ -8,7 +8,9 @@ import storage.RefBook;
 import views.ViewImpl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,7 +26,6 @@ public class GroupServiceImpl implements GroupService {
      * dao
      */
     private RefBook refBook = null;
-    private ViewImpl view = new ViewImpl();
     private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
     public GroupServiceImpl(RefBook refBook) {
@@ -39,15 +40,16 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void listGroupContact() {
-        String nameGroup = view.getEntGroup();
+    public List<Contact> getContactsGroup(String name) {
+        List<Contact> contacts1 = new ArrayList<>();
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
             Group group = contact.getGroup();
-            if (group.getName().equalsIgnoreCase(nameGroup)){
-                System.out.println(contact.contactInf());
+            if (group.getName().equalsIgnoreCase(name)){
+                contacts1.add(contact);
             }
         }
+        return contacts1;
     }
 
     @Override
@@ -60,64 +62,43 @@ public class GroupServiceImpl implements GroupService {
     public void addGroup(Entity entity) throws IOException {
         Group group = (Group) entity;
         Set<Group> groups = refBook.getGroups();
-        String name = view.getEntGroup();
-        if (name.trim().length() > 0){
-            group.setName(name);
-            groups.add(group);
-            view.getSuc();
-        }else {
-            throw new IOException();
-        }
+        groups.add(group);
         refBook.setId(group.getId());
         this.dao.save(refBook);
     }
 
     @Override
-    public void remGroup() throws IOException {
-        Set<Contact> contacts = refBook.getContacts();
+    public void remGroup(String name) throws IOException {
         Set<Group> groups = refBook.getGroups();
+        Set<Contact> contacts = refBook.getContacts();
         if (!groups.isEmpty()){
-            for (Group group : groups){
-                view.getListGroup(group);
-            }
-        }else {
-            throw  new IOException();
-        }
-        String nameGroup = view.getEntGroup();
-        Iterator<Group> iterator = groups.iterator();
-        while (iterator.hasNext()){
-            Group group = iterator.next();
-            if (group.getName().equalsIgnoreCase(nameGroup)){
-                iterator.remove();
-                view.getSuc();
-                for (Contact contact : contacts){
-                    group = contact.getGroup();
-                    if (group.getName().equalsIgnoreCase(nameGroup)){
-                        group.setName(view.getNoGroup());
+                Iterator<Group> iterator = groups.iterator();
+                while (iterator.hasNext()){
+                    Group group = iterator.next();
+                    if (group.getName().equalsIgnoreCase(name)){
+                        iterator.remove();
+                    }
+                    for (Contact contact : contacts){
+                        Group group1 = contact.getGroup();
+                        if (group1.getName().equalsIgnoreCase(name)){
+                            group1.setName("нет группы");
+                        }
                     }
                 }
-            }
         }
         this.dao.save(refBook);
     }
 
     @Override
-    public void updGroup() throws IOException {
-        String nameGroup = view.getEntGroup();
-        Set<Contact> contacts = refBook.getContacts();
+    public void updGroup(Group group,String oldName) {
         Set<Group> groups = refBook.getGroups();
-        for (Group group : groups){
-            if (group.getName().equalsIgnoreCase(nameGroup)){
-                String nameNewGroup = view.getEntGroup();
-                if (nameNewGroup.trim().length() > 0){
-                    group.setName(nameNewGroup);
-                    for (Contact contact : contacts){
-                        group = contact.getGroup();
-                        group.setName(group.getName());
-                }
-                }else {
-                    throw new IOException();
-                }
+        groups.add(group);
+        String newName = group.getName();
+        Set<Contact> contacts = refBook.getContacts();
+        for (Contact contact : contacts){
+            Group group1 = contact.getGroup();
+            if (group1.getName().equalsIgnoreCase(oldName)){
+                group1.setName(newName);
             }
         }
         this.dao.save(refBook);
@@ -133,5 +114,15 @@ public class GroupServiceImpl implements GroupService {
             }
         }
         return result;
+    }
+
+    public Group getGroup(String name){
+        Set<Group> groups = refBook.getGroups();
+        for (Group group : groups){
+            if (group.getName().equalsIgnoreCase(name)){
+                return group;
+            }
+        }
+        return null;
     }
 }

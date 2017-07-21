@@ -87,38 +87,27 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void remGroupContact() {
-        String nameContact = view.getEntContact();
+    public void remGroupContact(Contact contact) {
         Set<Contact> contacts = refBook.getContacts();
-        for (Contact contact : contacts) {
-            if (contact.getFio().equalsIgnoreCase(nameContact)) {
-                view.getContactInfo(contact);
-                String nameGroup = view.getEntGroup();
-                Group group = contact.getGroup();
-                if (group.getName().equalsIgnoreCase(nameGroup)) {
-                    group.setName(view.getNoGroup());//Наблюдатель
-                    view.getSuc();
-                }
-            }
-            this.dao.save(refBook);
-        }
-    }
-
-    @Override
-    public void contactInf() {
-        String fioContact = view.getEntContact();
-        Set<Contact> contacts = refBook.getContacts();
-        for (Contact contact : contacts){
-            if (contact.getFio().equalsIgnoreCase(fioContact)){
-                view.getContactInfo(contact);
-            }
-        }
+        contacts.add(contact);
+        this.dao.save(refBook);
     }
 
     @Override
     public Set<Contact> getContacts() {
         Set<Contact> contacts = refBook.getContacts();
         return contacts;
+    }
+
+    public Contact getContact(String fio){
+        Set<Contact> contacts  = refBook.getContacts();
+        for (Contact contact : contacts){
+            if (contact.getFio().equalsIgnoreCase(fio)){
+                return contact;
+            }
+        }
+        System.out.println("Пустой контакт");
+        return  null;
     }
 
     @Override
@@ -131,17 +120,6 @@ public class ContactServiceImpl implements ContactService{
             }
         }
         return result;
-    }
-
-    public Contact getContact(String fio){
-        Set<Contact> contacts  = refBook.getContacts();
-        for (Contact contact : contacts){
-            if (contact.getFio().equalsIgnoreCase(fio)){
-                return contact;
-            }
-        }
-        System.out.println("Пустой контакт");
-        return  null;
     }
 
 

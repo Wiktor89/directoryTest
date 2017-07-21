@@ -54,22 +54,22 @@ public interface View {
     /**
      * Список групп
      */
-    void getListGroup(Group group);
+    void getGroups();
 
     /**
      * Полная инф. о контакте
      */
-    void getContactInfo(Contact contact);
+    void getContactInfo();
 
     /**
      * Ввод контакта
      */
-    String getEntContact();
+    String getNameContact();
 
     /**
      * Ввод группы
      */
-    String getEntGroup();
+    String getNameGroup();
 
     /**
      * Нет групп

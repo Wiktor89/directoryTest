@@ -36,12 +36,7 @@ public interface ContactService {
     /**
      *Удаление группы у контакта контакта
      */
-    void remGroupContact();
-
-    /**
-     *Инф. по контакту
-     */
-    void contactInf();
+    void remGroupContact(Contact contact);
 
     /**
      *Список контактов

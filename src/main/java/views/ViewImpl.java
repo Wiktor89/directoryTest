@@ -1,5 +1,6 @@
 package views;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import controller.ControllerImpl;
 import models.Contact;
 import models.Group;
@@ -99,14 +100,10 @@ public class ViewImpl implements View {
             getContacts();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.addcatg)))
             appGroupContact();//Наблюдатель
-
-
-
-
         if (command.equalsIgnoreCase(String.valueOf(TeamList.remcofg)))
-            controller.remGroupContact();//Наблюдатель
+            remGroupContact();//Наблюдатель
         if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))
-            controller.contactInf();
+            getContactInfo();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
             startPage();
         pageActionContact();
@@ -116,7 +113,7 @@ public class ViewImpl implements View {
     public void addContact(String command) throws IOException {
         List<String> attContact = new ArrayList<>();
         do {
-            attContact.add(getEntContact());
+            attContact.add(getNameContact());
             System.out.println("Введите телефон");
             attContact.add(this.consol.readString());
             System.out.println("Введите email");
@@ -129,13 +126,13 @@ public class ViewImpl implements View {
 
     public void remContact (){
         getContacts();
-        controller.remContact(getEntContact());
+        controller.remContact(getNameContact());
     }//***
 
     @Override
     public void updContact() {
-        Contact contact = this.controller.getContact(getEntContact());
-        String fio = getEntContact();
+        Contact contact = this.controller.getContact(getNameContact());
+        String fio = getNameContact();
         while (fio.trim().length() > 0){
             contact.setFio(fio);
             System.out.println("Введите новый телефон");
@@ -148,10 +145,10 @@ public class ViewImpl implements View {
     }//***
 
     void appGroupContact(){
-        Contact contact = this.controller.getContact(getEntContact());
+        Contact contact = this.controller.getContact(getNameContact());
         getGroups();
         Group group = contact.getGroup();
-        String name = getEntGroup();
+        String name = getNameGroup();
         if (name.trim().length() > 0){
             group.setName(name);
             this.controller.appGroupContact(contact);
@@ -160,37 +157,21 @@ public class ViewImpl implements View {
         }
     }//***
 
-
-
     @Override
-    public void actionGroup() throws IOException {
-        String command = this.consol.readString();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
-            controller.addEntity("gro");
-
-
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))
-            controller.remGroup();//Наблюдатель
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.updg)))
-            controller.updGroup();//Наблюдатель
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.listg)))
-            controller.getGroups();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.listcofg)))
-            controller.listGroupContact();//Наблюдатель
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
-        pageActionGroup();
-    }
-
-    @Override
-    public void getListGroup(Group group) {
-        System.out.println("Список доступных групп");
-        System.out.println(group);
-    }
-
-    @Override
-    public void getContactInfo(Contact contact) {
+    public void getContactInfo() {
+        Contact contact = this.controller.getContact(getNameContact());
         System.out.println(contact);
-    }
+    }///***
+
+    void remGroupContact(){
+        Contact contact = this.controller.getContact(getNameContact());
+        Group group = contact.getGroup();
+        group.setName("нет группы");
+        this.controller.remGroupContact(contact);
+    }//***
+
+
+
 
     @Override
     public void pageActionGroup() {
@@ -211,14 +192,82 @@ public class ViewImpl implements View {
         }
     }
 
+
     @Override
-    public String getEntContact() {
+    public void actionGroup() throws IOException {
+        String command = this.consol.readString();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
+            addGroup("gro");
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))
+            remGroup();//Наблюдатель
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.updg)))
+            updGroup();//Наблюдатель
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.listg)))
+            getGroups();
+
+
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.listcofg)))
+            getContactsGroup();//Наблюдатель
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
+        pageActionGroup();
+    }
+
+    public void addGroup (String command) throws IOException{
+        List<String> attGroup = new ArrayList<>();
+        String name = getNameGroup();
+        if (name.trim().length() > 0){
+            attGroup.add(name);
+            this.controller.addEntity(attGroup,command);
+        }else {
+            System.out.println("не ввели имя группы");
+        }
+    } //***
+
+    public void remGroup() throws IOException{
+        String name = getNameGroup();
+        if(name.trim().length() > 0){
+            this.controller.remGroup(name);
+        }else {
+            System.out.println("не ввели имя группы");
+        }
+    }//***
+
+    public void updGroup() throws IOException{
+        String name = getNameGroup();
+        Group group = this.controller.getGroup(name);
+        String oldName = group.getName();
+        if (!(group == null)){
+            group.setName(getNameGroup());
+        }
+
+        this.controller.updGroup(group,oldName);
+    }//***
+
+    @Override
+    public void getGroups(){
+        System.out.println("Список доступных групп");
+        Set<Group> groups = this.controller.getGroups();
+        for (Group group : groups){
+            System.out.println(group);
+        }
+    }//***
+
+    public void getContactsGroup(){
+        this.controller.get
+
+    }
+
+
+
+
+    @Override
+    public String getNameContact() {
         System.out.println("Введите Ф И О контакта (обязательное поле)");
         return this.consol.readString();
     }
 
     @Override
-    public String getEntGroup() {
+    public String getNameGroup() {
         System.out.println("Введите имя группы (обязательное поле)");
         return this.consol.readString();
     }
@@ -238,13 +287,6 @@ public class ViewImpl implements View {
         Set<Contact> contacts = this.controller.getContacts();
         for (Contact contact : contacts){
             System.out.println(contact.contactInf());
-        }
-    }
-
-    public void getGroups(){
-        Set<Group> groups = this.controller.getGroups();
-        for (Group group : groups){
-            System.out.println(group);
         }
     }
 

@@ -86,13 +86,8 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void remGroupContact() {
-        this.serviceContact.remGroupContact();
-    }
-
-    @Override
-    public void contactInf() {
-        this.serviceContact.contactInf();
+    public void remGroupContact(Contact contact) {
+        this.serviceContact.remGroupContact(contact);
     }
 
     @Override
@@ -117,8 +112,8 @@ public class ControllerImpl implements Controller{
 
 
     @Override
-    public void listGroupContact() {
-        this.serviceGroup.listGroupContact();
+    public List<Contact> getContactsGroup(String name) {
+       return this.serviceGroup.getContactsGroup(name);
     }
 
     @Override
@@ -126,14 +121,19 @@ public class ControllerImpl implements Controller{
         return this.serviceGroup.getGroups();
     }
 
-    @Override
-    public void remGroup() throws IOException {
-        this.serviceGroup.remGroup();
+    public Group getGroup (String name){
+        return this.serviceGroup.getGroup(name);
     }
 
     @Override
-    public void updGroup() throws IOException {
-            this.serviceGroup.updGroup();
+    public void remGroup(String name) throws IOException {
+        this.serviceGroup.remGroup(name);
     }
+
+    @Override
+    public void updGroup(Group group,String oldName) throws IOException {
+            this.serviceGroup.updGroup(group,oldName);
+    }
+
 
 }

@@ -30,12 +30,7 @@ public interface Controller {
     /**
      *Удаление группы у контакта контакта
      */
-    void remGroupContact();
-
-    /**
-     *Инф. по контакту
-     */
-    void contactInf();
+    void remGroupContact(Contact contact);
 
     /**
      *Список контактов
@@ -45,7 +40,7 @@ public interface Controller {
     /**
      *Список контактов опр. группы
      */
-    void listGroupContact();
+    List<Contact> getContactsGroup(String name);
 
     /**
      *Список групп
@@ -55,12 +50,12 @@ public interface Controller {
     /**
      *Удаление группы
      */
-    void remGroup() throws IOException;
+    void remGroup(String name) throws IOException;
 
     /**
      *Обновление  группы
      */
-    void updGroup() throws IOException;
+    void updGroup(Group group,String name) throws IOException;
 
     /**
      * Создание сущности

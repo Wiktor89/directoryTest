@@ -1,9 +1,11 @@
 package service;
 
+import models.Contact;
 import models.Entity;
 import models.Group;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,7 +16,7 @@ public interface GroupService {
     /**
      *Список контактов опр. группы
      */
-    void listGroupContact();
+    List<Contact> getContactsGroup(String name);
 
     /**
      *Список групп
@@ -29,12 +31,12 @@ public interface GroupService {
     /**
      *Удаление группы
      */
-    void remGroup() throws IOException;
+    void remGroup(String name) throws IOException;
 
     /**
      *Обновление  группы
      */
-    void updGroup() throws IOException;
+    void updGroup(Group group,String oldName);
 
     /**
      *Смотрим есть группа в списке
