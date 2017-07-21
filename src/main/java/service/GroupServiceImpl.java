@@ -4,14 +4,12 @@ import dao.DirectoryDaoImpl;
 import models.Contact;
 import models.Entity;
 import models.Group;
+import sorted.ContactFioComparator;
 import storage.RefBook;
 import views.ViewImpl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  *Сервис для контакта
@@ -40,8 +38,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<Contact> getContactsGroup(String name) {
-        List<Contact> contacts1 = new ArrayList<>();
+    public Set<Contact> getContactsGroup(String name) {
+        Set<Contact> contacts1 = new TreeSet<>(new ContactFioComparator());
         Set<Contact> contacts = refBook.getContacts();
         for (Contact contact : contacts){
             Group group = contact.getGroup();

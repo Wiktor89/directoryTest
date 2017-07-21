@@ -3,6 +3,7 @@ package views;
 import models.Contact;
 import models.Group;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public interface View {
     /**
      * Действия для группы
      */
-    void updContact();
+    void updContact() throws EOFException;
 
     /**
      * Список контактов
@@ -59,12 +60,12 @@ public interface View {
     /**
      * Полная инф. о контакте
      */
-    void getContactInfo();
+    void getContactInfo() throws IOException;
 
     /**
      * Ввод контакта
      */
-    String getNameContact();
+    String getNameContact() throws EOFException;
 
     /**
      * Ввод группы

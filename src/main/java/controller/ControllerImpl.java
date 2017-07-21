@@ -112,7 +112,7 @@ public class ControllerImpl implements Controller{
 
 
     @Override
-    public List<Contact> getContactsGroup(String name) {
+    public Set<Contact> getContactsGroup(String name) {
        return this.serviceGroup.getContactsGroup(name);
     }
 

@@ -79,10 +79,10 @@ public class ViewImpl implements View {
         try {
             actionContact();
         } catch (EOFException e) {
-            System.out.println("нет доступных групп");
+            System.out.println("Вы не ввели Ф И О");
             pageActionContact();
         }catch (IOException e){
-            System.out.println("Вы не ввели Ф И О");
+            System.out.println("нет доступных групп");
             pageActionContact();
         }
     }
@@ -119,32 +119,39 @@ public class ViewImpl implements View {
             System.out.println("Введите email");
             attContact.add(this.consol.readString());
             attContact.add("нет группы");
-        }while (attContact.get(0).trim().length() > 0);
+        }while (!(attContact.get(0).trim().length() > 0));
         controller.addEntity(attContact,command);
         getSuc();
     }//***
 
-    public void remContact (){
+    public void remContact () throws IOException {
         getContacts();
         controller.remContact(getNameContact());
     }//***
 
     @Override
-    public void updContact() {
+    public void updContact() throws EOFException {
         Contact contact = this.controller.getContact(getNameContact());
-        String fio = getNameContact();
-        while (fio.trim().length() > 0){
-            contact.setFio(fio);
-            System.out.println("Введите новый телефон");
-            contact.setPhone(this.consol.readString());
-            System.out.println("Введите новый email");
-            contact.setEmail(this.consol.readString());
+        if (!(contact == null)){
+            String fio = getNameContact();
+            if (fio.trim().length() > 0){
+                contact.setFio(fio);
+                System.out.println("Введите новый телефон");
+                contact.setPhone(this.consol.readString());
+                System.out.println("Введите новый email");
+                contact.setEmail(this.consol.readString());
+                getSuc();
+            }else {
+                throw new EOFException();
+            }
+        }else {
+            throw new EOFException();
         }
         this.controller.updContact(contact);
 
     }//***
 
-    void appGroupContact(){
+    void appGroupContact() throws IOException{
         Contact contact = this.controller.getContact(getNameContact());
         getGroups();
         Group group = contact.getGroup();
@@ -158,12 +165,16 @@ public class ViewImpl implements View {
     }//***
 
     @Override
-    public void getContactInfo() {
+    public void getContactInfo() throws IOException {
         Contact contact = this.controller.getContact(getNameContact());
-        System.out.println(contact);
+        if (!(contact == null)){
+            System.out.println(contact);
+        }else {
+            System.out.println("нет контакта");
+        }
     }///***
 
-    void remGroupContact(){
+    void remGroupContact() throws IOException{
         Contact contact = this.controller.getContact(getNameContact());
         Group group = contact.getGroup();
         group.setName("нет группы");
@@ -204,8 +215,6 @@ public class ViewImpl implements View {
             updGroup();//Наблюдатель
         if (command.equalsIgnoreCase(String.valueOf(TeamList.listg)))
             getGroups();
-
-
         if (command.equalsIgnoreCase(String.valueOf(TeamList.listcofg)))
             getContactsGroup();//Наблюдатель
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
@@ -253,17 +262,24 @@ public class ViewImpl implements View {
     }//***
 
     public void getContactsGroup(){
-        this.controller.get
-
-    }
+        Set<Contact> contacts = this.controller.getContactsGroup(getNameGroup());
+        for (Contact contact : contacts){
+            System.out.println(contact.contactInf());
+        }
+    }//***
 
 
 
 
     @Override
-    public String getNameContact() {
+    public String getNameContact() throws EOFException {
         System.out.println("Введите Ф И О контакта (обязательное поле)");
-        return this.consol.readString();
+        String fio = this.consol.readString();
+        if (fio.trim().length() > 0){
+            return fio;
+        }else {
+            throw  new EOFException();
+        }
     }
 
     @Override

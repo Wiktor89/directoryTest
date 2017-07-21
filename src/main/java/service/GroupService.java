@@ -16,7 +16,7 @@ public interface GroupService {
     /**
      *Список контактов опр. группы
      */
-    List<Contact> getContactsGroup(String name);
+    Set<Contact> getContactsGroup(String name);
 
     /**
      *Список групп

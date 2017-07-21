@@ -99,15 +99,15 @@ public class ContactServiceImpl implements ContactService{
         return contacts;
     }
 
-    public Contact getContact(String fio){
-        Set<Contact> contacts  = refBook.getContacts();
-        for (Contact contact : contacts){
-            if (contact.getFio().equalsIgnoreCase(fio)){
-                return contact;
+    public Contact getContact(String fio) {
+        Contact contact1 = null;
+        Set<Contact> contacts = refBook.getContacts();
+        for (Contact contact : contacts) {
+            if (contact.getFio().equalsIgnoreCase(fio)) {
+                contact1 = contact;
             }
         }
-        System.out.println("Пустой контакт");
-        return  null;
+        return contact1;
     }
 
     @Override
