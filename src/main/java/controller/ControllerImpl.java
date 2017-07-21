@@ -69,8 +69,6 @@ public class ControllerImpl implements Controller{
         throw new EOFException();
     }
 
-
-
     @Override
     public void updContact(List<String> attContact) {
           this.serviceContact.updContact(attContact);
@@ -95,13 +93,12 @@ public class ControllerImpl implements Controller{
     public Set<Contact> getContacts() {
         Set<Contact> contacts =  this.serviceContact.getContacts();
         return contacts;
-    }//Возвращает список контактов
-
+    }
 
     @Override
     public Contact getContact (String fio){
         return this.serviceContact.getContact(fio);
-    }//Возвращает контакт
+    }
 
     @Override
     public boolean existContact(String name) {
@@ -113,21 +110,6 @@ public class ControllerImpl implements Controller{
         return this.serviceGroup.existGroup(name);
     }
 
-    public Group getGroup1(String name){
-        return serviceGroup.getGroup(name);
-    }//Возвращает группу
-
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public Set<Contact> getContactsGroup(String name) {
        return this.serviceGroup.getContactsGroup(name);
@@ -136,10 +118,6 @@ public class ControllerImpl implements Controller{
     @Override
     public Set<Group> getGroups() {
         return this.serviceGroup.getGroups();
-    }
-
-    public Group getGroup (String name){
-        return this.serviceGroup.getGroup(name);
     }
 
     @Override
@@ -151,6 +129,5 @@ public class ControllerImpl implements Controller{
     public void updGroup(List<String> attGroup)  {
             this.serviceGroup.updGroup(attGroup);
     }
-
 
 }

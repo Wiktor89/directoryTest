@@ -123,7 +123,7 @@ public class ViewImpl implements View {
         }else {
             getNoContact();
         }
-    }//***
+    }
 
     public void remContact ()  {
         getContacts();
@@ -136,7 +136,7 @@ public class ViewImpl implements View {
         }else{
             getNoContact();
         }
-    }//***Работает
+    }
 
     @Override
     public String getNameContact()  {
@@ -166,9 +166,10 @@ public class ViewImpl implements View {
         }else {
             System.out.println("нет контакта");
         }
-    }//***Работает
+    }
 
     void appGroupContact() {
+        getContacts();
         List<String> attContact = new ArrayList<>();
         String fio = getNameContact();
         if (this.controller.existContact(fio)){
@@ -181,10 +182,9 @@ public class ViewImpl implements View {
                 getNoGroup();
             }
         }else {
-            getNoContact();
+            notFound();
         }
-    }//Добавление группы Работает
-
+    }
 
 
     @Override
@@ -196,8 +196,7 @@ public class ViewImpl implements View {
         }else {
             getNoContact();
         }
-    }///Принимает контакт и выводит инф. о нем
-
+    }
 
     void remGroupContact() {
         String fio = getNameContact();
@@ -211,8 +210,7 @@ public class ViewImpl implements View {
         }else {
             getNoContact();
         }
-    }//***
-
+    }
 
     @Override
     public void pageActionGroup() {
@@ -259,7 +257,7 @@ public class ViewImpl implements View {
         }else {
             System.out.println("не ввели имя группы");
         }
-    } //***
+    }
 
     public void remGroup() {
         getGroups();
@@ -274,7 +272,7 @@ public class ViewImpl implements View {
         }else {
             emptyLine();
         }
-    }//***
+    }
 
     public void updGroup() {
         getGroups();
@@ -292,7 +290,7 @@ public class ViewImpl implements View {
         }else {
             getNoGroup();
         }
-    }//***
+    }
 
     @Override
     public void getGroups(){
@@ -301,17 +299,14 @@ public class ViewImpl implements View {
         for (Group group : groups){
             System.out.println(group);
         }
-    }//***
-
-
-
+    }
 
     public void getContactsGroup(){
         Set<Contact> contacts = this.controller.getContactsGroup(getNameGroup());
         for (Contact contact : contacts){
             System.out.println(contact.contactInf());
         }
-    }//***
+    }
 
     @Override
     public String getNameGroup() {
@@ -348,6 +343,10 @@ public class ViewImpl implements View {
 
     public void emptyLine(){
         System.out.println("пустая строка");
+    }
+
+    public void notFound(){
+        System.out.println("не найденно");
     }
 
 }

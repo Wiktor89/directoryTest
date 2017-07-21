@@ -56,7 +56,7 @@ public class ContactServiceImpl implements ContactService{
         }
         contacts.add(contact);
         this.dao.save(refBook);
-    }//***
+    }
 
     @Override
     public void updContact(List<String> attContact) {
@@ -84,7 +84,7 @@ public class ContactServiceImpl implements ContactService{
             }
         }
         this.dao.save(refBook);
-    }//***
+    }
 
     @Override
     public void appGroupContact(List<String> attContact){
@@ -96,7 +96,7 @@ public class ContactServiceImpl implements ContactService{
                 this.dao.save(refBook);
             }
         }
-    }//Изменение контакту группы
+    }
 
     @Override
     public void remGroupContact(String fio) {
@@ -108,7 +108,7 @@ public class ContactServiceImpl implements ContactService{
             }
             this.dao.save(refBook);
         }
-    }//Работает
+    }
 
     @Override
     public Set<Contact> getContacts() {
@@ -126,7 +126,7 @@ public class ContactServiceImpl implements ContactService{
             }
         }
         return result;
-    }//Проверка контакта на существование
+    }
 
     public Contact getContact(String fio) {
         Contact contact1 = null;
@@ -137,7 +137,7 @@ public class ContactServiceImpl implements ContactService{
             }
         }
         return contact1;
-    }//Возвращает контакт
+    }
 
 
 

@@ -116,16 +116,5 @@ public class GroupServiceImpl implements GroupService {
             }
         }
         return result;
-    }// проверяет на существование группы
-
-    public Group getGroup (String name){
-        Group group1 = null;
-        Set<Group> groups = refBook.getGroups();
-        for (Group group : groups){
-            if (group.getName().equalsIgnoreCase(name)){
-                group1 = group;
-            }
-        }
-        return  group1;
-    }// Возвращает группу
+    }
 }
