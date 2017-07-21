@@ -2,9 +2,7 @@ package service;
 
 import models.Contact;
 import models.Entity;
-import views.Observer;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -20,8 +18,9 @@ public interface ContactService {
 
     /**
      *Обновление контакта
+     * @param attContact
      */
-    void updContact(Contact contact);
+    void updContact(List<String> attContact);
 
     /**
      *Удаление контакта
@@ -31,12 +30,12 @@ public interface ContactService {
     /**
      *Добавить контакту группу
      */
-    void appGroupContact(Contact contact);
+    void appGroupContact(List<String> attContact);
 
     /**
      *Удаление группы у контакта контакта
      */
-    void remGroupContact(Contact contact);
+    void remGroupContact(String fio);
 
     /**
      *Список контактов
@@ -44,9 +43,10 @@ public interface ContactService {
     Set<Contact> getContacts();
 
     /**
-     *Смотрим есть группа в списке
+     *Проверка контакта на существование
      */
-    boolean existGroups(String nameGroup);
+    boolean existContact(String name);
+
 
 
 

@@ -5,9 +5,7 @@ import models.Contact;
 import models.Entity;
 import models.Group;
 import storage.RefBook;
-import views.ViewImpl;
-import java.io.EOFException;
-import java.io.IOException;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +46,7 @@ public class ContactServiceImpl implements ContactService{
     @Override
     public void addContact(List<String> attrEntity, Entity entity) {
         Contact contact = (Contact) entity;
+        contact.setFio(attrEntity.get(0));
         Set<Contact> contacts = refBook.getContacts();
         contact.setGroup(new Group(attrEntity.get(3)));
         if (attrEntity.get(1).trim().length() > 0 ||
@@ -57,13 +56,19 @@ public class ContactServiceImpl implements ContactService{
         }
         contacts.add(contact);
         this.dao.save(refBook);
-    }
+    }//***
 
     @Override
-    public void updContact(Contact contact) {
+    public void updContact(List<String> attContact) {
         Set<Contact> contacts = refBook.getContacts();
-        contacts.add(contact);
-        this.dao.save(refBook);
+        for (Contact contact : contacts){
+            if (contact.getFio().equalsIgnoreCase(attContact.get(4))){
+                contact.setFio(attContact.get(0));
+                contact.setPhone(attContact.get(1));
+                contact.setEmail(attContact.get(2));
+                this.dao.save(refBook);
+            }
+        }
     }
 
     @Override
@@ -77,27 +82,49 @@ public class ContactServiceImpl implements ContactService{
             }
         }
         this.dao.save(refBook);
-    }
+    }//***
 
     @Override
-    public void appGroupContact(Contact contact){
+    public void appGroupContact(List<String> attContact){
         Set<Contact> contacts  = refBook.getContacts();
-        contacts.add(contact);
-        this.dao.save(refBook);
-    }
+        for (Contact contact : contacts){
+            if (contact.getFio().equalsIgnoreCase(attContact.get(0))){
+                Group group = contact.getGroup();
+                group.setName(attContact.get(1));
+                this.dao.save(refBook);
+            }
+        }
+    }//Изменение контакту группы
 
     @Override
-    public void remGroupContact(Contact contact) {
+    public void remGroupContact(String fio) {
         Set<Contact> contacts = refBook.getContacts();
-        contacts.add(contact);
-        this.dao.save(refBook);
-    }
+        for (Contact contact : contacts){
+            if (contact.getFio().equalsIgnoreCase(fio)){
+                Group group = contact.getGroup();
+                group.setName("нет группы");
+            }
+            this.dao.save(refBook);
+        }
+    }//Работает
 
     @Override
     public Set<Contact> getContacts() {
         Set<Contact> contacts = refBook.getContacts();
         return contacts;
     }
+
+    @Override
+    public boolean existContact(String name) {
+        boolean result = false;
+        Set<Contact> contacts = refBook.getContacts();
+        for (Contact contact : contacts){
+            if (contact.getFio().equalsIgnoreCase(name)){
+                result = true;
+            }
+        }
+        return result;
+    }//Проверка контакта на существование
 
     public Contact getContact(String fio) {
         Contact contact1 = null;
@@ -108,19 +135,8 @@ public class ContactServiceImpl implements ContactService{
             }
         }
         return contact1;
-    }
+    }//Возвращает контакт
 
-    @Override
-    public boolean existGroups(String nameGroup){
-        Set<Group> groups = refBook.getGroups();
-        boolean result = false;
-        for (Group group : groups){
-            if (group.getName().equalsIgnoreCase(nameGroup)){
-                result = true;
-            }
-        }
-        return result;
-    }
 
 
 

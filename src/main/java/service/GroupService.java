@@ -41,5 +41,5 @@ public interface GroupService {
     /**
      *Смотрим есть группа в списке
      */
-    boolean existGroups(String nameGroup);
+    boolean existGroup(String name);
 }

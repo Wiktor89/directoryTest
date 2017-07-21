@@ -32,6 +32,10 @@ public class Contact implements Serializable,Entity {
         this.email = email;
     }
 
+    public Contact() {
+        this("нет данных","нет данных","нет данных");
+    }
+
     public int getId() {
         return id;
     }

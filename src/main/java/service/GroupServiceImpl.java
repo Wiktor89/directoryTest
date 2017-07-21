@@ -57,7 +57,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void addGroup(Entity entity) throws IOException {
+    public void addGroup(Entity entity)  {
         Group group = (Group) entity;
         Set<Group> groups = refBook.getGroups();
         groups.add(group);
@@ -66,7 +66,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void remGroup(String name) throws IOException {
+    public void remGroup(String name)  {
         Set<Group> groups = refBook.getGroups();
         Set<Contact> contacts = refBook.getContacts();
         if (!groups.isEmpty()){
@@ -103,24 +103,25 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean existGroups(String nameGroup){
-        Set<Group> groups = refBook.getGroups();
+    public boolean existGroup(String name){
         boolean result = false;
+        Set<Group> groups = refBook.getGroups();
         for (Group group : groups){
-            if (group.getName().equalsIgnoreCase(nameGroup)){
+            if (group.getName().equalsIgnoreCase(name)){
                 result = true;
             }
         }
         return result;
-    }
+    }// проверяет на существование группы
 
-    public Group getGroup(String name){
+    public Group getGroup (String name){
+        Group group1 = null;
         Set<Group> groups = refBook.getGroups();
         for (Group group : groups){
             if (group.getName().equalsIgnoreCase(name)){
-                return group;
+                group1 = group;
             }
         }
-        return null;
-    }
+        return  group1;
+    }// Возвращает группу
 }

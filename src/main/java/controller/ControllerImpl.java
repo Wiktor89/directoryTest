@@ -52,8 +52,8 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void addEntity(List<String> attrEntity, String command) throws IOException {
-        Entity entity = creatingEntity(command,attrEntity.get(0));
+    public void addEntity(List<String> attrEntity, String command) throws IOException  {
+        Entity entity = creatingEntity(command);
         if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
             this.serviceContact.addContact(attrEntity,entity);
 
@@ -62,17 +62,17 @@ public class ControllerImpl implements Controller{
             this.serviceGroup.addGroup(entity);
     }
 
-    Entity creatingEntity(String entity,String name) throws IOException{
-        if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new Contact(name);
-        if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new Group(name);
+    Entity creatingEntity(String entity) throws IOException{
+        if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new Contact();
+        if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new Group();
         throw new IOException();
     }
 
 
 
     @Override
-    public void updContact(Contact contact) {
-          this.serviceContact.updContact(contact);
+    public void updContact(List<String> attContact) {
+          this.serviceContact.updContact(attContact);
     }
 
     @Override
@@ -81,24 +81,40 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void appGroupContact(Contact contact){
-            this.serviceContact.appGroupContact(contact);
+    public void appGroupContact(List<String> attContact){
+            this.serviceContact.appGroupContact(attContact);
     }
 
     @Override
-    public void remGroupContact(Contact contact) {
-        this.serviceContact.remGroupContact(contact);
+    public void remGroupContact(String fio) {
+        this.serviceContact.remGroupContact(fio);
     }
 
     @Override
     public Set<Contact> getContacts() {
         Set<Contact> contacts =  this.serviceContact.getContacts();
         return contacts;
-    }
+    }//Возвращает список контактов
 
+
+    @Override
     public Contact getContact (String fio){
         return this.serviceContact.getContact(fio);
+    }//Возвращает контакт
+
+    @Override
+    public boolean existContact(String name) {
+        return this.serviceContact.existContact(name);
     }
+
+    @Override
+    public boolean existGroup(String name) {
+        return this.serviceGroup.existGroup(name);
+    }
+
+    public Group getGroup1(String name){
+        return serviceGroup.getGroup(name);
+    }//Возвращает группу
 
 
 
@@ -126,12 +142,12 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void remGroup(String name) throws IOException {
+    public void remGroup(String name)  {
         this.serviceGroup.remGroup(name);
     }
 
     @Override
-    public void updGroup(Group group,String oldName) throws IOException {
+    public void updGroup(Group group,String oldName)  {
             this.serviceGroup.updGroup(group,oldName);
     }
 

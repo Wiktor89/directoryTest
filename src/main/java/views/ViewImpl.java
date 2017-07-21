@@ -76,19 +76,11 @@ public class ViewImpl implements View {
         stringBuilder.append("Вверх                           --up\n");
         System.out.println(stringBuilder);
         System.out.println("==========================================\n");
-        try {
-            actionContact();
-        } catch (EOFException e) {
-            System.out.println("Вы не ввели Ф И О");
-            pageActionContact();
-        }catch (IOException e){
-            System.out.println("нет доступных групп");
-            pageActionContact();
-        }
+
     }
 
     @Override
-    public void actionContact() throws IOException {
+    public void actionContact() {
         String command = this.consol.readString();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.addc)))
             addContact("con");//Ввел добавить контакт
@@ -110,7 +102,7 @@ public class ViewImpl implements View {
     }
 
     @Override
-    public void addContact(String command) throws IOException {
+    public void addContact(String command)  {
         List<String> attContact = new ArrayList<>();
         do {
             attContact.add(getNameContact());
@@ -120,68 +112,100 @@ public class ViewImpl implements View {
             attContact.add(this.consol.readString());
             attContact.add("нет группы");
         }while (!(attContact.get(0).trim().length() > 0));
-        controller.addEntity(attContact,command);
+        try {
+            controller.addEntity(attContact,command);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         getSuc();
     }//***
 
-    public void remContact () throws IOException {
+    public void remContact ()  {
+        String fio = getNameContact();
+        if (this.controller.existContact(fio)){
+            controller.remContact(getNameContact());
+
+        }
         getContacts();
-        controller.remContact(getNameContact());
-    }//***
+    }//***Работает
 
     @Override
-    public void updContact() throws EOFException {
-        Contact contact = this.controller.getContact(getNameContact());
-        if (!(contact == null)){
-            String fio = getNameContact();
-            if (fio.trim().length() > 0){
-                contact.setFio(fio);
+    public String getNameContact()  {
+        System.out.println("Введите Ф И О контакта (обязательное поле)");
+        String fio = this.consol.readString();
+        if (fio.trim().length() > 0){
+            return fio;
+        }else {
+            System.out.println("нет имени контакта");
+        }
+        return fio;
+    }
+
+    @Override
+    public void updContact()  {
+        List<String> attContact = new ArrayList<>();
+        String name = getNameContact();
+        attContact.add(4,name);
+        if (this.controller.existContact(name)){
+            System.out.println("Введите новое Ф И О");
+            attContact.add(0,this.consol.readString());
+            if (attContact.get(0).trim().length() > 0){
                 System.out.println("Введите новый телефон");
-                contact.setPhone(this.consol.readString());
+                attContact.add(1,this.consol.readString());
                 System.out.println("Введите новый email");
-                contact.setEmail(this.consol.readString());
-                getSuc();
+                attContact.add(2,this.consol.readString());
+                this.controller.updContact(attContact);
             }else {
-                throw new EOFException();
+                System.out.println("Вы не ввели Ф И О");
             }
         }else {
-            throw new EOFException();
+            System.out.println("нет контакта");
         }
-        this.controller.updContact(contact);
+    }//***Работает
 
-    }//***
-
-    void appGroupContact() throws IOException{
-        Contact contact = this.controller.getContact(getNameContact());
-        getGroups();
-        Group group = contact.getGroup();
-        String name = getNameGroup();
-        if (name.trim().length() > 0){
-            group.setName(name);
-            this.controller.appGroupContact(contact);
+    void appGroupContact() {
+        List<String> attContact = new ArrayList<>();
+        String fio = getNameContact();
+        if (this.controller.existContact(fio)){
+            String name = getNameGroup();
+            if (this.controller.existGroup(name)){
+                attContact.add(0, fio);
+                attContact.add(1, name);
+                this.controller.appGroupContact(attContact);
+            }else {
+                getNoGroup();
+            }
         }else {
-            System.out.println("нет имени группы");
+            getNoContact();
         }
-    }//***
+    }//Добавление группы Работает
+
+
 
     @Override
-    public void getContactInfo() throws IOException {
+    public void getContactInfo() {
         Contact contact = this.controller.getContact(getNameContact());
         if (!(contact == null)){
             System.out.println(contact);
         }else {
-            System.out.println("нет контакта");
+            getNoContact();
         }
-    }///***
+    }///Принимает контакт и выводит инф. о нем
 
-    void remGroupContact() throws IOException{
-        Contact contact = this.controller.getContact(getNameContact());
-        Group group = contact.getGroup();
-        group.setName("нет группы");
-        this.controller.remGroupContact(contact);
+
+    void remGroupContact() {
+        String fio = getNameContact();
+        if (this.controller.existContact(fio)){
+            Contact contact = this.controller.getContact(fio);
+            System.out.println(contact);
+            String name = getNameGroup();
+            if (this.controller.existGroup(name)){
+                this.controller.remGroupContact(fio);
+            }
+        }else {
+            getNoContact();
+        }
     }//***
-
-
 
 
     @Override
@@ -195,17 +219,10 @@ public class ViewImpl implements View {
         stringBuilder.append("Вверх                               --up\n");
         System.out.println(stringBuilder);
         System.out.println("==========================================\n");
-        try {
-            actionGroup();
-        } catch (IOException e) {
-            System.out.println("нет групп");
-            pageActionGroup();
-        }
     }
 
-
     @Override
-    public void actionGroup() throws IOException {
+    public void actionGroup()  {
         String command = this.consol.readString();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
             addGroup("gro");
@@ -221,18 +238,22 @@ public class ViewImpl implements View {
         pageActionGroup();
     }
 
-    public void addGroup (String command) throws IOException{
+    public void addGroup (String command) {
         List<String> attGroup = new ArrayList<>();
         String name = getNameGroup();
         if (name.trim().length() > 0){
             attGroup.add(name);
-            this.controller.addEntity(attGroup,command);
+            try {
+                this.controller.addEntity(attGroup,command);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }else {
             System.out.println("не ввели имя группы");
         }
     } //***
 
-    public void remGroup() throws IOException{
+    public void remGroup() {
         String name = getNameGroup();
         if(name.trim().length() > 0){
             this.controller.remGroup(name);
@@ -241,7 +262,7 @@ public class ViewImpl implements View {
         }
     }//***
 
-    public void updGroup() throws IOException{
+    public void updGroup() {
         String name = getNameGroup();
         Group group = this.controller.getGroup(name);
         String oldName = group.getName();
@@ -261,26 +282,15 @@ public class ViewImpl implements View {
         }
     }//***
 
+
+
+
     public void getContactsGroup(){
         Set<Contact> contacts = this.controller.getContactsGroup(getNameGroup());
         for (Contact contact : contacts){
             System.out.println(contact.contactInf());
         }
     }//***
-
-
-
-
-    @Override
-    public String getNameContact() throws EOFException {
-        System.out.println("Введите Ф И О контакта (обязательное поле)");
-        String fio = this.consol.readString();
-        if (fio.trim().length() > 0){
-            return fio;
-        }else {
-            throw  new EOFException();
-        }
-    }
 
     @Override
     public String getNameGroup() {
@@ -289,8 +299,12 @@ public class ViewImpl implements View {
     }
 
     @Override
-    public String getNoGroup() {
-        return "нет группы";
+    public void getNoGroup() {
+        System.out.println("нет группы");
+    }
+
+    public void getNoContact(){
+        System.out.println("нет контакта");
     }
 
     @Override

@@ -30,22 +30,22 @@ public interface View {
     /**
      * Действия с контакта
      */
-    void actionContact() throws IOException;
+    void actionContact() ;
 
     /**
      * Действия с группой
      */
-    void actionGroup() throws IOException;
+    void actionGroup() ;
 
     /**
      * Добавление контакта
      */
-    void addContact(String command) throws IOException;
+    void addContact(String command) ;
 
     /**
      * Действия для группы
      */
-    void updContact() throws EOFException;
+    void updContact() ;
 
     /**
      * Список контактов
@@ -60,12 +60,12 @@ public interface View {
     /**
      * Полная инф. о контакте
      */
-    void getContactInfo() throws IOException;
+    void getContactInfo() ;
 
     /**
      * Ввод контакта
      */
-    String getNameContact() throws EOFException;
+    String getNameContact() ;
 
     /**
      * Ввод группы
@@ -75,7 +75,7 @@ public interface View {
     /**
      * Нет групп
      */
-    String getNoGroup();
+    void getNoGroup();
 
     /**
      * Контакт успешно добавлен

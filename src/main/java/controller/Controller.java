@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import models.Contact;
 import models.Group;
 
@@ -15,7 +16,7 @@ public interface Controller {
     /**
      *Обновление контакта
      */
-    void updContact(Contact contact);
+    void updContact(List<String> attContact);
 
     /**
      *Удаление контакта
@@ -25,12 +26,12 @@ public interface Controller {
     /**
      *Добавить контакту группу
      */
-    void appGroupContact(Contact contact);
+    void appGroupContact(List<String> attContact);
 
     /**
      *Удаление группы у контакта контакта
      */
-    void remGroupContact(Contact contact);
+    void remGroupContact(String fio);
 
     /**
      *Список контактов
@@ -50,15 +51,31 @@ public interface Controller {
     /**
      *Удаление группы
      */
-    void remGroup(String name) throws IOException;
+    void remGroup(String name) ;
 
     /**
      *Обновление  группы
      */
-    void updGroup(Group group,String name) throws IOException;
+    void updGroup(Group group,String name) ;
 
     /**
      * Создание сущности
      */
     void addEntity (List<String> attrEntity,String command) throws IOException;
+
+    /**
+     * Возвращает контакт
+     */
+    Contact getContact(String fio);
+
+    /**
+     * Проверяет контакт на сущ.
+     */
+    boolean existContact(String name);
+
+    /**
+     * Проверяет группу на сущ.
+     */
+    boolean existGroup(String name);
+
 }
