@@ -1,6 +1,7 @@
 package controller;
 
 import dao.DirectoryDaoImpl;
+import factory.FactoryEntity;
 import models.Contact;
 import models.Entity;
 import models.Group;
@@ -54,19 +55,14 @@ public class ControllerImpl implements Controller{
 
     @Override
     public void addEntity(List<String> attrEntity, String command) throws IOException  {
-        Entity entity = creatingEntity(command);
+        FactoryEntity factoryEntity = new FactoryEntity();
+        Entity entity = factoryEntity.creatingEntity(command);
+
         if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
             this.serviceContact.addContact(attrEntity,entity);
 
-
         if (command.equalsIgnoreCase(String.valueOf(TeamList.gro)))
             this.serviceGroup.addGroup(attrEntity,entity);
-    }
-
-    Entity creatingEntity(String entity) throws IOException{
-        if (entity.equalsIgnoreCase(String.valueOf(TeamList.con))) return new Contact();
-        if (entity.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new Group();
-        throw new EOFException();
     }
 
     @Override

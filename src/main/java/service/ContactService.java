@@ -46,30 +46,4 @@ public interface ContactService {
      *Проверка контакта на существование
      */
     boolean existContact(String name);
-
-
-
-
-
-
-
-
-
-//
-//    /**
-//     *Добавить наблюдателя
-//     */
-//    void addObserver(Observer observer);
-//
-//    /**
-//     *Удалить наблюдателя
-//     */
-//    void remObserver(Observer observer);
-//
-//    /**
-//     *Уведомить наблюдателя
-//     */
-//    void register();
-
-
 }
