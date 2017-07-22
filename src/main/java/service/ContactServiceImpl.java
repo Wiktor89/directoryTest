@@ -139,37 +139,4 @@ public class ContactServiceImpl implements ContactService{
         return contact1;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-//
-//    @Override
-//    public void addObserver(Observer observer) {
-//        List<Observer> subscribers = refBook.getSubscriber();
-//        subscribers.add(observer);
-//
-//    }
-//
-//    @Override
-//    public void remObserver(Observer observer) {
-//        List<Observer> subscribers = refBook.getSubscriber();
-//        subscribers.remove(observer);
-//    }
-//
-//    @Override
-//    public void register() {
-//        List<Observer> observers = refBook.getSubscriber();
-//        for (Observer observer : observers){
-//            observer.handle(refBook.getContacts());
-//        }
-//
-//    }
 }
