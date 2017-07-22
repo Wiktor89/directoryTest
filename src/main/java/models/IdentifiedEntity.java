@@ -6,7 +6,7 @@ import java.util.UUID;
 /**
  *Общий класс для группы и контакта
  */
-public abstract class IdentifiedEntity implements Serializable {
+public abstract class IdentifiedEntity implements Serializable,Entity {
 
     private UUID id;
     private final static UUID UID = UUID.randomUUID();

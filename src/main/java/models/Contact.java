@@ -6,7 +6,7 @@ import java.util.UUID;
 /**
  *Модель контакта
  */
-public class Contact extends IdentifiedEntity implements Serializable,Entity {
+public class Contact extends IdentifiedEntity implements Serializable {
 
     /**
      * fio

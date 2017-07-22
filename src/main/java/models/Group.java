@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  *Модель группы
  */
-public class Group extends IdentifiedEntity implements Serializable,Entity {
+public class Group extends IdentifiedEntity implements Serializable {
 
     /**
      * name
