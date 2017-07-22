@@ -62,7 +62,6 @@ public class GroupServiceImpl implements GroupService {
         group.setName(attrEntity.get(0));
         Set<Group> groups = refBook.getGroups();
         groups.add(group);
-        refBook.setId(group.getId());
         this.dao.save(refBook);
     }
 

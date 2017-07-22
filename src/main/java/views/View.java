@@ -1,32 +1,26 @@
 package views;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import models.Contact;
-import models.Group;
-
-import java.io.EOFException;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Интерфейс для вью
  */
 public interface View {
 
-    /**
-     * Стартовая страница
-     */
-    void startPage();
+//    /**
+//     * Стартовая страница
+//     */
+//    void startPage();
 
-    /**
-     * Страница для действий с контактом
-     */
-     void pageActionContact();
-
-    /**
-     * Страница для действий с группой
-     */
-     void pageActionGroup();
+//    /**
+//     * Страница для действий с контактом
+//     */
+//     void pageActionContact();
+//
+//    /**
+//     * Страница для действий с группой
+//     */
+//     void pageActionGroup();
 
     /**
      * Действия с контакта
@@ -73,13 +67,13 @@ public interface View {
      */
     String getNameGroup();
 
-    /**
-     * Нет групп
-     */
-    void getNoGroup();
+//    /**
+//     * Нет групп
+//     */
+//    void getNoGroup();
 
-    /**
-     * Контакт успешно добавлен
-     */
-    void getSuc();
+//    /**
+//     * Контакт успешно добавлен
+//     */
+//    void getSuc();
 }

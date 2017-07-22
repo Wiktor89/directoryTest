@@ -1,12 +1,13 @@
 package models;
 
 import java.io.Serializable;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *Модель группы
  */
-public class Group  implements Serializable,Entity {
+public class Group extends IdentifiedEntity implements Serializable,Entity {
 
     /**
      * name
@@ -15,22 +16,13 @@ public class Group  implements Serializable,Entity {
     private int id;
     private String name;
     private Contact contact;
-    private final static AtomicInteger COUNT = new AtomicInteger(0);
 
     public Group() {
     }
 
     public Group(String name) {
-        this.id = COUNT.incrementAndGet();
+        super();
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -51,7 +43,7 @@ public class Group  implements Serializable,Entity {
 
     @Override
     public String toString() {
-        return "id "+ getId()+" имя группы - "+ name;
+        return "имя группы - "+ name;
     }
 
     /**

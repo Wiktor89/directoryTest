@@ -68,9 +68,9 @@ public class ContactServiceImpl implements ContactService{
                 contact.setFio(attContact.get(1));
                 if (attContact.get(2).trim().length() > 0) contact.setPhone(attContact.get(2));
                 if (attContact.get(3).trim().length() > 0) contact.setEmail(attContact.get(3));
-                this.dao.save(refBook);
             }
         }
+        this.dao.save(refBook);
     }
 
     @Override
@@ -106,8 +106,8 @@ public class ContactServiceImpl implements ContactService{
                 Group group = contact.getGroup();
                 group.setName("нет группы");
             }
-            this.dao.save(refBook);
         }
+        this.dao.save(refBook);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class ContactServiceImpl implements ContactService{
 //    }
 //
 //    @Override
-//    public void notifyObserver() {
+//    public void register() {
 //        List<Observer> observers = refBook.getSubscriber();
 //        for (Observer observer : observers){
 //            observer.handle(refBook.getContacts());

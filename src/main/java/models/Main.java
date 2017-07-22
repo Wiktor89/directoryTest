@@ -1,7 +1,11 @@
 package models;
 
 import controller.ControllerImpl;
+import utilits.ConsoleReader;
 import views.ViewImpl;
+import views.ViewInf;
+
+import java.util.UUID;
 
 
 /**
@@ -13,13 +17,9 @@ public class Main {
     }
 
     public void goo() {
-
-            ControllerImpl controller = new ControllerImpl();
-            ViewImpl view = new ViewImpl();
-            view.setController(controller);
-            view.startPage();
-
-
+        ConsoleReader consol = new ConsoleReader();
+        ViewInf viewInf  = new ViewInf();
+        viewInf.startPage();
 
         //Это фабричный метод
 //        String name = "FIO";

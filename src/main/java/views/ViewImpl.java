@@ -18,17 +18,25 @@ import java.util.Set;
 public class ViewImpl implements View {
 
     private ControllerImpl controller = null;
-    private ConsoleReader consol = new ConsoleReader();
+    private ConsoleReader consol = null;
+    private ViewInf view = null;
 
 
     public ViewImpl() {
+        this.controller = new ControllerImpl();
+    }
 
+    public ViewInf getView() {
+        return view;
+    }
+
+    public void setView(ViewInf view) {
+        this.view = view;
     }
 
     public ControllerImpl getController() {
         return new ControllerImpl();
     }
-
     public void setController(ControllerImpl controller) {
         this.controller = controller;
     }
@@ -38,51 +46,6 @@ public class ViewImpl implements View {
     }
     public void setConsol(ConsoleReader consol) {
         this.consol = consol;
-    }
-
-    @Override
-    public void startPage() {
-        while (true) {
-            System.out.println("==========================================\n");
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Стартовая страница \n");
-            stringBuilder.append("Действие с контактом введите         --con\n");
-            stringBuilder.append("Действие с группой контактов введите --gro\n");
-            stringBuilder.append("Для выхода введите                   --exit\n");
-            System.out.println(stringBuilder);
-            System.out.println("==========================================\n");
-            String command = this.consol.readString();
-            if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
-                pageActionContact();
-            if ((command.equalsIgnoreCase(String.valueOf(TeamList.gro))))
-                pageActionGroup();
-            if ((command.equalsIgnoreCase(String.valueOf(TeamList.exit))))
-                System.exit(0);
-            System.out.println("Команда не поддерживается");
-        }
-    }
-
-    @Override
-    public void pageActionContact(){
-        StringBuilder stringBuilder = new StringBuilder("Выберите действие для контакта\n");
-        stringBuilder.append("Добавить контакт                --add\n");
-        stringBuilder.append("Удалить контакт                 --rem\n");
-        stringBuilder.append("Редактировать контакт           --upd\n");
-        stringBuilder.append("Показать список контактов       --list\n");
-        stringBuilder.append("Добавить контакт в группу       --addcatg\n");
-        stringBuilder.append("Удалить контакт из группы       --remcofg\n");
-        stringBuilder.append("Показать информацию о контакте  --inf\n");
-        stringBuilder.append("Вверх                           --up\n");
-        System.out.println(stringBuilder);
-        System.out.println("==========================================\n");
-        try {
-            actionContact();
-        } catch (EOFException e) {
-            System.out.println("не удача");
-        }catch (IOException e){
-
-        }
-
     }
 
     @Override
@@ -103,8 +66,8 @@ public class ViewImpl implements View {
         if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))
             getContactInfo();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
-            startPage();
-        pageActionContact();
+            view.startPage();
+        view.pageActionContact();
     }
 
     @Override
@@ -119,9 +82,9 @@ public class ViewImpl implements View {
             attContact.add(this.consol.readString());
             attContact.add("нет группы");
             this.controller.addEntity(attContact,command);
-            getSuc();
+            view.getSuc();
         }else {
-            getNoContact();
+            view.getNoContact();
         }
     }
 
@@ -131,10 +94,10 @@ public class ViewImpl implements View {
         if (fio.trim().length() > 0){
             if (this.controller.existContact(fio)){
                 controller.remContact(fio);
-                getSuc();
+                view.getSuc();
             }
         }else{
-            getNoContact();
+            view.getNoContact();
         }
     }
 
@@ -159,7 +122,7 @@ public class ViewImpl implements View {
                 System.out.println("Введите новый email");
                 attContact.add(3,this.consol.readString());
                 this.controller.updContact(attContact);
-                getSuc();
+                view.getSuc();
             }else {
                 System.out.println("Вы не ввели Ф И О");
             }
@@ -173,19 +136,19 @@ public class ViewImpl implements View {
         List<String> attContact = new ArrayList<>();
         String fio = getNameContact();
         if (this.controller.existContact(fio)){
+            getGroups();
             String name = getNameGroup();
             if (this.controller.existGroup(name)){
                 attContact.add(0, fio);
                 attContact.add(1, name);
                 this.controller.appGroupContact(attContact);
             }else {
-                getNoGroup();
+                view.getNoGroup();
             }
         }else {
-            notFound();
+            view.notFound();
         }
     }
-
 
     @Override
     public void getContactInfo() {
@@ -194,11 +157,12 @@ public class ViewImpl implements View {
         if (!(contact == null)){
             System.out.println(contact);
         }else {
-            getNoContact();
+            view.getNoContact();
         }
     }
 
     void remGroupContact() {
+        getContacts();
         String fio = getNameContact();
         if (this.controller.existContact(fio)){
             Contact contact = this.controller.getContact(fio);
@@ -208,22 +172,8 @@ public class ViewImpl implements View {
                 this.controller.remGroupContact(fio);
             }
         }else {
-            getNoContact();
+            view.getNoContact();
         }
-    }
-
-    @Override
-    public void pageActionGroup() {
-        StringBuilder stringBuilder = new StringBuilder("Выберите действие для группы\n");
-        stringBuilder.append("Создать группу                      --add\n");
-        stringBuilder.append("Удалить группу                      --rem\n");
-        stringBuilder.append("Редактировать группу                --upd\n");
-        stringBuilder.append("Список групп                        --list\n");
-        stringBuilder.append("Показать список контактов группы    --listcofg\n");
-        stringBuilder.append("Вверх                               --up\n");
-        System.out.println(stringBuilder);
-        System.out.println("==========================================\n");
-        actionGroup();
     }
 
     @Override
@@ -239,8 +189,8 @@ public class ViewImpl implements View {
             getGroups();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.listc)))
             getContactsGroup();//Наблюдатель
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))startPage();
-        pageActionGroup();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))view.startPage();
+        view.pageActionGroup();
     }
 
     public void addGroup (String command) {
@@ -250,7 +200,7 @@ public class ViewImpl implements View {
             attGroup.add(name);
             try {
                 this.controller.addEntity(attGroup,command);
-                getSuc();
+                view.getSuc();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -265,30 +215,30 @@ public class ViewImpl implements View {
         if(name.trim().length() > 0){
             if (this.controller.existGroup(name)){
                 this.controller.remGroup(name);
-                getSuc();
+                view.getSuc();
             }else {
-                getNoGroup();
+                view.getNoGroup();
             }
         }else {
-            emptyLine();
+            view.emptyLine();
         }
     }
 
     public void updGroup() {
         getGroups();
-        List<String> attGoup = new ArrayList<>();
+        List<String> attGroup = new ArrayList<>();
         String oldName = getNameGroup();
         if (this.controller.existGroup(oldName)){
             String newName = getNameGroup();
             if (newName.trim().length() > 0){
-                attGoup.add(0,oldName);
-                attGoup.add(1,newName);
-                this.controller.updGroup(attGoup);
+                attGroup.add(0,oldName);
+                attGroup.add(1,newName);
+                this.controller.updGroup(attGroup);
             }else {
-                emptyLine();
+                view.emptyLine();
             }
         }else {
-            getNoGroup();
+            view.getNoGroup();
         }
     }
 
@@ -296,12 +246,17 @@ public class ViewImpl implements View {
     public void getGroups(){
         System.out.println("Список доступных групп");
         Set<Group> groups = this.controller.getGroups();
-        for (Group group : groups){
-            System.out.println(group);
+        if (!groups.isEmpty()){
+            for (Group group : groups){
+                System.out.println(group);
+            }
+        }else {
+            view.emptyList();
         }
     }
 
     public void getContactsGroup(){
+        getGroups();
         Set<Contact> contacts = this.controller.getContactsGroup(getNameGroup());
         for (Contact contact : contacts){
             System.out.println(contact.contactInf());
@@ -315,38 +270,11 @@ public class ViewImpl implements View {
     }
 
     @Override
-    public void getNoGroup() {
-        System.out.println("нет группы");
-    }
-
-    public void getNoContact(){
-        System.out.println("нет Ф И О");
-    }
-
-    @Override
-    public void getSuc() {
-        System.out.println("успешно");
-    }
-
-    @Override
     public void getContacts(){
         Set<Contact> contacts = this.controller.getContacts();
         for (Contact contact : contacts){
             System.out.println(contact.contactInf());
         }
-    }
-
-    public String getExit(){
-        System.out.println("для выхода exit");
-        return this.consol.readString();
-    }
-
-    public void emptyLine(){
-        System.out.println("пустая строка");
-    }
-
-    public void notFound(){
-        System.out.println("не найденно");
     }
 
 }

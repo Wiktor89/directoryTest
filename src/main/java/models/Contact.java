@@ -1,12 +1,12 @@
 package models;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.UUID;
 
 /**
  *Модель контакта
  */
-public class Contact implements Serializable,Entity {
+public class Contact extends IdentifiedEntity implements Serializable,Entity {
 
     /**
      * fio
@@ -14,19 +14,17 @@ public class Contact implements Serializable,Entity {
       email
       group
      */
-    private int id;
     private String fio;
     private String phone;
     private String email;
     private Group group;
-    private final static AtomicInteger COUNT = new AtomicInteger(0);
 
     public Contact(String fio) {
         this(fio,"нет информации","нет информации");
     }
 
     public Contact(String fio, String phone, String email) {
-        this.id = COUNT.incrementAndGet();
+        super();
         this.fio = fio;
         this.phone = phone;
         this.email = email;
@@ -34,14 +32,6 @@ public class Contact implements Serializable,Entity {
 
     public Contact() {
         this("нет данных","нет данных","нет данных");
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFio() {
@@ -85,11 +75,29 @@ public class Contact implements Serializable,Entity {
 
     @Override
     public String toString() {
-        return "id "+ getId()+" Contact{" +
+        return "Contact{" +
                 "Ф И О = " + fio   +
                 ", телефон = " + phone +
                 ", email = " + email +
                 ", группа = " + group.informationGroup() +
                 "} ";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contact contact = (Contact) o;
+
+        if (fio != null ? !fio.equals(contact.fio) : contact.fio != null) return false;
+        if (phone != null ? !phone.equals(contact.phone) : contact.phone != null) return false;
+        if (email != null ? !email.equals(contact.email) : contact.email != null) return false;
+        return group != null ? group.equals(contact.group) : contact.group == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
 }

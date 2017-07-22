@@ -69,7 +69,7 @@ public interface ContactService {
 //    /**
 //     *Уведомить наблюдателя
 //     */
-//    void notifyObserver();
+//    void register();
 
 
 }
