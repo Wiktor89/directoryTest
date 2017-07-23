@@ -14,23 +14,27 @@ import java.util.*;
  */
 public class RefBook extends Observable implements  Serializable {
 
-    private int id;
+    private static RefBook refBook;
     private Set<Contact> contacts = new TreeSet<>(new ContactFioComparator());
     private Set<Group> groups = new TreeSet<>(new GroupNameComparator());
     private List<Observer> observers = new ArrayList<>();
-    private ViewChangModel model = null;
 
-    public RefBook() {
-        this.model = new ViewChangModel();
-        this.observers.add(model);
+    public static RefBook getRefBook (){
+        if (refBook == null){
+            refBook = new RefBook();
+        }
+        return refBook;
     }
 
-    public int getId() {
-        return id;
+    private RefBook() {
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public List<Observer> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(Observer observers) {
+        this.observers.add(observers);
     }
 
     public Set<Contact> getContacts() {

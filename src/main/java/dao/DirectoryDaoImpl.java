@@ -24,7 +24,7 @@ public class DirectoryDaoImpl implements DirectoryDao {
 
     @Override
     public RefBook load() {
-        RefBook refBook = null;
+        RefBook refBook = RefBook.getRefBook();
         final File file = new File("RefBook.ser");
         if (file.exists()){
             try (ObjectInputStream stream = new ObjectInputStream(
@@ -33,8 +33,6 @@ public class DirectoryDaoImpl implements DirectoryDao {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        }else {
-            refBook = new RefBook();
         }
         return refBook;
     }

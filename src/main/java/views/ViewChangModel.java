@@ -24,7 +24,7 @@ public class ViewChangModel implements Observer,Serializable {
                 }
                 System.out.println("******************************");
             }else {
-                System.out.println("список пуст");
+                System.out.println("список контактов пуст");
             }
             Set<Group> groups  = ((RefBook) o).getGroups();
             if (!groups.isEmpty()){
@@ -34,7 +34,7 @@ public class ViewChangModel implements Observer,Serializable {
                 }
                 System.out.println("******************************");
             }else {
-                System.out.println("список пуст");
+                System.out.println("список групп пуст");
 
             }
         }

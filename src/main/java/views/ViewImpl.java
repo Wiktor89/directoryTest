@@ -35,7 +35,7 @@ public class ViewImpl implements View {
     }
 
     public ControllerImpl getController() {
-        return new ControllerImpl();
+        return this.controller;
     }
     public void setController(ControllerImpl controller) {
         this.controller = controller;
