@@ -10,11 +10,11 @@ public interface DirectoryDao {
     /**
      *Сохранение в файл
      */
-    public void save(RefBook refBook);
+     void save(RefBook refBook);
 
     /**
      * return @RefBook
      *Чтение из файла
      */
-    public RefBook load();
+     RefBook load();
 }

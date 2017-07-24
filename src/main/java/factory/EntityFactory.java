@@ -9,6 +9,9 @@ import java.util.List;
  */
 public interface EntityFactory {
 
+     /**
+      * Создание сущности
+      */
      Entity creatingEntity(List<String> attrEntity);
 
 }

@@ -94,8 +94,7 @@ public class ControllerImpl implements Controller{
 
     @Override
     public Set<Contact> getContacts() {
-        Set<Contact> contacts =  this.serviceContact.getContacts();
-        return contacts;
+         return this.serviceContact.getContacts();
     }
 
     @Override

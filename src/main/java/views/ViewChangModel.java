@@ -9,7 +9,7 @@ import java.util.Observer;
 import java.util.Set;
 
 /**
- *
+ *Доп. вью для демонстрации Observer
  */
 public class ViewChangModel implements Observer,Serializable {
     private static ViewChangModel viewChangModel;

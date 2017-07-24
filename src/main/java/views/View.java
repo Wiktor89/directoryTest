@@ -7,21 +7,6 @@ import java.io.IOException;
  */
 public interface View {
 
-//    /**
-//     * Стартовая страница
-//     */
-//    void startPage();
-
-//    /**
-//     * Страница для действий с контактом
-//     */
-//     void pageActionContact();
-//
-//    /**
-//     * Страница для действий с группой
-//     */
-//     void pageActionGroup();
-
     /**
      * Действия с контакта
      */
@@ -67,13 +52,4 @@ public interface View {
      */
     String getNameGroup();
 
-//    /**
-//     * Нет групп
-//     */
-//    void getNoGroup();
-
-//    /**
-//     * Контакт успешно добавлен
-//     */
-//    void getSuc();
 }
