@@ -51,6 +51,7 @@ public class ControllerImpl implements Controller{
 
     public ControllerImpl() {
         this.refBook = this.dao.load();
+        this.refBook.setObservers(ViewChangModel.getViewChangModel());
         this.serviceContact = new ContactServiceImpl(this.refBook);
         this.serviceGroup = new GroupServiceImpl(this.refBook);
     }
