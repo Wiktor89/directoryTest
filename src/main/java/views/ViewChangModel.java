@@ -12,6 +12,17 @@ import java.util.Set;
  *
  */
 public class ViewChangModel implements Observer,Serializable {
+    private static ViewChangModel viewChangModel;
+
+    public static ViewChangModel getViewChangModel (){
+        if (viewChangModel == null){
+            viewChangModel = new ViewChangModel();
+        }
+        return viewChangModel;
+    }
+
+    private ViewChangModel() {
+    }
 
     @Override
     public void update(Observable o, Object arg) {

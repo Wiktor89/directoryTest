@@ -57,9 +57,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void addGroup(List<String> attrEntity,Entity entity)  {
+    public void addGroup(Entity entity)  {
         Group group = (Group) entity;
-        group.setName(attrEntity.get(0));
         Set<Group> groups = refBook.getGroups();
         groups.add(group);
         this.dao.save(refBook);

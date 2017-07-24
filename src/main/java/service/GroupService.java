@@ -26,7 +26,7 @@ public interface GroupService {
     /**
      *Добавление группы
      */
-    void addGroup(List<String> attrEntity,Entity entity) throws Exception;
+    void addGroup(Entity entity) throws Exception;
 
     /**
      *Удаление группы

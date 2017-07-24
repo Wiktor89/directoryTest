@@ -75,12 +75,12 @@ public class ViewImpl implements View {
         List<String> attContact = new ArrayList<>();
         String fio = getNameContact();
         if (fio.trim().length() > 0){
-            attContact.add(fio);
+            attContact.add(0,fio);
             System.out.println("Введите телефон");
-            attContact.add(this.consol.readString());
+            attContact.add(1,this.consol.readString());
             System.out.println("Введите email");
-            attContact.add(this.consol.readString());
-            attContact.add("нет группы");
+            attContact.add(2,this.consol.readString());
+            attContact.add(3,"нет группы");
             this.controller.addEntity(attContact,command);
             view.getSuc();
         }else {

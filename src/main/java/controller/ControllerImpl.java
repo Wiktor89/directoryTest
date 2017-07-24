@@ -1,7 +1,9 @@
 package controller;
 
 import dao.DirectoryDaoImpl;
+import factory.ContactFactory;
 import factory.EntityFactory;
+import factory.GroupFactory;
 import models.Contact;
 import models.Entity;
 import models.Group;
@@ -49,26 +51,24 @@ public class ControllerImpl implements Controller{
 
     public ControllerImpl() {
         this.refBook = this.dao.load();
-        this.refBook.setObservers(new ViewChangModel());
         this.serviceContact = new ContactServiceImpl(this.refBook);
         this.serviceGroup = new GroupServiceImpl(this.refBook);
     }
 
     @Override
     public void addEntity(List<String> attrEntity,String command) throws IOException  {
-//        EntityFactory entityFactory = new EntityFactory();
-        Entity entity = create(command);
+        EntityFactory entityFactory = create(command);
+        Entity entity = entityFactory.creatingEntity(attrEntity);
 
         if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
-            this.serviceContact.addContact(attrEntity,entity);
-
+            this.serviceContact.addContact(entity);
         if (command.equalsIgnoreCase(String.valueOf(TeamList.gro)))
-            this.serviceGroup.addGroup(attrEntity,entity);
+            this.serviceGroup.addGroup(entity);
     }
 
-     Entity create (String command) throws IOException{
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.con))) return new Contact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new Group();
+     EntityFactory create (String command) throws IOException{
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.con))) return new ContactFactory();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new GroupFactory();
         throw new IOException();
     }
 

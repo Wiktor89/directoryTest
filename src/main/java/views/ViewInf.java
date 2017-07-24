@@ -16,8 +16,8 @@ public class ViewInf {
     public ViewInf() {
         this.consol = new ConsoleReader();
         this.view = new ViewImpl();
-        view.setConsol(consol);
-        view.setView(this);
+        this.view.setConsol(consol);
+        this.view.setView(this);
     }
 
     public void startPage() {

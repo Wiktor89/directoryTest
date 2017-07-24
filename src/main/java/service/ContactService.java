@@ -14,7 +14,7 @@ public interface ContactService {
     /**
      *Добавление контакта
      */
-    void addContact (List<String> attrEntity, Entity entity);
+    void addContact (Entity entity);
 
     /**
      *Обновление контакта

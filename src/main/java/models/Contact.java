@@ -30,9 +30,11 @@ public class Contact extends IdentifiedEntity implements Serializable {
         this.email = email;
     }
 
-    public Contact() {
-        this("нет данных","нет данных","нет данных");
+    public Contact(String fio,String phone) {
+        this(fio,phone,"нет информации");
     }
+
+
 
     public String getFio() {
         return fio;

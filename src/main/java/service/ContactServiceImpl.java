@@ -44,16 +44,9 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void addContact(List<String> attrEntity, Entity entity) {
+    public void addContact(Entity entity) {
         Contact contact = (Contact) entity;
-        contact.setFio(attrEntity.get(0));
         Set<Contact> contacts = refBook.getContacts();
-        contact.setGroup(new Group(attrEntity.get(3)));
-        if (attrEntity.get(1).trim().length() > 0 ||
-                attrEntity.get(2).trim().length() > 0) {
-            contact.setPhone(attrEntity.get(1));
-            contact.setEmail(attrEntity.get(2));
-        }
         contacts.add(contact);
         this.dao.save(refBook);
     }
