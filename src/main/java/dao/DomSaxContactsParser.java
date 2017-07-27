@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  *
  */
-public interface ParserContactsDomSax {
+public interface DomSaxContactsParser {
 
     /**
      *Добавление контакта

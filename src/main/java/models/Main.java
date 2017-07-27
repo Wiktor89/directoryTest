@@ -1,11 +1,7 @@
 package models;
-import dao.ParserContactsDomSax;
-import dao.ParserGroupDomSax;
-import dao.parsers.dom.ParserGroupImpDom;
-import dao.parsers.sax.ParserContactImpSax;
-import dao.parsers.sax.ParserGroupImpSax;
+import dao.DomSaxGroupParser;
+import dao.parsers.sax.GroupParserImp;
 import org.xml.sax.SAXException;
-import views.ViewInf;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -24,12 +20,12 @@ public class Main {
 //        ViewInf viewInf  = new ViewInf();
 //        viewInf.startPage();
 //        Entity entity = new Group();
-//        ParserGroupImpDom parserGroupImpDom = new ParserGroupImpDom();
+//        GroupParserImp parserGroupImpDom = new GroupParserImp();
 //        parserGroupImpDom.addGroup(entity);
 
-        ParserGroupDomSax sax = new ParserGroupImpSax();
+        DomSaxGroupParser sax = new GroupParserImp();
         sax.getGroups();
-//        ParserContactsDomSax domSax = new ParserContactImpSax();
+//        DomSaxContactsParser domSax = new ContactParserImpl();
 //        domSax.getContacts();
     }
 }
