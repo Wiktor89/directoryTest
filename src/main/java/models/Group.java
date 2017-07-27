@@ -25,6 +25,10 @@ public class Group extends IdentifiedEntity implements Serializable {
         this.name = name;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -43,7 +47,7 @@ public class Group extends IdentifiedEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "имя группы - "+ name;
+        return +id+" имя группы - "+ name;
     }
 
     /**

@@ -121,6 +121,7 @@ public class ContactServiceImpl implements ContactService{
         return result;
     }
 
+    @Override
     public Contact getContact(String fio) {
         Contact contact1 = null;
         Set<Contact> contacts = refBook.getContacts();
@@ -130,6 +131,17 @@ public class ContactServiceImpl implements ContactService{
             }
         }
         return contact1;
+    }
+
+    @Override
+    public Contact searchName(String fio) {
+        Set<Contact> contacts = refBook.getContacts();
+        for (Contact contact : contacts){
+            if (contact.getFio().equalsIgnoreCase(fio)){
+                return contact;
+            }
+        }
+        return null;
     }
 
 }

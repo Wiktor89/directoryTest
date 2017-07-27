@@ -1,46 +1,49 @@
-package service;
+package dao;
 
 import models.Contact;
 import models.Entity;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Интерфейс для контактов
+ *
  */
-public interface ContactService {
+public interface ParserContactsDomSax {
 
     /**
      *Добавление контакта
      */
-    void addContact (Entity entity);
+    boolean addContact (Entity entity);
 
     /**
      *Обновление контакта
      * @param attContact
      */
-    void updContact(List<String> attContact);
+    boolean updContact(List<String> attContact);
 
     /**
      *Удаление контакта
      */
-    void remContact(String fio);
+    boolean remContact(String fio);
 
     /**
      *Добавить контакту группу
      */
-    void appGroupContact(List<String> attContact);
+    boolean appGroupContact(List<String> attContact);
 
     /**
      *Удаление группы у контакта контакта
      */
-    void remGroupContact(String fio);
+    boolean remGroupContact(String fio);
 
     /**
      *Список контактов
      */
-    Set<Contact> getContacts();
+    Set<Contact> getContacts() throws ParserConfigurationException, SAXException, IOException;
 
     /**
      *Проверка контакта на существование
@@ -56,4 +59,6 @@ public interface ContactService {
      *Поиск контакта по имени
      */
     Contact searchName (String fio);
+
+
 }

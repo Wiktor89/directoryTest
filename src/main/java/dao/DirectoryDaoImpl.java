@@ -2,7 +2,6 @@ package dao;
 
 import org.apache.log4j.Logger;
 import storage.RefBook;
-
 import java.io.*;
 
 /**

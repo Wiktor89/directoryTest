@@ -102,4 +102,8 @@ public class Contact extends IdentifiedEntity implements Serializable {
     public int hashCode() {
         return getId().hashCode();
     }
+
+    public void setId(int id) {
+
+    }
 }
