@@ -1,14 +1,17 @@
 package dao.parsers.sax;
 
 import dao.DomSaxGroupParser;
-import dao.parsers.Parser;
+import dao.parsers.handler.HandlerGroup;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +19,7 @@ import java.util.Set;
 /**
  *
  */
-public class GroupParserImp extends Parser implements DomSaxGroupParser {
+public class GroupParserImp implements DomSaxGroupParser {
 
 
     @Override
@@ -42,16 +45,12 @@ public class GroupParserImp extends Parser implements DomSaxGroupParser {
     @Override
     public Set<String> getGroups() throws ParserConfigurationException, SAXException
             , IOException, XPathExpressionException {
-        return super.getGroups();
-//        SAXParserFactory factory = SAXParserFactory.newInstance();//фабрика
-//        HandlerGroup handlerGroup = new HandlerGroup();
-//        SAXParser parser = factory.newSAXParser();//получаем парсер
-//        parser.parse(new File("refbook.xml"), handlerGroup);//читаем из файла, слушатель
-//        Set<String> groups = handlerGroup.getGroups();
-//        for (String group : groups){
-//            System.out.println(group);
-//        }
-
+        SAXParserFactory factory = SAXParserFactory.newInstance();//фабрика
+        HandlerGroup handlerGroup = new HandlerGroup();
+        SAXParser parser = factory.newSAXParser();//получаем парсер
+        parser.parse(new File("refbook.xml"), handlerGroup);//читаем из файла, слушатель
+        Set<String> groups = handlerGroup.getGroups();
+        return groups;
     }
 
     @Override

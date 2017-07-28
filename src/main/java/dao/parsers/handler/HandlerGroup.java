@@ -15,7 +15,7 @@ public class HandlerGroup extends DefaultHandler {
 
     private int id;
     private String data;
-    private Set<Group> groups = new TreeSet<>(new GroupNameComparator());
+    private Set<String> groups = new TreeSet<>();
 
     @Override
     public void startElement(String nameSpace, String localName, String qName, Attributes attributes) throws SAXException{
@@ -36,13 +36,11 @@ public class HandlerGroup extends DefaultHandler {
     public void characters(char [] chars, int start, int end){
         if (data.equalsIgnoreCase("title")){
             String s = new String(chars,start,end);
-            Group group = new Group(s);
-            group.setId(id);
-            groups.add(group);
+            groups.add(s);
         }
     }
 
-    public Set<Group> getGroups(){
+    public Set<String> getGroups(){
         return groups;
     }
 }

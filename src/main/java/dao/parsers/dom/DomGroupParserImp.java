@@ -1,7 +1,6 @@
 package dao.parsers.dom;
 
 import dao.DomSaxGroupParser;
-import dao.parsers.Parser;
 import models.Contact;
 import models.Entity;
 import models.Group;
@@ -15,13 +14,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +27,7 @@ import java.util.TreeSet;
 /**
  *
  */
-public class DomGroupParserImp extends Parser implements DomSaxGroupParser {
+public class DomGroupParserImp implements DomSaxGroupParser {
 
     private Set<Group> groups = new TreeSet<>(new GroupNameComparator());
 
@@ -78,7 +75,19 @@ public class DomGroupParserImp extends Parser implements DomSaxGroupParser {
     @Override
     public Set<String> getGroups() throws ParserConfigurationException, IOException
             ,SAXException, XPathExpressionException{
-        return super.getGroups();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        Set<String> groups = new TreeSet<>();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document xmlDocument  = builder.parse(new File("refbook.xml"));
+        String titls = "/entity/group/title";
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        NodeList nodeList = (NodeList) xPath.compile(titls)
+                .evaluate(xmlDocument, XPathConstants.NODESET);
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            groups.add(nodeList.item(i).getFirstChild().getNodeValue());
+        }
+
+        return groups;
 //        Transformer transformer = TransformerFactory.newInstance().newTransformer();
 //        transformer.setOutputProperty(OutputKeys.INDENT,"yes");//для переносов
 //        transformer.transform(new DOMSource());

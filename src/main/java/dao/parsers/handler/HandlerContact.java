@@ -18,7 +18,7 @@ public class HandlerContact extends DefaultHandler {
     private int id;
     private String data;
     private Contact contact;
-    private Set<Contact> contacts = new TreeSet<>(new ContactFioComparator());
+    private Set<Contact> contacts = new TreeSet<>();
 
     @Override
     public void startDocument() throws SAXException {
