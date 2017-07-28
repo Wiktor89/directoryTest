@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  *Модель группы
  */
-public class Group extends IdentifiedEntity implements Serializable {
+public class Group extends IdentifiedEntity implements Serializable,Comparable<Group> {
 
     /**
      * name
@@ -17,7 +17,7 @@ public class Group extends IdentifiedEntity implements Serializable {
     private String name;
     private Contact contact;
 
-    public Group() {
+    public Group()  {
     }
 
     public Group(String name) {
@@ -55,5 +55,10 @@ public class Group extends IdentifiedEntity implements Serializable {
      */
     public String informationGroup(){
         return name;
+    }
+
+    @Override
+    public int compareTo(Group o) {
+        return name.compareToIgnoreCase(o.getName());
     }
 }

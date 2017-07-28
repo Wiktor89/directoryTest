@@ -6,7 +6,7 @@ import java.util.UUID;
 /**
  *Модель контакта
  */
-public class Contact extends IdentifiedEntity implements Serializable {
+public class Contact extends IdentifiedEntity implements Serializable,Comparable<Contact> {
 
     /**
      * fio
@@ -105,5 +105,9 @@ public class Contact extends IdentifiedEntity implements Serializable {
 
     public void setId(int id) {
 
+    }
+    @Override
+    public int compareTo(Contact o) {
+        return fio.compareToIgnoreCase(o.getFio());
     }
 }

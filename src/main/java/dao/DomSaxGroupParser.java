@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -25,12 +26,12 @@ public interface DomSaxGroupParser {
     /**
      *Удаление группы
      */
-    boolean remGroup(String name);
+    boolean removeGroup(String name);
 
     /**
      *Обновление  группы
      */
-    boolean updGroup(List<String> attGoup);
+    boolean updateGroup(List<String> attGoup);
 
     /**
      *Смотрим есть группа в списке
@@ -40,7 +41,7 @@ public interface DomSaxGroupParser {
     /**
      *Список групп
      */
-    Set<Group> getGroups() throws ParserConfigurationException, SAXException, IOException;
+    Set<String> getGroups() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException, TransformerConfigurationException;
 
     /**
      *Список контактов опр. группы

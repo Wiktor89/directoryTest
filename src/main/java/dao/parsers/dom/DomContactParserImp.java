@@ -1,11 +1,12 @@
 package dao.parsers.dom;
 
 import dao.DomSaxContactsParser;
+import dao.parsers.Parser;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +14,7 @@ import java.util.Set;
 /**
  *
  */
-public class ContactParserImp implements DomSaxContactsParser {
+public class DomContactParserImp extends Parser implements DomSaxContactsParser {
 
     @Override
     public boolean addContact(Entity entity) {
@@ -21,12 +22,12 @@ public class ContactParserImp implements DomSaxContactsParser {
     }
 
     @Override
-    public boolean updContact(List<String> attContact) {
+    public boolean updateContact(List<String> attContact) {
         return false;
     }
 
     @Override
-    public boolean remContact(String fio) {
+    public boolean removeContact(String fio) {
         return false;
     }
 
@@ -36,13 +37,14 @@ public class ContactParserImp implements DomSaxContactsParser {
     }
 
     @Override
-    public boolean remGroupContact(String fio) {
+    public boolean removeGroupContact(String fio) {
         return false;
     }
 
     @Override
-    public Set<Contact> getContacts() throws ParserConfigurationException, SAXException, IOException {
-        return null;
+    public Set<String> getContacts() throws ParserConfigurationException
+            , SAXException, IOException, XPathExpressionException {
+        return super.getContacts();
     }
 
     @Override

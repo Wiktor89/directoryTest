@@ -6,7 +6,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import sorted.ContactFioComparator;
-
 import java.util.Set;
 import java.util.TreeSet;
 
