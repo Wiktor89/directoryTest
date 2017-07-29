@@ -1,12 +1,15 @@
 package service;
 
-import dao.DirectoryDaoImpl;
+import dao.DomSaxContactsParser;
+import dao.parsers.dom.DomContactParserImp;
 import models.Contact;
 import models.Entity;
 import models.Group;
-import storage.RefBook;
+import org.xml.sax.SAXException;
 
-import java.util.Iterator;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -22,125 +25,63 @@ public class ContactServiceImpl implements ContactService{
      * groups
      * dao
      */
-    private RefBook refBook = null;
-    private DirectoryDaoImpl dao = new DirectoryDaoImpl();
+    private DomSaxContactsParser dao = new DomContactParserImp();
 
-    public ContactServiceImpl(RefBook refBook) {
-        this.refBook = refBook;
+    public ContactServiceImpl() {
     }
 
-    public DirectoryDaoImpl getDao() {
+    public DomSaxContactsParser getDao() {
         return dao;
     }
-    public void setDao(DirectoryDaoImpl dao) {
-        this.dao = dao;
-    }
 
-    public RefBook getRefBook() {
-        return refBook ;
-    }
-    public void setRefBook(RefBook refBook) {
-            this.refBook = refBook;
+    public void setDao(DomSaxContactsParser dao) {
+        this.dao = dao;
     }
 
     @Override
     public void addContact(Entity entity) {
-        Contact contact = (Contact) entity;
-        Set<Contact> contacts = refBook.getContacts();
-        contacts.add(contact);
-        this.dao.save(refBook);
+        this.dao.addContact(entity);
     }
 
     @Override
-    public void updContact(List<String> attContact) {
-        Set<Contact> contacts = refBook.getContacts();
-        for (Contact contact : contacts){
-            contact.setEmail("нет информации");
-            contact.setPhone("нет информации");
-            if (contact.getFio().equalsIgnoreCase(attContact.get(0))){
-                contact.setFio(attContact.get(1));
-                if (attContact.get(2).trim().length() > 0) contact.setPhone(attContact.get(2));
-                if (attContact.get(3).trim().length() > 0) contact.setEmail(attContact.get(3));
-            }
-        }
-        this.dao.save(refBook);
+    public void updateContact(List<String> attContact) {
+        this.dao.updateContact(attContact);
     }
 
     @Override
-    public void remContact(String fio) {
-        Set<Contact> contacts = refBook.getContacts();
-        Iterator<Contact> iterator = contacts.iterator();
-        while (iterator.hasNext()){
-            Contact contact = iterator.next();
-            if (contact.getFio().equalsIgnoreCase(fio)){
-                iterator.remove();
-            }
-        }
-        this.dao.save(refBook);
+    public void removeContact(String fio) {
+        this.dao.removeContact(fio);
+
     }
 
     @Override
     public void appGroupContact(List<String> attContact){
-        Set<Contact> contacts  = refBook.getContacts();
-        for (Contact contact : contacts){
-            if (contact.getFio().equalsIgnoreCase(attContact.get(0))){
-                Group group = contact.getGroup();
-                group.setName(attContact.get(1));
-                this.dao.save(refBook);
-            }
-        }
+        this.dao.appGroupContact(attContact);
     }
 
     @Override
-    public void remGroupContact(String fio) {
-        Set<Contact> contacts = refBook.getContacts();
-        for (Contact contact : contacts){
-            if (contact.getFio().equalsIgnoreCase(fio)){
-                Group group = contact.getGroup();
-                group.setName("нет группы");
-            }
-        }
-        this.dao.save(refBook);
+    public void removeGroupContact(String fio) {
+        this.dao.removeGroupContact(fio);
     }
 
     @Override
-    public Set<Contact> getContacts() {
-        Set<Contact> contacts = refBook.getContacts();
-        return contacts;
+    public Set<Contact> getContacts() throws ParserConfigurationException, SAXException,
+            XPathExpressionException, IOException {
+        return this.dao.getContacts();
     }
 
     @Override
     public boolean existContact(String name) {
-        boolean result = false;
-        Set<Contact> contacts = refBook.getContacts();
-        for (Contact contact : contacts){
-            if (contact.getFio().equalsIgnoreCase(name)){
-                result = true;
-            }
-        }
-        return result;
+        return this.dao.existContact(name);
     }
 
     @Override
     public Contact getContact(String fio) {
-        Contact contact1 = null;
-        Set<Contact> contacts = refBook.getContacts();
-        for (Contact contact : contacts) {
-            if (contact.getFio().equalsIgnoreCase(fio)) {
-                contact1 = contact;
-            }
-        }
-        return contact1;
+        return this.dao.getContact(fio);
     }
 
     @Override
     public Contact searchName(String fio) {
-        Set<Contact> contacts = refBook.getContacts();
-        for (Contact contact : contacts){
-            if (contact.getFio().equalsIgnoreCase(fio)){
-                return contact;
-            }
-        }
         return null;
     }
 

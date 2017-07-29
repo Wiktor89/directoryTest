@@ -2,11 +2,14 @@ package views;
 
 import controller.ControllerImpl;
 import models.Contact;
-import models.Group;
+import org.xml.sax.SAXException;
 import utilits.ConsoleReader;
 import utilits.TeamList;
 
-import java.io.EOFException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +57,15 @@ public class ViewImpl implements View {
         if (command.equalsIgnoreCase(String.valueOf(TeamList.add)))
             addContact("con");//Ввел добавить контакт
         if (command.equalsIgnoreCase(String.valueOf(TeamList.rem)))
-            remContact();//Наблюдатель Удаление контакта...
+            removeContact();//Наблюдатель Удаление контакта...
         if (command.equalsIgnoreCase(String.valueOf(TeamList.upd)))
-            updContact();//Обновление контакта...
+            updateContact();//Обновление контакта...
         if (command.equalsIgnoreCase(String.valueOf(TeamList.list)))
             getContacts();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
             appGroupContact();//Наблюдатель
         if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))
-            remGroupContact();//Наблюдатель
+            removeGroupContact();//Наблюдатель
         if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))
             getContactInfo();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
@@ -81,19 +84,23 @@ public class ViewImpl implements View {
             System.out.println("Введите email");
             attContact.add(2,this.consol.readString());
             attContact.add(3,"нет группы");
-            this.controller.addEntity(attContact,command);
+            try {
+                this.controller.addEntity(attContact,command);
+            } catch (TransformerException | ParserConfigurationException e) {
+                e.printStackTrace();
+            }
             view.getSuc();
         }else {
             view.getNoContact();
         }
     }
 
-    public void remContact ()  {
+    public void removeContact()  {
         getContacts();
         String fio = getNameContact();
         if (fio.trim().length() > 0){
             if (this.controller.existContact(fio)){
-                controller.remContact(fio);
+                controller.removeContact(fio);
                 view.getSuc();
             }
         }else{
@@ -108,7 +115,7 @@ public class ViewImpl implements View {
     }
 
     @Override
-    public void updContact()  {
+    public void updateContact()  {
         getContacts();
         List<String> attContact = new ArrayList<>();
         String name = getNameContact();
@@ -121,7 +128,7 @@ public class ViewImpl implements View {
                 attContact.add(2,this.consol.readString());
                 System.out.println("Введите новый email");
                 attContact.add(3,this.consol.readString());
-                this.controller.updContact(attContact);
+                this.controller.updateContact(attContact);
                 view.getSuc();
             }else {
                 System.out.println("Вы не ввели Ф И О");
@@ -161,7 +168,7 @@ public class ViewImpl implements View {
         }
     }
 
-    void remGroupContact() {
+    void removeGroupContact() {
         getContacts();
         String fio = getNameContact();
         if (this.controller.existContact(fio)){
@@ -169,7 +176,7 @@ public class ViewImpl implements View {
             System.out.println(contact);
             String name = getNameGroup();
             if (this.controller.existGroup(name)){
-                this.controller.remGroupContact(fio);
+                this.controller.removeGroupContact(fio);
             }
         }else {
             view.getNoContact();
@@ -182,13 +189,13 @@ public class ViewImpl implements View {
         if (command.equalsIgnoreCase(String.valueOf(TeamList.add)))
             addGroup("gro");
         if (command.equalsIgnoreCase(String.valueOf(TeamList.rem)))
-            remGroup();//Наблюдатель
+            removeGroup();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.upd)))
-            updGroup();//Наблюдатель
+            updateGroup();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.list)))
             getGroups();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.listc)))
-            getContactsGroup();//Наблюдатель
+            getContactsGroup();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))view.startPage();
         view.pageActionGroup();
     }
@@ -199,7 +206,11 @@ public class ViewImpl implements View {
         if (name.trim().length() > 0){
             attGroup.add(name);
             try {
-                this.controller.addEntity(attGroup,command);
+                try {
+                    this.controller.addEntity(attGroup,command);
+                } catch (TransformerException | ParserConfigurationException e) {
+                    e.printStackTrace();
+                }
                 view.getSuc();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -209,12 +220,16 @@ public class ViewImpl implements View {
         }
     }
 
-    public void remGroup() {
+    public void removeGroup() {
         getGroups();
         String name = getNameGroup();
         if(name.trim().length() > 0){
             if (this.controller.existGroup(name)){
-                this.controller.remGroup(name);
+                try {
+                    this.controller.removeGroup(name);
+                } catch (ParserConfigurationException | TransformerException | XPathExpressionException | SAXException e) {
+                    e.printStackTrace();
+                }
                 view.getSuc();
             }else {
                 view.getNoGroup();
@@ -224,7 +239,7 @@ public class ViewImpl implements View {
         }
     }
 
-    public void updGroup() {
+    public void updateGroup() {
         getGroups();
         List<String> attGroup = new ArrayList<>();
         String oldName = getNameGroup();
@@ -233,7 +248,11 @@ public class ViewImpl implements View {
             if (newName.trim().length() > 0){
                 attGroup.add(0,oldName);
                 attGroup.add(1,newName);
-                this.controller.updGroup(attGroup);
+                try {
+                    this.controller.updateGroup(attGroup);
+                } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
+                    e.printStackTrace();
+                }
             }else {
                 view.emptyLine();
             }
@@ -245,9 +264,14 @@ public class ViewImpl implements View {
     @Override
     public void getGroups(){
         System.out.println("Список доступных групп");
-        Set<Group> groups = this.controller.getGroups();
+        Set<String> groups = null;
+        try {
+            groups = this.controller.getGroups();
+        } catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException | TransformerConfigurationException e) {
+            e.printStackTrace();
+        }
         if (!groups.isEmpty()){
-            for (Group group : groups){
+            for (String group : groups){
                 System.out.println(group);
             }
         }else {
@@ -257,9 +281,14 @@ public class ViewImpl implements View {
 
     public void getContactsGroup(){
         getGroups();
-        Set<Contact> contacts = this.controller.getContactsGroup(getNameGroup());
-        for (Contact contact : contacts){
-            System.out.println(contact.contactInf());
+        Set<String> contacts = null;
+        try {
+            contacts = this.controller.getContactsGroup(getNameGroup());
+        } catch (ParserConfigurationException | IOException | XPathExpressionException | SAXException e) {
+            e.printStackTrace();
+        }
+        for (String contact : contacts){
+            System.out.println(contact);
         }
     }
 
@@ -271,7 +300,12 @@ public class ViewImpl implements View {
 
     @Override
     public void getContacts(){
-        Set<Contact> contacts = this.controller.getContacts();
+        Set<Contact> contacts = null;
+        try {
+            contacts = this.controller.getContacts();
+        } catch (ParserConfigurationException | IOException | XPathExpressionException | SAXException e) {
+            e.printStackTrace();
+        }
         for (Contact contact : contacts){
             System.out.println(contact.contactInf());
         }

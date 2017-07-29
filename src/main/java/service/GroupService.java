@@ -1,9 +1,12 @@
 package service;
 
-import models.Contact;
 import models.Entity;
-import models.Group;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -16,27 +19,32 @@ public interface GroupService {
     /**
      *Список контактов опр. группы
      */
-    Set<Contact> getContactsGroup(String name);
+    Set<String> getContactsGroup(String name) throws ParserConfigurationException,
+            SAXException, XPathExpressionException, IOException;
 
     /**
      *Список групп
      */
-    Set<Group> getGroups();
+    Set<String> getGroups() throws TransformerConfigurationException, ParserConfigurationException,
+            SAXException, XPathExpressionException, IOException;
 
     /**
      *Добавление группы
      */
-    void addGroup(Entity entity) throws Exception;
+    void addGroup(Entity entity) throws TransformerException,
+            ParserConfigurationException;
 
     /**
      *Удаление группы
      */
-    void remGroup(String name) throws IOException;
+    void removeGroup(String name) throws ParserConfigurationException,
+            TransformerException, SAXException, XPathExpressionException;
 
     /**
      *Обновление  группы
      */
-    void updGroup(List<String> attGoup);
+    void updateGroup(List<String> attGoup) throws ParserConfigurationException, TransformerException
+            , SAXException, IOException;
 
     /**
      *Смотрим есть группа в списке

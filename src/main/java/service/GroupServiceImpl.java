@@ -1,13 +1,14 @@
 package service;
 
-import dao.DirectoryDaoImpl;
-import models.Contact;
+import dao.DomSaxGroupParser;
+import dao.parsers.dom.DomGroupParserImp;
 import models.Entity;
-import models.Group;
-import sorted.ContactFioComparator;
-import storage.RefBook;
-import views.ViewImpl;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.*;
 
@@ -23,96 +24,44 @@ public class GroupServiceImpl implements GroupService {
      * groups
      * dao
      */
-    private RefBook refBook = null;
-    private DirectoryDaoImpl dao = new DirectoryDaoImpl();
+    private DomSaxGroupParser dao = new DomGroupParserImp();
 
-    public GroupServiceImpl(RefBook refBook) {
-        this.refBook = refBook;
+    public GroupServiceImpl() {
     }
 
-    public RefBook getRefBook() {
-        return refBook ;
-    }
-    public void setRefBook(RefBook refBook) {
-        this.refBook = refBook;
+
+    @Override
+    public Set<String> getContactsGroup(String name) throws ParserConfigurationException,
+            SAXException, XPathExpressionException, IOException {
+        return this.dao.getContactsGroup(name);
     }
 
     @Override
-    public Set<Contact> getContactsGroup(String name) {
-        Set<Contact> contacts1 = new TreeSet<>(new ContactFioComparator());
-        Set<Contact> contacts = refBook.getContacts();
-        for (Contact contact : contacts){
-            Group group = contact.getGroup();
-            if (group.getName().equalsIgnoreCase(name)){
-                contacts1.add(contact);
-            }
-        }
-        return contacts1;
+    public Set<String> getGroups() throws TransformerConfigurationException, ParserConfigurationException,
+            SAXException, XPathExpressionException, IOException {
+        return this.dao.getGroups();
     }
 
     @Override
-    public Set<Group> getGroups(){
-        Set<Group> groups = refBook.getGroups();
-        return groups;
+    public void addGroup(Entity entity) throws TransformerException,
+            ParserConfigurationException {
+        this.dao.addGroup(entity);
     }
 
     @Override
-    public void addGroup(Entity entity)  {
-        Group group = (Group) entity;
-        Set<Group> groups = refBook.getGroups();
-        groups.add(group);
-        this.dao.save(refBook);
+    public void removeGroup(String name) throws ParserConfigurationException,
+            TransformerException, SAXException, XPathExpressionException {
+        this.dao.removeGroup(name);
     }
 
     @Override
-    public void remGroup(String name)  {
-        Set<Group> groups = refBook.getGroups();
-        Set<Contact> contacts = refBook.getContacts();
-        if (!groups.isEmpty()){
-                Iterator<Group> iterator = groups.iterator();
-                while (iterator.hasNext()){
-                    Group group = iterator.next();
-                    if (group.getName().equalsIgnoreCase(name)){
-                        iterator.remove();
-                    }
-                    for (Contact contact : contacts){
-                        Group group1 = contact.getGroup();
-                        if (group1.getName().equalsIgnoreCase(name)){
-                            group1.setName("нет группы");
-                        }
-                    }
-                }
-        }
-        this.dao.save(refBook);
-    }
-
-    @Override
-    public void updGroup(List<String> attGroup) {
-        Set<Group> groups = refBook.getGroups();
-        for (Group group : groups){
-            if (group.getName().equalsIgnoreCase(attGroup.get(0))){
-                group.setName(attGroup.get(1));
-            }
-        }
-        Set<Contact> contacts = refBook.getContacts();
-        for (Contact contact : contacts){
-            Group group = contact.getGroup();
-            if (group.getName().equalsIgnoreCase(attGroup.get(0))){
-                group.setName(attGroup.get(1));
-            }
-        }
-        this.dao.save(refBook);
+    public void updateGroup(List<String> attGroup) throws ParserConfigurationException, TransformerException
+            , SAXException, IOException {
+        this.dao.updateGroup(attGroup);
     }
 
     @Override
     public boolean existGroup(String name){
-        boolean result = false;
-        Set<Group> groups = refBook.getGroups();
-        for (Group group : groups){
-            if (group.getName().equalsIgnoreCase(name)){
-                result = true;
-            }
-        }
-        return result;
+        return this.dao.existGroup(name);
     }
 }

@@ -2,7 +2,11 @@ package service;
 
 import models.Contact;
 import models.Entity;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -20,12 +24,12 @@ public interface ContactService {
      *Обновление контакта
      * @param attContact
      */
-    void updContact(List<String> attContact);
+    void updateContact(List<String> attContact);
 
     /**
      *Удаление контакта
      */
-    void remContact(String fio);
+    void removeContact(String fio);
 
     /**
      *Добавить контакту группу
@@ -35,12 +39,12 @@ public interface ContactService {
     /**
      *Удаление группы у контакта контакта
      */
-    void remGroupContact(String fio);
+    void removeGroupContact(String fio);
 
     /**
      *Список контактов
      */
-    Set<Contact> getContacts();
+    Set<Contact> getContacts() throws ParserConfigurationException, SAXException, XPathExpressionException, IOException;
 
     /**
      *Проверка контакта на существование

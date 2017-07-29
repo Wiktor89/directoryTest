@@ -6,13 +6,15 @@ import factory.EntityFactory;
 import factory.GroupFactory;
 import models.Contact;
 import models.Entity;
-import models.Group;
+import org.xml.sax.SAXException;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
-import storage.RefBook;
 import utilits.TeamList;
-import views.ViewChangModel;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -27,15 +29,8 @@ public class ControllerImpl implements Controller{
      */
     private ContactServiceImpl serviceContact = null;
     private GroupServiceImpl serviceGroup = null;
-    private RefBook refBook  = null;
     private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
-    public RefBook getRefBook() {
-        return refBook;
-    }
-    public void setRefBook(RefBook refBook) {
-        this.refBook = refBook;
-    }
     public GroupServiceImpl getServiceGroup() {
         return serviceGroup;
     }
@@ -50,14 +45,14 @@ public class ControllerImpl implements Controller{
     }
 
     public ControllerImpl() {
-        this.refBook = this.dao.load();
-        this.refBook.setObservers(ViewChangModel.getViewChangModel());
-        this.serviceContact = new ContactServiceImpl(this.refBook);
-        this.serviceGroup = new GroupServiceImpl(this.refBook);
+//        this.refBook.setObservers(ViewChangModel.getViewChangModel());
+        this.serviceContact = new ContactServiceImpl();
+        this.serviceGroup = new GroupServiceImpl();
     }
 
     @Override
-    public void addEntity(List<String> attrEntity,String command) throws IOException  {
+    public void addEntity(List<String> attrEntity,String command) throws IOException,
+            TransformerException, ParserConfigurationException {
         EntityFactory entityFactory = create(command);
         Entity entity = entityFactory.creatingEntity(attrEntity);
 
@@ -74,13 +69,13 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void updContact(List<String> attContact) {
-          this.serviceContact.updContact(attContact);
+    public void updateContact(List<String> attContact) {
+          this.serviceContact.updateContact(attContact);
     }
 
     @Override
-    public void remContact(String fio) {
-        this.serviceContact.remContact(fio);
+    public void removeContact(String fio) {
+        this.serviceContact.removeContact(fio);
     }
 
     @Override
@@ -89,12 +84,13 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void remGroupContact(String fio) {
-        this.serviceContact.remGroupContact(fio);
+    public void removeGroupContact(String fio) {
+        this.serviceContact.removeGroupContact(fio);
     }
 
     @Override
-    public Set<Contact> getContacts() {
+    public Set<Contact> getContacts() throws ParserConfigurationException, SAXException,
+            XPathExpressionException, IOException {
          return this.serviceContact.getContacts();
     }
 
@@ -114,23 +110,27 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public Set<Contact> getContactsGroup(String name) {
+    public Set<String> getContactsGroup(String name) throws ParserConfigurationException, SAXException,
+            XPathExpressionException, IOException {
        return this.serviceGroup.getContactsGroup(name);
     }
 
     @Override
-    public Set<Group> getGroups() {
+    public Set<String> getGroups() throws XPathExpressionException, ParserConfigurationException,
+            SAXException, TransformerConfigurationException, IOException {
         return this.serviceGroup.getGroups();
     }
 
     @Override
-    public void remGroup(String name)  {
-        this.serviceGroup.remGroup(name);
+    public void removeGroup(String name) throws ParserConfigurationException, SAXException,
+            XPathExpressionException, TransformerException {
+        this.serviceGroup.removeGroup(name);
     }
 
     @Override
-    public void updGroup(List<String> attGroup)  {
-            this.serviceGroup.updGroup(attGroup);
+    public void updateGroup(List<String> attGroup) throws ParserConfigurationException, IOException,
+            SAXException, TransformerException {
+            this.serviceGroup.updateGroup(attGroup);
     }
 
 }

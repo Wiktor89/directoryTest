@@ -1,8 +1,6 @@
 package dao;
 
-import models.Contact;
 import models.Entity;
-import models.Group;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,12 +24,15 @@ public interface DomSaxGroupParser {
     /**
      *Удаление группы
      */
-    boolean removeGroup(String name);
+    boolean removeGroup(String name) throws ParserConfigurationException, SAXException
+            ,XPathExpressionException, TransformerException;
 
     /**
      *Обновление  группы
+     * @param attGroup
      */
-    boolean updateGroup(List<String> attGoup);
+    void updateGroup(List<String> attGroup) throws ParserConfigurationException
+            , SAXException, TransformerException, IOException;
 
     /**
      *Смотрим есть группа в списке
@@ -41,12 +42,14 @@ public interface DomSaxGroupParser {
     /**
      *Список групп
      */
-    Set<String> getGroups() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException, TransformerConfigurationException;
+    Set<String> getGroups() throws ParserConfigurationException, SAXException,
+            XPathExpressionException, TransformerConfigurationException, IOException;
 
     /**
      *Список контактов опр. группы
      */
-    Set<Contact> getContactsGroup(String name);
+    Set<String> getContactsGroup(String name) throws ParserConfigurationException, SAXException,
+            XPathExpressionException, IOException;
 
 
 }

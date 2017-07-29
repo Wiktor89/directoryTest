@@ -9,6 +9,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -32,10 +34,13 @@ public class Main {
 //        DomSaxContactsParser domSax = new ContactParserImpl();
 //        domSax.getContacts();
 
-        DomContactParserImp domContactParserImp = new DomContactParserImp();
-        Set<String> contacts = domContactParserImp.getContacts();
-        for (String s : contacts){
-            System.out.println(s);
-        }
+        DomGroupParserImp domContactParserImp = new DomGroupParserImp();
+        List<String> strings = new ArrayList<>();
+        strings.add()
+        boolean test = domContactParserImp.updateGroup("test");
+        System.out.println(test);
+//        for (String s : contacts){
+//            System.out.println(s);
+//        }
     }
 }

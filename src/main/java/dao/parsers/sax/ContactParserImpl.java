@@ -2,7 +2,6 @@ package dao.parsers.sax;
 
 import dao.DomSaxContactsParser;
 import dao.parsers.handler.HandlerContact;
-import dao.parsers.handler.HandlerGroup;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;

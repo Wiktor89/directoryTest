@@ -23,7 +23,7 @@ import java.util.TreeSet;
 /**
  *
  */
-public class DomContactParserImp extends Parser implements DomSaxContactsParser {
+public class DomContactParserImp implements DomSaxContactsParser {
 
     @Override
     public boolean addContact(Entity entity) {
@@ -54,7 +54,7 @@ public class DomContactParserImp extends Parser implements DomSaxContactsParser 
     public Set<Contact> getContacts() throws ParserConfigurationException
             , SAXException, IOException, XPathExpressionException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        Set<String> contacts = new TreeSet<>();
+        Set<Contact> contacts = new TreeSet<>();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document xmlDocument  = builder.parse(new File("refbook.xml"));
         String fio = "/entity/contact/name";
@@ -62,7 +62,7 @@ public class DomContactParserImp extends Parser implements DomSaxContactsParser 
         NodeList nodeList = (NodeList) xPath.compile(fio)
                 .evaluate(xmlDocument, XPathConstants.NODESET);
         for (int i = 0; i < nodeList.getLength(); i++) {
-            contacts.add(nodeList.item(i).getFirstChild().getNodeValue());
+            contacts.add(new Contact(nodeList.item(i).getFirstChild().getNodeValue()));
         }
         return contacts;
     }

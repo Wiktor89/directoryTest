@@ -44,7 +44,8 @@ public interface DomSaxContactsParser {
     /**
      *Список контактов
      */
-    Set<Contact> getContacts() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException;
+    Set<Contact> getContacts() throws ParserConfigurationException,
+            SAXException, IOException, XPathExpressionException;
 
     /**
      *Проверка контакта на существование

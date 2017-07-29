@@ -2,7 +2,6 @@ package dao.parsers.sax;
 
 import dao.DomSaxGroupParser;
 import dao.parsers.handler.HandlerGroup;
-import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
 
@@ -33,8 +32,7 @@ public class GroupParserImp implements DomSaxGroupParser {
     }
 
     @Override
-    public boolean updateGroup(List<String> attGoup) {
-        return false;
+    public void updateGroup(List<String> attGroup) {
     }
 
     @Override
@@ -54,7 +52,7 @@ public class GroupParserImp implements DomSaxGroupParser {
     }
 
     @Override
-    public Set<Contact> getContactsGroup(String name) {
+    public Set<String> getContactsGroup(String name) {
         return null;
     }
 }

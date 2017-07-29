@@ -1,8 +1,12 @@
 package controller;
 
 import models.Contact;
-import models.Group;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -15,12 +19,12 @@ public interface Controller {
     /**
      *Обновление контакта
      */
-    void updContact(List<String> attContact);
+    void updateContact(List<String> attContact);
 
     /**
      *Удаление контакта
      */
-    void remContact(String fio);
+    void removeContact(String fio);
 
     /**
      *Добавить контакту группу
@@ -30,37 +34,40 @@ public interface Controller {
     /**
      *Удаление группы у контакта контакта
      */
-    void remGroupContact(String fio);
+    void removeGroupContact(String fio);
 
     /**
      *Список контактов
      */
-    Set<Contact> getContacts();
+    Set<Contact> getContacts() throws ParserConfigurationException, SAXException,
+            XPathExpressionException, IOException;
 
     /**
      *Список контактов опр. группы
      */
-    Set<Contact> getContactsGroup(String name);
+    Set<String> getContactsGroup(String name) throws ParserConfigurationException, SAXException,
+            XPathExpressionException, IOException;
 
     /**
      *Список групп
      */
-    Set<Group> getGroups();
+    Set<String> getGroups() throws XPathExpressionException, ParserConfigurationException, SAXException, TransformerConfigurationException, IOException;
 
     /**
      *Удаление группы
      */
-    void remGroup(String name) ;
+    void removeGroup(String name) throws ParserConfigurationException, SAXException, XPathExpressionException, TransformerException;
 
     /**
      *Обновление  группы
      */
-    void updGroup(List<String> attGoup) ;
+    void updateGroup(List<String> attGoup) throws ParserConfigurationException, IOException, SAXException, TransformerException;
 
     /**
      * Создание сущности
      */
-    void addEntity (List<String> attrEntity,String command) throws IOException;
+    void addEntity (List<String> attrEntity,String command) throws IOException, TransformerException,
+            ParserConfigurationException;
 
     /**
      * Возвращает контакт

@@ -25,7 +25,7 @@ public interface View {
     /**
      * Действия для группы
      */
-    void updContact() ;
+    void updateContact() ;
 
     /**
      * Список контактов
