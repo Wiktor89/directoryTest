@@ -52,7 +52,7 @@ public class ControllerImpl implements Controller{
 
     @Override
     public void addEntity(List<String> attrEntity,String command) throws IOException,
-            TransformerException, ParserConfigurationException {
+            TransformerException, ParserConfigurationException, SAXException {
         EntityFactory entityFactory = create(command);
         Entity entity = entityFactory.creatingEntity(attrEntity);
 
@@ -69,12 +69,14 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void updateContact(List<String> attContact) {
+    public void updateContact(List<String> attContact) throws ParserConfigurationException,
+            SAXException, IOException {
           this.serviceContact.updateContact(attContact);
     }
 
     @Override
-    public void removeContact(String fio) {
+    public void removeContact(String fio) throws SAXException, ParserConfigurationException,
+            IOException, TransformerException {
         this.serviceContact.removeContact(fio);
     }
 
@@ -123,7 +125,7 @@ public class ControllerImpl implements Controller{
 
     @Override
     public void removeGroup(String name) throws ParserConfigurationException, SAXException,
-            XPathExpressionException, TransformerException {
+            XPathExpressionException, TransformerException, IOException {
         this.serviceGroup.removeGroup(name);
     }
 

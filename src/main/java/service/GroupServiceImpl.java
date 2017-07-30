@@ -1,6 +1,5 @@
 package service;
 
-import dao.DomSaxGroupParser;
 import dao.parsers.dom.DomGroupParserImp;
 import models.Entity;
 import org.xml.sax.SAXException;
@@ -24,7 +23,7 @@ public class GroupServiceImpl implements GroupService {
      * groups
      * dao
      */
-    private DomSaxGroupParser dao = new DomGroupParserImp();
+    private DomGroupParserImp dao = new DomGroupParserImp();
 
     public GroupServiceImpl() {
     }
@@ -44,13 +43,13 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void addGroup(Entity entity) throws TransformerException,
-            ParserConfigurationException {
+            ParserConfigurationException, IOException, SAXException {
         this.dao.addGroup(entity);
     }
 
     @Override
     public void removeGroup(String name) throws ParserConfigurationException,
-            TransformerException, SAXException, XPathExpressionException {
+            TransformerException, SAXException, XPathExpressionException, IOException {
         this.dao.removeGroup(name);
     }
 
@@ -61,7 +60,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean existGroup(String name){
+    public boolean existGroup(String name) {
         return this.dao.existGroup(name);
     }
 }

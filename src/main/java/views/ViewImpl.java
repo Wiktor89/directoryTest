@@ -88,6 +88,8 @@ public class ViewImpl implements View {
                 this.controller.addEntity(attContact,command);
             } catch (TransformerException | ParserConfigurationException e) {
                 e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
             }
             view.getSuc();
         }else {
@@ -99,10 +101,14 @@ public class ViewImpl implements View {
         getContacts();
         String fio = getNameContact();
         if (fio.trim().length() > 0){
-            if (this.controller.existContact(fio)){
-                controller.removeContact(fio);
+//            if (this.controller.existContact(fio)){
+                try {
+                    controller.removeContact(fio);
+                } catch (SAXException | TransformerException | IOException | ParserConfigurationException e) {
+                    e.printStackTrace();
+                }
                 view.getSuc();
-            }
+//            }
         }else{
             view.getNoContact();
         }
@@ -128,7 +134,11 @@ public class ViewImpl implements View {
                 attContact.add(2,this.consol.readString());
                 System.out.println("Введите новый email");
                 attContact.add(3,this.consol.readString());
-                this.controller.updateContact(attContact);
+                try {
+                    this.controller.updateContact(attContact);
+                } catch (ParserConfigurationException | IOException | SAXException e) {
+                    e.printStackTrace();
+                }
                 view.getSuc();
             }else {
                 System.out.println("Вы не ввели Ф И О");
@@ -208,7 +218,7 @@ public class ViewImpl implements View {
             try {
                 try {
                     this.controller.addEntity(attGroup,command);
-                } catch (TransformerException | ParserConfigurationException e) {
+                } catch (TransformerException | ParserConfigurationException | SAXException e) {
                     e.printStackTrace();
                 }
                 view.getSuc();
@@ -227,7 +237,7 @@ public class ViewImpl implements View {
             if (this.controller.existGroup(name)){
                 try {
                     this.controller.removeGroup(name);
-                } catch (ParserConfigurationException | TransformerException | XPathExpressionException | SAXException e) {
+                } catch (ParserConfigurationException | TransformerException | XPathExpressionException | SAXException | IOException e) {
                     e.printStackTrace();
                 }
                 view.getSuc();

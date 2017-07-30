@@ -19,12 +19,12 @@ public interface Controller {
     /**
      *Обновление контакта
      */
-    void updateContact(List<String> attContact);
+    void updateContact(List<String> attContact) throws ParserConfigurationException, SAXException, IOException;
 
     /**
      *Удаление контакта
      */
-    void removeContact(String fio);
+    void removeContact(String fio) throws SAXException, ParserConfigurationException, IOException, TransformerException;
 
     /**
      *Добавить контакту группу
@@ -56,7 +56,7 @@ public interface Controller {
     /**
      *Удаление группы
      */
-    void removeGroup(String name) throws ParserConfigurationException, SAXException, XPathExpressionException, TransformerException;
+    void removeGroup(String name) throws ParserConfigurationException, SAXException, XPathExpressionException, TransformerException, IOException;
 
     /**
      *Обновление  группы
@@ -67,7 +67,7 @@ public interface Controller {
      * Создание сущности
      */
     void addEntity (List<String> attrEntity,String command) throws IOException, TransformerException,
-            ParserConfigurationException;
+            ParserConfigurationException, SAXException;
 
     /**
      * Возвращает контакт

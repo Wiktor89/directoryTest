@@ -32,13 +32,13 @@ public interface GroupService {
      *Добавление группы
      */
     void addGroup(Entity entity) throws TransformerException,
-            ParserConfigurationException;
+            ParserConfigurationException, IOException, SAXException;
 
     /**
      *Удаление группы
      */
     void removeGroup(String name) throws ParserConfigurationException,
-            TransformerException, SAXException, XPathExpressionException;
+            TransformerException, SAXException, XPathExpressionException, IOException;
 
     /**
      *Обновление  группы

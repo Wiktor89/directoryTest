@@ -19,13 +19,13 @@ public interface DomSaxGroupParser {
     /**
      *Добавление группы
      */
-    boolean addGroup(Entity entity) throws ParserConfigurationException, TransformerException;
+    boolean addGroup(Entity entity) throws ParserConfigurationException, TransformerException, IOException, SAXException;
 
     /**
      *Удаление группы
      */
     boolean removeGroup(String name) throws ParserConfigurationException, SAXException
-            ,XPathExpressionException, TransformerException;
+            , XPathExpressionException, TransformerException, IOException;
 
     /**
      *Обновление  группы

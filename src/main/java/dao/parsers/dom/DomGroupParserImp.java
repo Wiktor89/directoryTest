@@ -2,6 +2,7 @@ package dao.parsers.dom;
 
 import dao.DomSaxGroupParser;
 import models.Entity;
+import models.Group;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -16,10 +17,9 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  *
@@ -28,68 +28,138 @@ public class DomGroupParserImp implements DomSaxGroupParser {
 
 
     @Override
-    public boolean addGroup(Entity entity) throws ParserConfigurationException, TransformerException {
-        File file = new File("refbook.xml");
+    public boolean addGroup(Entity entity) throws ParserConfigurationException,
+            TransformerException, IOException, SAXException {
+        boolean result = false;
+        Group group  =(Group) entity;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.newDocument();
+        Document xmlDocument  = null;
+        Element rootGroups = null;
 
-        Element groupEl = document.createElement("group");
-        Attr id = document.createAttribute("id");
-        id.setValue("1");
+        File file = new File("groups.xml");
+        if (file.exists()){
+            xmlDocument = builder.parse(file);
+            rootGroups = xmlDocument.getDocumentElement();
+            result = true;
+
+        }else {
+            xmlDocument = builder.newDocument();
+            rootGroups = xmlDocument.createElement("groups");
+            xmlDocument.appendChild(rootGroups);
+            result = true;
+        }
+        Element groupEl = xmlDocument.createElement("group");
+        rootGroups.appendChild(groupEl);
+
+        Attr id = xmlDocument.createAttribute("id");
+        id.setValue(String.valueOf(group.getId()));
         groupEl.setAttributeNode(id);
-        document.appendChild(groupEl);
 
-
-        Element titleEl = document.createElement("title");
-        titleEl.appendChild(document.createTextNode("test"));
+        Element titleEl = xmlDocument.createElement("title");
         groupEl.appendChild(titleEl);
 
+        Text titleText = xmlDocument.createTextNode(group.getName());
+        titleEl.appendChild(titleText);
+        rootGroups.appendChild(groupEl);
 
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+        transformer.transform(new DOMSource(xmlDocument),new StreamResult(
+                new FileOutputStream(file)));
 
+        return result;
 
-
-        return false;
-
-    }
+    }//yes
 
     @Override
     public boolean removeGroup(String name) throws ParserConfigurationException,
-            SAXException, XPathExpressionException, TransformerException {
-
-
-
-        return false;
-    }
-
-    @Override
-    public void updateGroup(List<String> attGroup) throws ParserConfigurationException,
-            SAXException, TransformerException, IOException {
+            SAXException, XPathExpressionException, TransformerException, IOException {
+        boolean result = false;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document xmlDocument  = builder.parse(new File("groups.xml"));
 
         Node root = xmlDocument.getFirstChild();
+        NodeList nodeList = xmlDocument.getElementsByTagName("group");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            NodeList childNodes = nodeList.item(i).getChildNodes();
+            for (int j = 1; j < childNodes.getLength(); j++) {
+                Node item = childNodes.item(j);
+                if (item.getTextContent().equalsIgnoreCase(name)){
+                    Node parentNode = item.getParentNode();
+                    root.removeChild(parentNode);
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    DOMSource domSource = new DOMSource(xmlDocument);
+                    StreamResult streamResult = new StreamResult(new File("groups.xml"));
+                    transformer.transform(domSource, streamResult);
+                    result = true;
+                }
+            }
+        }
 
-        Node group = xmlDocument.getElementsByTagName("group").item(0);
+        return result;
+    }//yes
 
-        NamedNodeMap namedNodeMap = group.getAttributes();
+    @Override
+    public void updateGroup(List<String> attGroup) throws ParserConfigurationException,
+            SAXException, TransformerException, IOException {
 
-        Node nodeAttr = namedNodeMap.getNamedItem("id");
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document xmlDocument  = builder.parse(new File("groups.xml"));
 
-        nodeAttr.setTextContent("11111111111");
-
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource domSource = new DOMSource(xmlDocument);
-        StreamResult streamResult = new StreamResult(new File("groups.xml"));
-        transformer.transform(domSource, streamResult);
-    }
+        NodeList nodeList = xmlDocument.getElementsByTagName("group");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            NodeList nodeChildList = nodeList.item(i).getChildNodes();
+            for (int j = 0; j < nodeChildList.getLength(); j++) {
+                Node node = nodeChildList.item(j);
+                if (node.getNodeName().equalsIgnoreCase("title")
+                        && node.getTextContent().equalsIgnoreCase(attGroup.get(0))){
+                    node.setTextContent(attGroup.get(1));
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    DOMSource domSource = new DOMSource(xmlDocument);
+                    StreamResult streamResult = new StreamResult(new File("groups.xml"));
+                    transformer.transform(domSource, streamResult);
+                }
+            }
+        }
+    }//yes
 
     @Override
     public boolean existGroup(String name) {
-        return false;
-    }
+        boolean result = false;
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document xmlDocument  = null;
+        try {
+            xmlDocument = builder.parse(new File("groups.xml"));
+        } catch (SAXException | IOException e) {
+            e.printStackTrace();
+        }
+        String title = "/groups/group/title";
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        NodeList nodeList = null;
+        try {
+            nodeList = (NodeList) xPath.compile(title)
+                    .evaluate(xmlDocument, XPathConstants.NODESET);
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            if (nodeList.item(i).getFirstChild().getNodeValue().equalsIgnoreCase(name)){
+                result = true;
+            }
+        }
+        return result;
+    }//yes
 
     @Override
     public Set<String> getGroups() throws ParserConfigurationException
@@ -97,10 +167,10 @@ public class DomGroupParserImp implements DomSaxGroupParser {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         Set<String> groups = new TreeSet<>();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document xmlDocument  = builder.parse(new File("refbook.xml"));
-        String titls = "/entity/group/title";
+        Document xmlDocument  = builder.parse(new File("groups.xml"));
+        String title = "/groups/group/title";
         XPath xPath = XPathFactory.newInstance().newXPath();
-        NodeList nodeList = (NodeList) xPath.compile(titls)
+        NodeList nodeList = (NodeList) xPath.compile(title)
                 .evaluate(xmlDocument, XPathConstants.NODESET);
         for (int i = 0; i < nodeList.getLength(); i++) {
             groups.add(nodeList.item(i).getFirstChild().getNodeValue());
@@ -125,18 +195,17 @@ public class DomGroupParserImp implements DomSaxGroupParser {
 //            System.out.println(id);
 //            groups.add(new Group(title));
 //        }
-
-    }
+    }//yes
 
     @Override
     public Set<String> getContactsGroup(String name) throws ParserConfigurationException,
             SAXException, XPathExpressionException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document xmlDocument  = builder.parse(new File("refbook.xml"));
+        Document xmlDocument  = builder.parse(new File("contacts.xml"));
 
         Set<String> contacts = new TreeSet<>();
-        String titls = "/entity/contact";
+        String titls = "/contacts/contact";
         XPath xPath = XPathFactory.newInstance().newXPath();
         NodeList nodeList = (NodeList) xPath.compile(titls)
                 .evaluate(xmlDocument, XPathConstants.NODESET);
@@ -153,5 +222,45 @@ public class DomGroupParserImp implements DomSaxGroupParser {
             }
         }
         return contacts;
+    }//yes
+
+    public static void main(String[] args) throws ParserConfigurationException, IOException,
+            SAXException, TransformerException, XPathExpressionException {
+//
+//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//        DocumentBuilder builder = factory.newDocumentBuilder();
+//        Document xmlDocument  = null;
+//        Element rootGroups = null;
+//
+//        File file = new File("groups.xml");
+//        if (file.exists()){
+//            xmlDocument = builder.parse(file);
+//            rootGroups = xmlDocument.getDocumentElement();
+//
+//        }else {
+//            xmlDocument = builder.newDocument();
+//            rootGroups = xmlDocument.createElement("groups");
+//            xmlDocument.appendChild(rootGroups);
+//        }
+//        Element groupEl = xmlDocument.createElement("group");
+//        rootGroups.appendChild(groupEl);
+//
+//        Attr id = xmlDocument.createAttribute("id");
+//        id.setValue("444");
+//        groupEl.setAttributeNode(id);
+//
+//        Element titleEl = xmlDocument.createElement("title");
+//        groupEl.appendChild(titleEl);
+//
+//        Text titleText = xmlDocument.createTextNode("titleText");
+//        titleEl.appendChild(titleText);
+//        rootGroups.appendChild(groupEl);
+//
+//
+//
+//        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+//        transformer.transform(new DOMSource(xmlDocument),new StreamResult(
+//                new FileOutputStream(file)));
     }
 }

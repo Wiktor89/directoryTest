@@ -4,10 +4,10 @@ import dao.DomSaxContactsParser;
 import dao.parsers.dom.DomContactParserImp;
 import models.Contact;
 import models.Entity;
-import models.Group;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.List;
@@ -44,12 +44,14 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void updateContact(List<String> attContact) {
+    public void updateContact(List<String> attContact) throws IOException, SAXException,
+            ParserConfigurationException {
         this.dao.updateContact(attContact);
     }
 
     @Override
-    public void removeContact(String fio) {
+    public void removeContact(String fio) throws SAXException, TransformerException,
+            ParserConfigurationException, IOException {
         this.dao.removeContact(fio);
 
     }

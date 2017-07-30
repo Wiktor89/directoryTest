@@ -46,7 +46,7 @@ public class GroupParserImp implements DomSaxGroupParser {
         SAXParserFactory factory = SAXParserFactory.newInstance();//фабрика
         HandlerGroup handlerGroup = new HandlerGroup();
         SAXParser parser = factory.newSAXParser();//получаем парсер
-        parser.parse(new File("refbook.xml"), handlerGroup);//читаем из файла, слушатель
+        parser.parse(new File("contacts.xml"), handlerGroup);//читаем из файла, слушатель
         Set<String> groups = handlerGroup.getGroups();
         return groups;
     }

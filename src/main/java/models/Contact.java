@@ -1,11 +1,15 @@
 package models;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import java.io.Serializable;
 import java.util.UUID;
 
 /**
  *Модель контакта
  */
+@JacksonXmlRootElement(localName = "contact")
 public class Contact extends IdentifiedEntity implements Serializable,Comparable<Contact> {
 
     /**
@@ -18,6 +22,9 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
     private String phone;
     private String email;
     private Group group;
+
+    public Contact() {
+    }
 
     public Contact(String fio) {
         this(fio,"нет информации","нет информации");

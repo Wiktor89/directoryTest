@@ -5,6 +5,7 @@ import models.Entity;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.List;
@@ -24,12 +25,12 @@ public interface DomSaxContactsParser {
      *Обновление контакта
      * @param attContact
      */
-    boolean updateContact(List<String> attContact);
+    boolean updateContact(List<String> attContact) throws ParserConfigurationException, IOException, SAXException;
 
     /**
      *Удаление контакта
      */
-    boolean removeContact(String fio);
+    boolean removeContact(String fio) throws IOException, SAXException, ParserConfigurationException, TransformerException;
 
     /**
      *Добавить контакту группу

@@ -51,7 +51,7 @@ public class ContactParserImpl implements DomSaxContactsParser {
         SAXParserFactory factory = SAXParserFactory.newInstance();//фабрика
         HandlerContact handlerContact = new HandlerContact();
         SAXParser parser = factory.newSAXParser();//получаем парсер
-        parser.parse(new File("refbook.xml"), handlerContact);//читаем из файла, слушатель
+        parser.parse(new File("contacts.xml"), handlerContact);//читаем из файла, слушатель
         Set<Contact> contacts = handlerContact.getContacts();
         return contacts;
     }
