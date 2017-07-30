@@ -39,7 +39,8 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void addContact(Entity entity) {
+    public void addContact(Entity entity) throws IOException, ParserConfigurationException,
+            SAXException, TransformerException {
         this.dao.addContact(entity);
     }
 
@@ -57,12 +58,14 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void appGroupContact(List<String> attContact){
+    public void appGroupContact(List<String> attContact) throws SAXException, TransformerException,
+            ParserConfigurationException, IOException {
         this.dao.appGroupContact(attContact);
     }
 
     @Override
-    public void removeGroupContact(String fio) {
+    public void removeGroupContact(String fio) throws ParserConfigurationException,
+            SAXException, IOException, TransformerException {
         this.dao.removeGroupContact(fio);
     }
 
@@ -73,12 +76,13 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public boolean existContact(String name) {
+    public boolean existContact(String name) throws ParserConfigurationException,
+            TransformerException, SAXException, IOException {
         return this.dao.existContact(name);
     }
 
     @Override
-    public Contact getContact(String fio) {
+    public Contact getContact(String fio) throws IOException, SAXException, ParserConfigurationException {
         return this.dao.getContact(fio);
     }
 

@@ -126,25 +126,29 @@ public class ViewImpl implements View {
         List<String> attContact = new ArrayList<>();
         String name = getNameContact();
         attContact.add(0,name);
-        if (this.controller.existContact(name)){
-            System.out.println("Введите новое Ф И О");
-            attContact.add(1,this.consol.readString());
-            if (attContact.get(1).trim().length() > 0){
-                System.out.println("Введите новый телефон");
-                attContact.add(2,this.consol.readString());
-                System.out.println("Введите новый email");
-                attContact.add(3,this.consol.readString());
-                try {
-                    this.controller.updateContact(attContact);
-                } catch (ParserConfigurationException | IOException | SAXException e) {
-                    e.printStackTrace();
+        try {
+            if (this.controller.existContact(name)){
+                System.out.println("Введите новое Ф И О");
+                attContact.add(1,this.consol.readString());
+                if (attContact.get(1).trim().length() > 0){
+                    System.out.println("Введите новый телефон");
+                    attContact.add(2,this.consol.readString());
+                    System.out.println("Введите новый email");
+                    attContact.add(3,this.consol.readString());
+                    try {
+                        this.controller.updateContact(attContact);
+                    } catch (ParserConfigurationException | IOException | SAXException e) {
+                        e.printStackTrace();
+                    }
+                    view.getSuc();
+                }else {
+                    System.out.println("Вы не ввели Ф И О");
                 }
-                view.getSuc();
             }else {
-                System.out.println("Вы не ввели Ф И О");
+                System.out.println("нет контакта");
             }
-        }else {
-            System.out.println("нет контакта");
+        } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -152,25 +156,34 @@ public class ViewImpl implements View {
         getContacts();
         List<String> attContact = new ArrayList<>();
         String fio = getNameContact();
-        if (this.controller.existContact(fio)){
-            getGroups();
-            String name = getNameGroup();
-            if (this.controller.existGroup(name)){
-                attContact.add(0, fio);
-                attContact.add(1, name);
-                this.controller.appGroupContact(attContact);
+        try {
+            if (this.controller.existContact(fio)){
+                getGroups();
+                String name = getNameGroup();
+                if (this.controller.existGroup(name)){
+                    attContact.add(0, fio);
+                    attContact.add(1, name);
+                    this.controller.appGroupContact(attContact);
+                }else {
+                    view.getNoGroup();
+                }
             }else {
-                view.getNoGroup();
+                view.notFound();
             }
-        }else {
-            view.notFound();
+        } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getContactInfo() {
         getContacts();
-        Contact contact = this.controller.getContact(getNameContact());
+        Contact contact = null;
+        try {
+            contact = this.controller.getContact(getNameContact());
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
         if (!(contact == null)){
             System.out.println(contact);
         }else {
@@ -181,15 +194,26 @@ public class ViewImpl implements View {
     void removeGroupContact() {
         getContacts();
         String fio = getNameContact();
-        if (this.controller.existContact(fio)){
-            Contact contact = this.controller.getContact(fio);
-            System.out.println(contact);
-            String name = getNameGroup();
-            if (this.controller.existGroup(name)){
-                this.controller.removeGroupContact(fio);
+        try {
+            if (this.controller.existContact(fio)){
+                Contact contact = this.controller.getContact(fio);
+                String name = getNameGroup();
+                if (this.controller.existGroup(name)){
+                    try {
+                        try {
+                            this.controller.removeGroupContact(fio);
+                        } catch (TransformerException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (IOException | ParserConfigurationException | SAXException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }else {
+                view.getNoContact();
             }
-        }else {
-            view.getNoContact();
+        } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
+            e.printStackTrace();
         }
     }
 

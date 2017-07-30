@@ -224,43 +224,4 @@ public class DomGroupParserImp implements DomSaxGroupParser {
         return contacts;
     }//yes
 
-    public static void main(String[] args) throws ParserConfigurationException, IOException,
-            SAXException, TransformerException, XPathExpressionException {
-//
-//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//        DocumentBuilder builder = factory.newDocumentBuilder();
-//        Document xmlDocument  = null;
-//        Element rootGroups = null;
-//
-//        File file = new File("groups.xml");
-//        if (file.exists()){
-//            xmlDocument = builder.parse(file);
-//            rootGroups = xmlDocument.getDocumentElement();
-//
-//        }else {
-//            xmlDocument = builder.newDocument();
-//            rootGroups = xmlDocument.createElement("groups");
-//            xmlDocument.appendChild(rootGroups);
-//        }
-//        Element groupEl = xmlDocument.createElement("group");
-//        rootGroups.appendChild(groupEl);
-//
-//        Attr id = xmlDocument.createAttribute("id");
-//        id.setValue("444");
-//        groupEl.setAttributeNode(id);
-//
-//        Element titleEl = xmlDocument.createElement("title");
-//        groupEl.appendChild(titleEl);
-//
-//        Text titleText = xmlDocument.createTextNode("titleText");
-//        titleEl.appendChild(titleText);
-//        rootGroups.appendChild(groupEl);
-//
-//
-//
-//        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-//        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
-//        transformer.transform(new DOMSource(xmlDocument),new StreamResult(
-//                new FileOutputStream(file)));
-    }
 }

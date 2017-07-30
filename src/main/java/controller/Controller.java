@@ -29,12 +29,12 @@ public interface Controller {
     /**
      *Добавить контакту группу
      */
-    void appGroupContact(List<String> attContact);
+    void appGroupContact(List<String> attContact) throws SAXException, ParserConfigurationException, IOException, TransformerException;
 
     /**
      *Удаление группы у контакта контакта
      */
-    void removeGroupContact(String fio);
+    void removeGroupContact(String fio) throws IOException, SAXException, ParserConfigurationException, TransformerException;
 
     /**
      *Список контактов
@@ -72,12 +72,12 @@ public interface Controller {
     /**
      * Возвращает контакт
      */
-    Contact getContact(String fio);
+    Contact getContact(String fio) throws ParserConfigurationException, SAXException, IOException;
 
     /**
      * Проверяет контакт на сущ.
      */
-    boolean existContact(String name);
+    boolean existContact(String name) throws ParserConfigurationException, IOException, SAXException, TransformerException;
 
     /**
      * Проверяет группу на сущ.

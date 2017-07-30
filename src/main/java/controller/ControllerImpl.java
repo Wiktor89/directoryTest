@@ -81,12 +81,14 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void appGroupContact(List<String> attContact){
+    public void appGroupContact(List<String> attContact) throws SAXException, ParserConfigurationException,
+            IOException, TransformerException {
             this.serviceContact.appGroupContact(attContact);
     }
 
     @Override
-    public void removeGroupContact(String fio) {
+    public void removeGroupContact(String fio) throws IOException, SAXException,
+            ParserConfigurationException, TransformerException {
         this.serviceContact.removeGroupContact(fio);
     }
 
@@ -97,12 +99,13 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public Contact getContact (String fio){
+    public Contact getContact (String fio) throws ParserConfigurationException, SAXException, IOException {
         return this.serviceContact.getContact(fio);
     }
 
     @Override
-    public boolean existContact(String name) {
+    public boolean existContact(String name) throws ParserConfigurationException,
+            IOException, SAXException, TransformerException {
         return this.serviceContact.existContact(name);
     }
 

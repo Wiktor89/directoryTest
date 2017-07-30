@@ -19,7 +19,7 @@ public interface ContactService {
     /**
      *Добавление контакта
      */
-    void addContact (Entity entity);
+    void addContact (Entity entity) throws IOException, ParserConfigurationException, SAXException, TransformerException;
 
     /**
      *Обновление контакта
@@ -35,12 +35,12 @@ public interface ContactService {
     /**
      *Добавить контакту группу
      */
-    void appGroupContact(List<String> attContact);
+    void appGroupContact(List<String> attContact) throws SAXException, TransformerException, ParserConfigurationException, IOException;
 
     /**
      *Удаление группы у контакта контакта
      */
-    void removeGroupContact(String fio);
+    void removeGroupContact(String fio) throws ParserConfigurationException, SAXException, IOException, TransformerException;
 
     /**
      *Список контактов
@@ -50,12 +50,12 @@ public interface ContactService {
     /**
      *Проверка контакта на существование
      */
-    boolean existContact(String name);
+    boolean existContact(String name) throws ParserConfigurationException, TransformerException, SAXException, IOException;
 
     /**
      *Возвращает контакт
      */
-    Contact getContact(String fio);
+    Contact getContact(String fio) throws IOException, SAXException, ParserConfigurationException;
 
     /**
      *Поиск контакта по имени
