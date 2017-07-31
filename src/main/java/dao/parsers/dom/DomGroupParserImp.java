@@ -22,13 +22,13 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- *
+ *Dom парсер для групп
  */
 public class DomGroupParserImp implements DomSaxGroupParser {
 
 
     @Override
-    public boolean addGroup(Entity entity) throws ParserConfigurationException,
+    public void addGroup(Entity entity) throws ParserConfigurationException,
             TransformerException, IOException, SAXException {
         boolean result = false;
         Group group  =(Group) entity;
@@ -67,10 +67,7 @@ public class DomGroupParserImp implements DomSaxGroupParser {
         transformer.setOutputProperty(OutputKeys.INDENT,"yes");
         transformer.transform(new DOMSource(xmlDocument),new StreamResult(
                 new FileOutputStream(file)));
-
-        return result;
-
-    }//yes
+    }
 
     @Override
     public boolean removeGroup(String name) throws ParserConfigurationException,
@@ -100,7 +97,7 @@ public class DomGroupParserImp implements DomSaxGroupParser {
         }
 
         return result;
-    }//yes
+    }
 
     @Override
     public void updateGroup(List<String> attGroup) throws ParserConfigurationException,
@@ -126,7 +123,7 @@ public class DomGroupParserImp implements DomSaxGroupParser {
                 }
             }
         }
-    }//yes
+    }
 
     @Override
     public boolean existGroup(String name) {
@@ -159,7 +156,7 @@ public class DomGroupParserImp implements DomSaxGroupParser {
             }
         }
         return result;
-    }//yes
+    }
 
     @Override
     public Set<String> getGroups() throws ParserConfigurationException
@@ -195,7 +192,7 @@ public class DomGroupParserImp implements DomSaxGroupParser {
 //            System.out.println(id);
 //            groups.add(new Group(title));
 //        }
-    }//yes
+    }
 
     @Override
     public Set<String> getContactsGroup(String name) throws ParserConfigurationException,
@@ -222,6 +219,6 @@ public class DomGroupParserImp implements DomSaxGroupParser {
             }
         }
         return contacts;
-    }//yes
+    }
 
 }

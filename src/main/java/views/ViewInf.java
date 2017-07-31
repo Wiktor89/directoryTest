@@ -58,6 +58,7 @@ public class ViewInf {
         StringBuilder stringBuilder = new StringBuilder("Выберите действие для контакта\n");
         stringBuilder.append("Добавить контакт                --add\n");
         stringBuilder.append("Удалить контакт                 --rem\n");
+        stringBuilder.append("Найти контакт                   --ser\n");
         stringBuilder.append("Редактировать контакт           --upd\n");
         stringBuilder.append("Показать список контактов       --list\n");
         stringBuilder.append("Добавить контакт в группу       --addg\n");

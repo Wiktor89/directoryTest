@@ -1,5 +1,6 @@
 package service;
 
+import dao.DomSaxGroupParser;
 import dao.parsers.dom.DomGroupParserImp;
 import models.Entity;
 import org.xml.sax.SAXException;
@@ -23,9 +24,10 @@ public class GroupServiceImpl implements GroupService {
      * groups
      * dao
      */
-    private DomGroupParserImp dao = new DomGroupParserImp();
+    private DomSaxGroupParser dao = null;
 
-    public GroupServiceImpl() {
+    public GroupServiceImpl(DomSaxGroupParser dao) {
+        this.dao = dao;
     }
 
 

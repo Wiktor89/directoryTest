@@ -1,9 +1,6 @@
 package controller;
 
-import dao.DirectoryDaoImpl;
-import factory.ContactFactory;
-import factory.EntityFactory;
-import factory.GroupFactory;
+import factory.*;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
@@ -29,7 +26,6 @@ public class ControllerImpl implements Controller{
      */
     private ContactServiceImpl serviceContact = null;
     private GroupServiceImpl serviceGroup = null;
-    private DirectoryDaoImpl dao = new DirectoryDaoImpl();
 
     public GroupServiceImpl getServiceGroup() {
         return serviceGroup;
@@ -45,9 +41,11 @@ public class ControllerImpl implements Controller{
     }
 
     public ControllerImpl() {
+        GroupDaoFactory groupDaoFactory = new GroupDaoFactory();
+        ContactDaoFactory contactDaoFactory = new ContactDaoFactory();
 //        this.refBook.setObservers(ViewChangModel.getViewChangModel());
-        this.serviceContact = new ContactServiceImpl();
-        this.serviceGroup = new GroupServiceImpl();
+        this.serviceContact = new ContactServiceImpl(contactDaoFactory.getContactParser());
+        this.serviceGroup = new GroupServiceImpl(groupDaoFactory.getGroupParser());
     }
 
     @Override
@@ -70,7 +68,7 @@ public class ControllerImpl implements Controller{
 
     @Override
     public void updateContact(List<String> attContact) throws ParserConfigurationException,
-            SAXException, IOException {
+            SAXException, IOException, TransformerException {
           this.serviceContact.updateContact(attContact);
     }
 
@@ -115,6 +113,12 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
+    public String searchName(String fio) throws ParserConfigurationException,
+            SAXException, IOException {
+        return this.serviceContact.searchName(fio);
+    }
+
+    @Override
     public Set<String> getContactsGroup(String name) throws ParserConfigurationException, SAXException,
             XPathExpressionException, IOException {
        return this.serviceGroup.getContactsGroup(name);
@@ -133,7 +137,8 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void updateGroup(List<String> attGroup) throws ParserConfigurationException, IOException,
+    public void updateGroup(List<String> attGroup) throws ParserConfigurationException,
+            IOException,
             SAXException, TransformerException {
             this.serviceGroup.updateGroup(attGroup);
     }

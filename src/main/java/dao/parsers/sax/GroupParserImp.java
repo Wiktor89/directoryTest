@@ -11,8 +11,11 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -22,8 +25,9 @@ public class GroupParserImp implements DomSaxGroupParser {
 
 
     @Override
-    public boolean addGroup(Entity entity) throws ParserConfigurationException, TransformerException {
-        return false;
+    public void addGroup(Entity entity) throws ParserConfigurationException,
+            TransformerException, IOException {
+        throw new IOException();
     }
 
     @Override
@@ -43,10 +47,10 @@ public class GroupParserImp implements DomSaxGroupParser {
     @Override
     public Set<String> getGroups() throws ParserConfigurationException, SAXException
             , IOException, XPathExpressionException {
-        SAXParserFactory factory = SAXParserFactory.newInstance();//фабрика
+        SAXParserFactory factory = SAXParserFactory.newInstance();
         HandlerGroup handlerGroup = new HandlerGroup();
-        SAXParser parser = factory.newSAXParser();//получаем парсер
-        parser.parse(new File("contacts.xml"), handlerGroup);//читаем из файла, слушатель
+        SAXParser parser = factory.newSAXParser();
+        parser.parse(new File("contacts.xml"), handlerGroup);
         Set<String> groups = handlerGroup.getGroups();
         return groups;
     }
@@ -55,4 +59,9 @@ public class GroupParserImp implements DomSaxGroupParser {
     public Set<String> getContactsGroup(String name) {
         return null;
     }
+
+    public static void main(String[] args) {
+
+    }
+
 }

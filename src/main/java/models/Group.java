@@ -13,7 +13,6 @@ public class Group extends IdentifiedEntity implements Serializable,Comparable<G
      * name
      * contact
      */
-    private int id;
     private String name;
     private Contact contact;
 
@@ -25,9 +24,6 @@ public class Group extends IdentifiedEntity implements Serializable,Comparable<G
         this.name = name;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -47,7 +43,7 @@ public class Group extends IdentifiedEntity implements Serializable,Comparable<G
 
     @Override
     public String toString() {
-        return +id+" имя группы - "+ name;
+        return " имя группы - "+ name;
     }
 
     /**

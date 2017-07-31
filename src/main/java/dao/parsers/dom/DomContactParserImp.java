@@ -18,7 +18,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -26,13 +25,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- *
+ *Dom парсер для контакта
  */
 public class DomContactParserImp implements DomSaxContactsParser {
 
 
     @Override
-    public boolean addContact(Entity entity) throws TransformerException, IOException,
+    public void addContact(Entity entity) throws TransformerException, IOException,
             SAXException, ParserConfigurationException {
 
         Contact contact = (Contact) entity;
@@ -85,35 +84,53 @@ public class DomContactParserImp implements DomSaxContactsParser {
         transformer.setOutputProperty(OutputKeys.INDENT,"yes");
         transformer.transform(new DOMSource(xmlDocument),new StreamResult(
                 new FileOutputStream(file)));
-        return false;
-    }//yes
+    }
 
     @Override
     public boolean updateContact(List<String> attContact) throws ParserConfigurationException,
-            IOException, SAXException {
-        String newName = attContact.get(0);
-        String newPhone = attContact.get(1);
-        String newEmail = attContact.get(2);
-        String newGroup = attContact.get(3);
-//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//        DocumentBuilder builder = factory.newDocumentBuilder();
-//        Document xmlDocument  = builder.parse(new File("contacts.xml"));
-//
-//        NodeList nodeList = xmlDocument.getElementsByTagName("contact");
-//        for (int i = 0; i < nodeList.getLength(); i++) {
-//            NodeList nodeChildList = nodeList.item(i).getChildNodes();
-//            for (int j = 0; j < nodeChildList.getLength(); j++) {
-//                Node node = nodeChildList.item(j);
-//                if (node.getNodeName().equalsIgnoreCase("name")
-//                        && node.getTextContent().equalsIgnoreCase(attGroup.get(0))){
-//                    node.setTextContent(attGroup.get(1));
-//                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//                    Transformer transformer = transformerFactory.newTransformer();
-//                    DOMSource domSource = new DOMSource(xmlDocument);
-//                    StreamResult streamResult = new StreamResult(new File("groups.xml"));
-//                    transformer.transform(domSource, streamResult);
-//                }
-//            }
+            IOException, SAXException, TransformerException {
+        String oldName = attContact.get(0);
+        String newName = attContact.get(1);
+        String newPhone = attContact.get(2);
+        String newEmail = attContact.get(3);
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document xmlDocument = builder.parse(new File("contacts.xml"));
+
+        NodeList nodeList = xmlDocument.getElementsByTagName("contact");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            NodeList nodeChildList = nodeList.item(i).getChildNodes();
+            for (int j = 0; j < nodeChildList.getLength(); j++) {
+                Node node = nodeChildList.item(j);
+                if (node instanceof  Element && node.getTextContent().equalsIgnoreCase(oldName)){
+                    for (int k = 0; k < nodeChildList.getLength(); k++) {
+                        Node childPhone = nodeChildList.item(k);
+                        switch (childPhone.getNodeName()){
+                            case "name":{
+                                System.out.println("name");
+                                childPhone.setTextContent(newName);
+                                break;
+                            }case "phone":{
+                                System.out.println("phone");
+                                childPhone.setTextContent(newPhone);
+                                break;
+                            }case "email":{
+                                System.out.println("email");
+                                childPhone.setTextContent(newEmail);
+                                break;
+                            }default:break;
+                        }
+                    }
+
+                }
+
+            }
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(xmlDocument);
+            StreamResult streamResult = new StreamResult(new File("contacts.xml"));
+            transformer.transform(domSource, streamResult);
+        }
         return false;
     }
 
@@ -148,7 +165,7 @@ public class DomContactParserImp implements DomSaxContactsParser {
             }
         }
         return result;
-    }//yes
+    }
 
     @Override
     public boolean appGroupContact(List<String> attContact) throws IOException,
@@ -178,7 +195,7 @@ public class DomContactParserImp implements DomSaxContactsParser {
         }
 
         return result;
-    }//yes
+    }
 
     @Override
     public boolean removeGroupContact(String fio) throws IOException, SAXException,
@@ -207,7 +224,7 @@ public class DomContactParserImp implements DomSaxContactsParser {
         }
 
         return result;
-    }//yes
+    }
 
     @Override
     public Set<Contact> getContacts() throws ParserConfigurationException
@@ -224,7 +241,7 @@ public class DomContactParserImp implements DomSaxContactsParser {
             contacts.add(new Contact(nodeList.item(i).getFirstChild().getNodeValue()));
         }
         return contacts;
-    }//yes
+    }
 
     @Override
     public boolean existContact(String name) throws ParserConfigurationException,
@@ -247,7 +264,8 @@ public class DomContactParserImp implements DomSaxContactsParser {
     }
 
     @Override
-    public Contact getContact(String fio) throws ParserConfigurationException, IOException, SAXException {
+    public Contact getContact(String fio) throws ParserConfigurationException,
+            IOException, SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(new File("contacts.xml"));
@@ -268,36 +286,27 @@ public class DomContactParserImp implements DomSaxContactsParser {
             }
         }
         return null;
-    }//yes
-
-    @Override
-    public Contact searchName(String fio) {
-        return null;
     }
 
-    public static void main(String[] args) throws ParserConfigurationException, IOException,
-            SAXException, TransformerException {
+    @Override
+    public String searchName(String fio) throws ParserConfigurationException,
+            IOException, SAXException {
+        String contact = "";
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = builder.parse(new File("contacts.xml"));
 
-//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//        DocumentBuilder builder = factory.newDocumentBuilder();
-//        Document document = builder.parse(new File("contacts.xml"));
-//
-//        NodeList contact = document.getElementsByTagName("contact");
-//        for (int i = 0; i < contact.getLength(); i++) {
-//            NodeList childNodes = contact.item(i).getChildNodes();
-//            for (int j = 0; j < childNodes.getLength(); j++) {
-//                Node item = childNodes.item(j);
-//                if (item instanceof Element && item.getTextContent().equalsIgnoreCase("test")){
-//                    childNodes.item(7).setTextContent("testgroup");
-//                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//                    Transformer transformer = transformerFactory.newTransformer();
-//                    DOMSource domSource = new DOMSource(document);
-//                    StreamResult streamResult = new StreamResult(new File("contacts.xml"));
-//                    transformer.transform(domSource, streamResult);
-//
-//                }
-//            }
-//        }
+        NodeList contact1 = document.getElementsByTagName("contact");
+        for (int i = 0; i < contact1.getLength(); i++) {
+            NodeList childNodes = contact1.item(i).getChildNodes();
+            for (int j = 0; j < childNodes.getLength(); j++) {
+                Node item = childNodes.item(j);
+                if (item instanceof Element && item.getTextContent().equalsIgnoreCase(fio)){
+                    contact = item.getTextContent();
+                }
+            }
+        }
+        return contact;
     }
 
 }

@@ -25,7 +25,7 @@ public interface ContactService {
      *Обновление контакта
      * @param attContact
      */
-    void updateContact(List<String> attContact) throws IOException, SAXException, ParserConfigurationException;
+    void updateContact(List<String> attContact) throws IOException, SAXException, ParserConfigurationException, TransformerException;
 
     /**
      *Удаление контакта
@@ -60,5 +60,7 @@ public interface ContactService {
     /**
      *Поиск контакта по имени
      */
-    Contact searchName (String fio);
+    String searchName (String fio) throws IOException, SAXException, ParserConfigurationException;
+
+
 }

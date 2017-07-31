@@ -68,6 +68,8 @@ public class ViewImpl implements View {
             removeGroupContact();//Наблюдатель
         if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))
             getContactInfo();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.ser)))
+            searchName();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
             view.startPage();
         view.pageActionContact();
@@ -247,7 +249,7 @@ public class ViewImpl implements View {
                 }
                 view.getSuc();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("не поддерживается");
             }
         }else {
             System.out.println("не ввели имя группы");
@@ -330,6 +332,20 @@ public class ViewImpl implements View {
     public String getNameGroup() {
         System.out.println("Введите имя группы (обязательное поле)");
         return this.consol.readString();
+    }
+
+    @Override
+    public void searchName() {
+        try {
+            String s = this.controller.searchName(getNameContact());
+            if (s.trim().length() > 0){
+                System.out.println("найден контакт "+s);
+            }else {
+                System.out.println("нет контакта");
+            }
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

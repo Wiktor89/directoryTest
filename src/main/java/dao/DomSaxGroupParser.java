@@ -19,7 +19,8 @@ public interface DomSaxGroupParser {
     /**
      *Добавление группы
      */
-    boolean addGroup(Entity entity) throws ParserConfigurationException, TransformerException, IOException, SAXException;
+    void addGroup(Entity entity) throws ParserConfigurationException,
+            TransformerException, IOException, SAXException;
 
     /**
      *Удаление группы

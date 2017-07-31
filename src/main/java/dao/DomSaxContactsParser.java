@@ -5,10 +5,8 @@ import models.Entity;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -21,13 +19,13 @@ public interface DomSaxContactsParser {
     /**
      *Добавление контакта
      */
-    boolean addContact (Entity entity) throws TransformerException, IOException, SAXException, ParserConfigurationException;
+    void addContact (Entity entity) throws TransformerException, IOException, SAXException, ParserConfigurationException;
 
     /**
      *Обновление контакта
      * @param attContact
      */
-    boolean updateContact(List<String> attContact) throws ParserConfigurationException, IOException, SAXException;
+    boolean updateContact(List<String> attContact) throws ParserConfigurationException, IOException, SAXException, TransformerException;
 
     /**
      *Удаление контакта
@@ -63,7 +61,7 @@ public interface DomSaxContactsParser {
     /**
      *Поиск контакта по имени
      */
-    Contact searchName (String fio);
+    String searchName (String fio) throws ParserConfigurationException, IOException, SAXException;
 
 
 }

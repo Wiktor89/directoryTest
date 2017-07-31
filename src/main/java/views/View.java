@@ -52,4 +52,9 @@ public interface View {
      */
     String getNameGroup();
 
+    /**
+     * Поиск контакта по имени
+     */
+    void searchName();
+
 }

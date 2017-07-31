@@ -19,7 +19,7 @@ public interface Controller {
     /**
      *Обновление контакта
      */
-    void updateContact(List<String> attContact) throws ParserConfigurationException, SAXException, IOException;
+    void updateContact(List<String> attContact) throws ParserConfigurationException, SAXException, IOException, TransformerException;
 
     /**
      *Удаление контакта
@@ -83,5 +83,10 @@ public interface Controller {
      * Проверяет группу на сущ.
      */
     boolean existGroup(String name);
+
+    /**
+     * Поиск по имени
+     */
+    String searchName(String fio) throws ParserConfigurationException, SAXException, IOException;
 
 }

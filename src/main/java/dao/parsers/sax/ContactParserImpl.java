@@ -21,8 +21,8 @@ import java.util.Set;
 public class ContactParserImpl implements DomSaxContactsParser {
 
     @Override
-    public boolean addContact(Entity entity) {
-        return false;
+    public void addContact(Entity entity) throws IOException {
+        throw new IOException();
     }
 
     @Override
@@ -48,10 +48,10 @@ public class ContactParserImpl implements DomSaxContactsParser {
     @Override
     public Set<Contact> getContacts() throws ParserConfigurationException,
             SAXException, IOException, XPathExpressionException {
-        SAXParserFactory factory = SAXParserFactory.newInstance();//фабрика
+        SAXParserFactory factory = SAXParserFactory.newInstance();
         HandlerContact handlerContact = new HandlerContact();
-        SAXParser parser = factory.newSAXParser();//получаем парсер
-        parser.parse(new File("contacts.xml"), handlerContact);//читаем из файла, слушатель
+        SAXParser parser = factory.newSAXParser();
+        parser.parse(new File("contacts.xml"), handlerContact);
         Set<Contact> contacts = handlerContact.getContacts();
         return contacts;
     }
@@ -67,7 +67,7 @@ public class ContactParserImpl implements DomSaxContactsParser {
     }
 
     @Override
-    public Contact searchName(String fio) {
+    public String searchName(String fio) {
         return null;
     }
 }

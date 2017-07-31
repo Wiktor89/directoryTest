@@ -2,6 +2,7 @@ package service;
 
 import dao.DomSaxContactsParser;
 import dao.parsers.dom.DomContactParserImp;
+import dao.parsers.dom.DomGroupParserImp;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
@@ -25,9 +26,10 @@ public class ContactServiceImpl implements ContactService{
      * groups
      * dao
      */
-    private DomSaxContactsParser dao = new DomContactParserImp();
+    private DomSaxContactsParser dao = null;
 
-    public ContactServiceImpl() {
+    public ContactServiceImpl(DomSaxContactsParser dao) {
+        this.dao = dao;
     }
 
     public DomSaxContactsParser getDao() {
@@ -46,7 +48,7 @@ public class ContactServiceImpl implements ContactService{
 
     @Override
     public void updateContact(List<String> attContact) throws IOException, SAXException,
-            ParserConfigurationException {
+            ParserConfigurationException, TransformerException {
         this.dao.updateContact(attContact);
     }
 
@@ -87,8 +89,9 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public Contact searchName(String fio) {
-        return null;
+    public String searchName(String fio) throws IOException, SAXException,
+            ParserConfigurationException {
+        return this.dao.searchName(fio);
     }
 
 }
