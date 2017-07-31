@@ -2,6 +2,7 @@ package factory;
 
 import dao.DomSaxGroupParser;
 import dao.parsers.dom.DomGroupParserImp;
+import dao.parsers.jackson.GroupJacksonParser;
 import dao.parsers.sax.GroupParserImp;
 
 import java.io.FileInputStream;
@@ -25,8 +26,8 @@ public class GroupDaoFactory {
             return new DomGroupParserImp();
         }if(command.equalsIgnoreCase("sax")){
             return new GroupParserImp();
-        }if (command.equalsIgnoreCase("jackson")){
-            return null;
+        }if (command.equalsIgnoreCase("jac")){
+            return new GroupJacksonParser();
         }
         return null;
     }

@@ -2,6 +2,7 @@ package factory;
 
 import dao.DomSaxContactsParser;
 import dao.parsers.dom.DomContactParserImp;
+import dao.parsers.jackson.ContactsJacksonParser;
 import dao.parsers.sax.ContactParserImpl;
 
 import java.io.FileInputStream;
@@ -25,8 +26,8 @@ public class ContactDaoFactory {
             return new DomContactParserImp();
         }if(command.equalsIgnoreCase("sax")){
             return new ContactParserImpl();
-        }if (command.equalsIgnoreCase("jackson")){
-            return null;
+        }if (command.equalsIgnoreCase("jac")){
+            return new ContactsJacksonParser();
         }
         return null;
     }
