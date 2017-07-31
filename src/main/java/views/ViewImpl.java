@@ -55,17 +55,17 @@ public class ViewImpl implements View {
     public void actionContact() throws IOException {
         String command = this.consol.readString();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.add)))
-            addContact("con");//Ввел добавить контакт
+            addContact("con");
         if (command.equalsIgnoreCase(String.valueOf(TeamList.rem)))
-            removeContact();//Наблюдатель Удаление контакта...
+            removeContact();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.upd)))
-            updateContact();//Обновление контакта...
+            updateContact();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.list)))
             getContacts();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
-            appGroupContact();//Наблюдатель
+            appGroupContact();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))
-            removeGroupContact();//Наблюдатель
+            removeGroupContact();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))
             getContactInfo();
         if (command.equalsIgnoreCase(String.valueOf(TeamList.ser)))
@@ -103,14 +103,12 @@ public class ViewImpl implements View {
         getContacts();
         String fio = getNameContact();
         if (fio.trim().length() > 0){
-//            if (this.controller.existContact(fio)){
                 try {
                     controller.removeContact(fio);
                 } catch (SAXException | TransformerException | IOException | ParserConfigurationException e) {
                     System.out.println("не поддерживается");
                 }
                 view.getSuc();
-//            }
         }else{
             view.getNoContact();
         }

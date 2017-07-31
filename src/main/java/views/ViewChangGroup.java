@@ -1,8 +1,6 @@
 package views;
 
-import dao.DomSaxContactsParser;
 import dao.DomSaxGroupParser;
-import models.Contact;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,7 +12,7 @@ import java.util.Observer;
 import java.util.Set;
 
 /**
- *
+ *Доп. вью для демонстрации Observer
  */
 public class ViewChangGroup implements Observer {
 
