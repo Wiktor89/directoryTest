@@ -43,7 +43,6 @@ public class ControllerImpl implements Controller{
     public ControllerImpl() {
         GroupDaoFactory groupDaoFactory = new GroupDaoFactory();
         ContactDaoFactory contactDaoFactory = new ContactDaoFactory();
-//        this.refBook.setObservers(ViewChangModel.getViewChangModel());
         this.serviceContact = new ContactServiceImpl(contactDaoFactory.getContactParser());
         this.serviceGroup = new GroupServiceImpl(groupDaoFactory.getGroupParser());
     }
@@ -108,7 +107,7 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public boolean existGroup(String name) {
+    public boolean existGroup(String name) throws ParserConfigurationException, SAXException, IOException {
         return this.serviceGroup.existGroup(name);
     }
 

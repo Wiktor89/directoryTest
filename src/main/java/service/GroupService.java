@@ -49,5 +49,5 @@ public interface GroupService {
     /**
      *Смотрим есть группа в списке
      */
-    boolean existGroup(String name);
+    boolean existGroup(String name) throws IOException, SAXException, ParserConfigurationException;
 }

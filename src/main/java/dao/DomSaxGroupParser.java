@@ -1,5 +1,6 @@
 package dao;
 
+import javafx.beans.Observable;
 import models.Entity;
 import org.xml.sax.SAXException;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 /**
  *
  */
-public interface DomSaxGroupParser {
+public interface DomSaxGroupParser  {
 
     /**
      *Добавление группы
@@ -38,7 +39,7 @@ public interface DomSaxGroupParser {
     /**
      *Смотрим есть группа в списке
      */
-    boolean existGroup(String name);
+    boolean existGroup(String name) throws ParserConfigurationException, SAXException, IOException;
 
     /**
      *Список групп

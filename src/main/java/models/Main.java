@@ -1,7 +1,6 @@
 package models;
 
 import org.xml.sax.SAXException;
-import views.ViewImpl;
 import views.ViewInf;
 
 import javax.xml.parsers.ParserConfigurationException;

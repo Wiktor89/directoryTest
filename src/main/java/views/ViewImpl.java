@@ -107,7 +107,7 @@ public class ViewImpl implements View {
                 try {
                     controller.removeContact(fio);
                 } catch (SAXException | TransformerException | IOException | ParserConfigurationException e) {
-                    e.printStackTrace();
+                    System.out.println("не поддерживается");
                 }
                 view.getSuc();
 //            }
@@ -140,7 +140,7 @@ public class ViewImpl implements View {
                     try {
                         this.controller.updateContact(attContact);
                     } catch (ParserConfigurationException | IOException | SAXException e) {
-                        e.printStackTrace();
+                        System.out.println("не поддерживается");
                     }
                     view.getSuc();
                 }else {
@@ -260,15 +260,19 @@ public class ViewImpl implements View {
         getGroups();
         String name = getNameGroup();
         if(name.trim().length() > 0){
-            if (this.controller.existGroup(name)){
-                try {
-                    this.controller.removeGroup(name);
-                } catch (ParserConfigurationException | TransformerException | XPathExpressionException | SAXException | IOException e) {
-                    e.printStackTrace();
+            try {
+                if (this.controller.existGroup(name)){
+                    try {
+                        this.controller.removeGroup(name);
+                    } catch (ParserConfigurationException | TransformerException | XPathExpressionException | SAXException | IOException e) {
+                        e.printStackTrace();
+                    }
+                    view.getSuc();
+                }else {
+                    view.getNoGroup();
                 }
-                view.getSuc();
-            }else {
-                view.getNoGroup();
+            } catch (ParserConfigurationException | IOException | SAXException e) {
+                System.out.println("не поддерживается");
             }
         }else {
             view.emptyLine();
@@ -279,21 +283,25 @@ public class ViewImpl implements View {
         getGroups();
         List<String> attGroup = new ArrayList<>();
         String oldName = getNameGroup();
-        if (this.controller.existGroup(oldName)){
-            String newName = getNameGroup();
-            if (newName.trim().length() > 0){
-                attGroup.add(0,oldName);
-                attGroup.add(1,newName);
-                try {
-                    this.controller.updateGroup(attGroup);
-                } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
-                    e.printStackTrace();
+        try {
+            if (this.controller.existGroup(oldName)){
+                String newName = getNameGroup();
+                if (newName.trim().length() > 0){
+                    attGroup.add(0,oldName);
+                    attGroup.add(1,newName);
+                    try {
+                        this.controller.updateGroup(attGroup);
+                    } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    view.emptyLine();
                 }
             }else {
-                view.emptyLine();
+                view.getNoGroup();
             }
-        }else {
-            view.getNoGroup();
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            System.out.println("не поддерживается");
         }
     }
 

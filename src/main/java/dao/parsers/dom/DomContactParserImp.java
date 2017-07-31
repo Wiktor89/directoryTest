@@ -6,6 +6,7 @@ import models.Entity;
 import models.Group;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import views.ViewChangContact;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,14 +22,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Observable;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
  *Dom парсер для контакта
  */
-public class DomContactParserImp implements DomSaxContactsParser {
+public class DomContactParserImp extends Observable implements DomSaxContactsParser {
 
+    private ViewChangContact model = null;
+
+    public DomContactParserImp() {
+        model = ViewChangContact.getViewChangContact();
+    }
 
     @Override
     public void addContact(Entity entity) throws TransformerException, IOException,
@@ -84,6 +91,14 @@ public class DomContactParserImp implements DomSaxContactsParser {
         transformer.setOutputProperty(OutputKeys.INDENT,"yes");
         transformer.transform(new DOMSource(xmlDocument),new StreamResult(
                 new FileOutputStream(file)));
+        Set<Contact> contacts = null;
+        try {
+            contacts = getContacts();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        model.update(this,contacts);
+
     }
 
     @Override
@@ -120,6 +135,13 @@ public class DomContactParserImp implements DomSaxContactsParser {
                                 break;
                             }default:break;
                         }
+                        Set<Contact> contacts = null;
+                        try {
+                            contacts = getContacts();
+                        } catch (XPathExpressionException e) {
+                            e.printStackTrace();
+                        }
+                        model.update(this,contacts);
                     }
 
                 }
@@ -160,6 +182,13 @@ public class DomContactParserImp implements DomSaxContactsParser {
                         StreamResult streamResult = new StreamResult(new File("contacts.xml"));
                         transformer.transform(domSource, streamResult);
                         result = true;
+                        Set<Contact> contacts = null;
+                        try {
+                            contacts = getContacts();
+                        } catch (XPathExpressionException e) {
+                            e.printStackTrace();
+                        }
+                        model.update(this,contacts);
                     }
                 }
             }
@@ -190,6 +219,13 @@ public class DomContactParserImp implements DomSaxContactsParser {
                     StreamResult streamResult = new StreamResult(new File("contacts.xml"));
                     transformer.transform(domSource, streamResult);
                     result = true;
+                    Set<Contact> contacts = null;
+                    try {
+                        contacts = getContacts();
+                    } catch (XPathExpressionException e) {
+                        e.printStackTrace();
+                    }
+                    model.update(this,contacts);
                 }
             }
         }
@@ -219,6 +255,13 @@ public class DomContactParserImp implements DomSaxContactsParser {
                     StreamResult streamResult = new StreamResult(new File("contacts.xml"));
                     transformer.transform(domSource, streamResult);
                     result = true;
+                    Set<Contact> contacts = null;
+                    try {
+                        contacts = getContacts();
+                    } catch (XPathExpressionException e) {
+                        e.printStackTrace();
+                    }
+                    model.update(this,contacts);
                 }
             }
         }

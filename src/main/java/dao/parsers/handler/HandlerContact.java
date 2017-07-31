@@ -15,7 +15,6 @@ import java.util.TreeSet;
 public class HandlerContact extends DefaultHandler {
 
 
-    private int id;
     private String data;
     private Contact contact;
     private Set<Contact> contacts = new TreeSet<>();
@@ -31,23 +30,22 @@ public class HandlerContact extends DefaultHandler {
     @Override
     public void startElement(String nameSpace, String localName, String qName, Attributes attributes) throws SAXException {
         data = qName;
-        if (data.equalsIgnoreCase("contact")) {
-            id = Integer.parseInt(attributes.getValue("id"));
+        if (data.equalsIgnoreCase("name")){
+            contact = new Contact();
         }
     }
 
     @Override
     public void endElement(String nameSpace, String localName, String qName) throws SAXException{
         data = "";
-        id = -1;
 
     }
 
     @Override
     public void characters(char [] chars, int start, int end){
-        if (this.data.equalsIgnoreCase("data")){
+        if (this.data.equalsIgnoreCase("name")){
             String s = new String(chars,start,end);
-            this.contact = new Contact(s);
+            this.contact.setFio(s);
         }if (this.data.equalsIgnoreCase("phone")){
             String s = new String(chars,start,end);
             this.contact.setPhone(s);

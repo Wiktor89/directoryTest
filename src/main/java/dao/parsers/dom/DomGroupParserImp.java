@@ -5,6 +5,8 @@ import models.Entity;
 import models.Group;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import views.ViewChangContact;
+import views.ViewChangGroup;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,13 +26,17 @@ import java.util.*;
 /**
  *Dom парсер для групп
  */
-public class DomGroupParserImp implements DomSaxGroupParser {
+public class DomGroupParserImp extends Observable implements DomSaxGroupParser {
 
+    private ViewChangGroup model = null;
+
+    public DomGroupParserImp() {
+        model = ViewChangGroup.getViewChangGroup();
+    }
 
     @Override
     public void addGroup(Entity entity) throws ParserConfigurationException,
             TransformerException, IOException, SAXException {
-        boolean result = false;
         Group group  =(Group) entity;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -41,13 +47,11 @@ public class DomGroupParserImp implements DomSaxGroupParser {
         if (file.exists()){
             xmlDocument = builder.parse(file);
             rootGroups = xmlDocument.getDocumentElement();
-            result = true;
 
         }else {
             xmlDocument = builder.newDocument();
             rootGroups = xmlDocument.createElement("groups");
             xmlDocument.appendChild(rootGroups);
-            result = true;
         }
         Element groupEl = xmlDocument.createElement("group");
         rootGroups.appendChild(groupEl);
@@ -67,6 +71,13 @@ public class DomGroupParserImp implements DomSaxGroupParser {
         transformer.setOutputProperty(OutputKeys.INDENT,"yes");
         transformer.transform(new DOMSource(xmlDocument),new StreamResult(
                 new FileOutputStream(file)));
+        Set<String> groups = null;
+        try {
+            groups = getGroups();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        model.update(this,groups);
     }
 
     @Override
@@ -92,6 +103,13 @@ public class DomGroupParserImp implements DomSaxGroupParser {
                     StreamResult streamResult = new StreamResult(new File("groups.xml"));
                     transformer.transform(domSource, streamResult);
                     result = true;
+                    Set<String> groups = null;
+                    try {
+                        groups = getGroups();
+                    } catch (XPathExpressionException e) {
+                        e.printStackTrace();
+                    }
+                    model.update(this,groups);
                 }
             }
         }
@@ -120,6 +138,13 @@ public class DomGroupParserImp implements DomSaxGroupParser {
                     DOMSource domSource = new DOMSource(xmlDocument);
                     StreamResult streamResult = new StreamResult(new File("groups.xml"));
                     transformer.transform(domSource, streamResult);
+                    Set<String> groups = null;
+                    try {
+                        groups = getGroups();
+                    } catch (XPathExpressionException e) {
+                        e.printStackTrace();
+                    }
+                    model.update(this,groups);
                 }
             }
         }
@@ -173,25 +198,6 @@ public class DomGroupParserImp implements DomSaxGroupParser {
             groups.add(nodeList.item(i).getFirstChild().getNodeValue());
         }
         return groups;
-//        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-//        transformer.setOutputProperty(OutputKeys.INDENT,"yes");//для переносов
-//        transformer.transform(new DOMSource());
-
-//        String s = document.getDocumentElement().getNodeName();
-//        System.out.println(s);
-//        NodeList nodeList = document.getElementsByTagName("group");
-//        Element element1 = (Element) nodeList.item(0);
-//        String id = element1.getElementsByTagName("id").item(0).getNodeValue();
-//        System.out.println(id);
-//        for (int i = 0; i < nodeList.getLength(); i++) {
-//            Element element = (Element) nodeList.item(i);
-//            String title = element.getElementsByTagName("title").item(0).getChildNodes()
-//                    .item(0).getNodeValue();
-//            String nodeValue = element.getParentNode().getAttributes()
-//                    .getNamedItem("id").getNodeName();
-//            System.out.println(id);
-//            groups.add(new Group(title));
-//        }
     }
 
     @Override

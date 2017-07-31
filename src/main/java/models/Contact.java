@@ -83,7 +83,7 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
                 "Ф И О = " + fio   +
                 ", телефон = " + phone +
                 ", email = " + email +
-                ", группа = " + group.informationGroup() +
+                ", группа = "  +
                 "} ";
     }
 
@@ -102,12 +102,13 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
 
     @Override
     public int hashCode() {
-        return getId().hashCode();
+        return super.hashCode();
     }
 
     public void setId(int id) {
 
     }
+
     @Override
     public int compareTo(Contact o) {
         return fio.compareToIgnoreCase(o.getFio());
