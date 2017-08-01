@@ -150,7 +150,7 @@ public class DomContactParserImp extends Observable implements DomSaxContactsPar
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(xmlDocument);
-            StreamResult streamResult = new StreamResult(new File("contacts.xml"));
+            StreamResult streamResult = new StreamResult(new File("contacts"));
             transformer.transform(domSource, streamResult);
         }
         return false;
@@ -179,7 +179,7 @@ public class DomContactParserImp extends Observable implements DomSaxContactsPar
                         TransformerFactory transformerFactory = TransformerFactory.newInstance();
                         Transformer transformer = transformerFactory.newTransformer();
                         DOMSource domSource = new DOMSource(xmlDocument);
-                        StreamResult streamResult = new StreamResult(new File("contacts.xml"));
+                        StreamResult streamResult = new StreamResult(new File("contacts"));
                         transformer.transform(domSource, streamResult);
                         result = true;
                         Set<Contact> contacts = null;
@@ -216,7 +216,7 @@ public class DomContactParserImp extends Observable implements DomSaxContactsPar
                     TransformerFactory transformerFactory = TransformerFactory.newInstance();
                     Transformer transformer = transformerFactory.newTransformer();
                     DOMSource domSource = new DOMSource(document);
-                    StreamResult streamResult = new StreamResult(new File("contacts.xml"));
+                    StreamResult streamResult = new StreamResult(new File("contacts"));
                     transformer.transform(domSource, streamResult);
                     result = true;
                     Set<Contact> contacts = null;
@@ -252,7 +252,7 @@ public class DomContactParserImp extends Observable implements DomSaxContactsPar
                     TransformerFactory transformerFactory = TransformerFactory.newInstance();
                     Transformer transformer = transformerFactory.newTransformer();
                     DOMSource domSource = new DOMSource(document);
-                    StreamResult streamResult = new StreamResult(new File("contacts.xml"));
+                    StreamResult streamResult = new StreamResult(new File("contacts"));
                     transformer.transform(domSource, streamResult);
                     result = true;
                     Set<Contact> contacts = null;

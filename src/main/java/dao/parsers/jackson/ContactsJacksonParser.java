@@ -3,38 +3,67 @@ package dao.parsers.jackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import dao.DomSaxContactsParser;
-import models.Contact;
 import models.Entity;
 import models.Group;
 import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.SAXException;
+import views.ViewChangContact;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Observable;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
  *
  */
-public class ContactsJacksonParser implements DomSaxContactsParser {
+public class ContactsJacksonParser extends Observable implements DomSaxContactsParser {
 
+    private ViewChangContact model = null;
+
+    public ContactsJacksonParser() {
+        model = ViewChangContact.getViewChangContact();
+    }
 
     @Override
     public void addContact(Entity entity) throws TransformerException,
             IOException, SAXException, ParserConfigurationException {
-
+//        Contact contact = (Contact) entity;
+//        Contact contactJac = new Contact();
+//        contactJac.setName(contact.getFio());
+//        contactJac.setPhone(contact.getPhone());
+//        contactJac.setEmail(contact.getEmail());
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.writeValue(new File("contacts"), contactJac);
+        Set<models.Contact> contacts = null;
+        try {
+            contacts = getContacts();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        model.update(this,contacts);
     }
 
     @Override
     public boolean updateContact(List<String> attContact) throws ParserConfigurationException,
             IOException, SAXException, TransformerException {
+
+
+        Set<models.Contact> contacts = null;
+        try {
+            contacts = getContacts();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        model.update(this,contacts);
         return false;
     }
 
@@ -44,13 +73,20 @@ public class ContactsJacksonParser implements DomSaxContactsParser {
         boolean result = false;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Paths.get("contacts")), StandardCharsets.UTF_8),
                 Contacts.class);
-        List<ContactJac> contactsList = contacts.getContact();
-        for (ContactJac contact : contactsList){
-            if (contact.getTitle().equalsIgnoreCase(fio)){
+        List<Contact> contactsList = contacts.getContact();
+        for (Contact contact : contactsList){
+            if (contact.getName().equalsIgnoreCase(fio)){
                 contactsList.remove(contact);
                 result = true;
+                Set<models.Contact> contactss = null;
+                try {
+                    contactss = getContacts();
+                } catch (XPathExpressionException e) {
+                    e.printStackTrace();
+                }
+                model.update(this,contacts);
             }
         }
         return result;
@@ -64,35 +100,52 @@ public class ContactsJacksonParser implements DomSaxContactsParser {
         boolean result = false;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Paths.get("contacts")), StandardCharsets.UTF_8),
                 Contacts.class);
-        List<ContactJac> contactsList = contacts.getContact();
-        for (ContactJac contact : contactsList){
-            if (contact.getTitle().equalsIgnoreCase(fio)){
+        List<Contact> contactsList = contacts.getContact();
+        for (Contact contact : contactsList){
+            if (contact.getName().equalsIgnoreCase(fio)){
                 contact.setGroup(name);
                 result = true;
+                Set<models.Contact> contactss = null;
+                try {
+                    contactss = getContacts();
+                } catch (XPathExpressionException e) {
+                    e.printStackTrace();
+                }
+                model.update(this,contacts);
             }
         }
         return result;
     }
 
     @Override
-    public boolean removeGroupContact(String fio) throws IOException, SAXException, ParserConfigurationException, TransformerException {
+    public boolean removeGroupContact(String fio) throws IOException, SAXException,
+            ParserConfigurationException, TransformerException {
+
+
+        Set<models.Contact> contacts = null;
+        try {
+            contacts = getContacts();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        model.update(this,contacts);
         return false;
     }
 
     @Override
-    public Set<Contact> getContacts() throws ParserConfigurationException,
+    public Set<models.Contact> getContacts() throws ParserConfigurationException,
             SAXException, IOException, XPathExpressionException {
-        Set<Contact> contactsSet = new TreeSet<>();
+        Set<models.Contact> contactsSet = new TreeSet<>();
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Paths.get("contacts")), StandardCharsets.UTF_8),
                 Contacts.class);
-        List<ContactJac> contactsList = contacts.getContact();
-        for (ContactJac contact : contactsList){
-            Contact contact1 = new Contact();
-            contact1.setFio(contact.getTitle());
+        List<Contact> contactsList = contacts.getContact();
+        for (Contact contact : contactsList){
+            models.Contact contact1 = new models.Contact();
+            contact1.setFio(contact.getName());
             contact1.setPhone(contact.getPhone());
             contact1.setEmail(contact.getEmail());
             contact1.setGroup(new Group(contact.getGroup()));
@@ -107,11 +160,11 @@ public class ContactsJacksonParser implements DomSaxContactsParser {
         boolean result = false;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Paths.get("contacts")), StandardCharsets.UTF_8),
                 Contacts.class);
-        List<ContactJac> contactsList = contacts.getContact();
-        for (ContactJac contact : contactsList){
-            if (contact.getTitle().equalsIgnoreCase(name)){
+        List<Contact> contactsList = contacts.getContact();
+        for (Contact contact : contactsList){
+            if (contact.getName().equalsIgnoreCase(name)){
                 result = true;
             }
         }
@@ -119,17 +172,17 @@ public class ContactsJacksonParser implements DomSaxContactsParser {
     }
 
     @Override
-    public Contact getContact(String fio) throws ParserConfigurationException,
+    public models.Contact getContact(String fio) throws ParserConfigurationException,
             IOException, SAXException {
-        Contact contact1 = null;
+        models.Contact contact1 = null;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Paths.get("contacts")), StandardCharsets.UTF_8),
                 Contacts.class);
-        List<ContactJac> contactsList = contacts.getContact();
-        for (ContactJac contact : contactsList){
-            if (contact.getTitle().equalsIgnoreCase(fio)){
-                contact1.setFio(contact.getTitle());
+        List<Contact> contactsList = contacts.getContact();
+        for (Contact contact : contactsList){
+            if (contact.getName().equalsIgnoreCase(fio)){
+                contact1.setFio(contact.getName());
                 contact1.setPhone(contact.getPhone());
                 contact1.setEmail(contact.getEmail());
                 contact1.setGroup(new Group(contact.getGroup()));
@@ -144,14 +197,29 @@ public class ContactsJacksonParser implements DomSaxContactsParser {
         String name = null;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Paths.get("contacts")), StandardCharsets.UTF_8),
                 Contacts.class);
-        List<ContactJac> contactsList = contacts.getContact();
-        for (ContactJac contact : contactsList){
-            if (contact.getTitle().equalsIgnoreCase(fio)){
-                name = contact.getTitle();
+        List<Contact> contactsList = contacts.getContact();
+        for (Contact contact : contactsList){
+            if (contact.getName().equalsIgnoreCase(fio)){
+                name = contact.getName();
             }
         }
         return name;
+    }
+
+
+    public static void main(String[] args) throws IOException {
+
+//        Contact contact = (Contact) entity;
+        Contact contact = new Contact();
+//        contact.setName(contact.getFio());
+//        contact.setPhone(contact.getPhone());
+//        contact.setEmail(contact.getEmail());
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(new File("contacts"), contact);
+
+
+
     }
 }

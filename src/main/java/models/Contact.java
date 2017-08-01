@@ -79,7 +79,7 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
 
     @Override
     public String toString() {
-        return "ContactJac{" +
+        return "Contact{" +
                 "Ф И О = " + fio   +
                 ", телефон = " + phone +
                 ", email = " + email +

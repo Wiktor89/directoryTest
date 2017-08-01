@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 /**
  *Модель группы jackson
  */
-public class GroupJac {
+public class Group {
 
     /**
      * title
@@ -17,10 +17,10 @@ public class GroupJac {
     @JacksonXmlProperty(localName = "title")
     private String title;
 
-    public GroupJac() {
+    public Group() {
     }
 
-    public GroupJac(String title) {
+    public Group(String title) {
         this.title = title;
     }
 
@@ -42,7 +42,7 @@ public class GroupJac {
 
     @Override
     public String toString() {
-        return "GroupJac{" +
+        return "Group{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 '}';

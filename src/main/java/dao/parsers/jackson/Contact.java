@@ -5,18 +5,18 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *Модель контакта для jackson
  */
 
-public final class ContactJac  {
+public final class Contact {
 
     /**
-     * title
+     * name
      phone
      email
      group
      */
     @JacksonXmlProperty(localName = "id", isAttribute = true)
     private String id;
-    @JacksonXmlProperty(localName = "title")
-    private String title;
+    @JacksonXmlProperty(localName = "name")
+    private String name;
     @JacksonXmlProperty(localName = "phone")
     private String phone;
     @JacksonXmlProperty(localName = "email")
@@ -26,17 +26,25 @@ public final class ContactJac  {
 
 
 
-    public ContactJac() {
+    public Contact() {
     }
 
-    public ContactJac(String title) {
-        this(title,"нет информации","нет информации");
+    public Contact(String name) {
+        this(name,"нет информации","нет информации");
     }
 
-    public ContactJac(String title, String phone, String email) {
-        this.title = title;
+    public Contact(String name, String phone, String email) {
+        this.name = name;
         this.phone = phone;
         this.email = email;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPhone() {
@@ -63,18 +71,18 @@ public final class ContactJac  {
         this.group = group;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return "ContactJac{" +
-                "title='" + title + '\'' +
+        return "Contact{" +
+                "name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", group='" + group + '\'' +

@@ -12,20 +12,20 @@ import java.util.List;
 public final class Groups {
 
     @JacksonXmlElementWrapper(localName = "group",useWrapping = false)
-    private List<GroupJac> group;
+    private List<Group> group;
 
     public Groups() {
     }
 
-    public Groups(List<GroupJac> group) {
+    public Groups(List<Group> group) {
         this.group = group;
     }
 
-    public List<GroupJac> getGroup() {
+    public List<Group> getGroup() {
         return group;
     }
 
-    public void setGroupJacs(List<GroupJac> group) {
+    public void setGroupJacs(List<Group> group) {
         this.group = group;
     }
 

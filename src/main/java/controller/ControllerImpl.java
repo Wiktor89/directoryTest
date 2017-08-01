@@ -8,13 +8,18 @@ import service.ContactServiceImpl;
 import service.GroupServiceImpl;
 import utilits.TeamList;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import javax.xml.xpath.XPathExpressionException;
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  *Реализация контроллера
@@ -41,6 +46,7 @@ public class ControllerImpl implements Controller{
     }
 
     public ControllerImpl() {
+        validationStorage();
         GroupDaoFactory groupDaoFactory = new GroupDaoFactory();
         ContactDaoFactory contactDaoFactory = new ContactDaoFactory();
         this.serviceContact = new ContactServiceImpl(contactDaoFactory.getContactParser());
@@ -141,5 +147,28 @@ public class ControllerImpl implements Controller{
             SAXException, TransformerException {
             this.serviceGroup.updateGroup(attGroup);
     }
+
+    private void validationStorage() {
+        Map<String,String> stringMap = new HashMap<>();
+        stringMap.put("contact.xsd","contacts.xml");
+        stringMap.put("group.xsd","groups.xml");
+
+        for (Map.Entry<String,String> entry : stringMap.entrySet()){
+            String schemaXsd = entry.getKey();
+            String validatorXml = entry.getValue();
+            try {
+                SchemaFactory factory =
+                        SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                Schema schema = factory.newSchema(new File(schemaXsd));
+                Validator validator = schema.newValidator();
+                validator.validate(new StreamSource(new File(validatorXml)));
+            } catch (IOException e){
+                System.out.println("Exception: "+e.getMessage());
+            }catch(SAXException e1){
+                System.out.println("SAX Exception: "+e1.getMessage());
+            }
+        }
+    }
+
 
 }

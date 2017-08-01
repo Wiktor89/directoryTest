@@ -11,21 +11,21 @@ import java.util.List;
 public final class Contacts {
 
     @JacksonXmlElementWrapper(localName = "contact",useWrapping = false)
-    private List<ContactJac> contact;
+    private List<Contact> contact;
 
     public Contacts() {
     }
 
-    public Contacts(List<ContactJac> contact) {
+    public Contacts(List<Contact> contact) {
         this.contact = contact;
     }
 
 
-    public List<ContactJac> getContact() {
+    public List<Contact> getContact() {
         return contact;
     }
 
-    public void setContact(List<ContactJac> contact) {
+    public void setContact(List<Contact> contact) {
         this.contact = contact;
     }
 

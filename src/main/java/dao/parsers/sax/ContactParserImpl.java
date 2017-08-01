@@ -51,7 +51,7 @@ public class ContactParserImpl implements DomSaxContactsParser {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         HandlerContact handlerContact = new HandlerContact();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts.xml"), handlerContact);
+        parser.parse(new File("contacts"), handlerContact);
         Set<Contact> contacts = handlerContact.getContacts();
         return contacts;
     }
@@ -62,7 +62,7 @@ public class ContactParserImpl implements DomSaxContactsParser {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         HandlerContact handlerContact = new HandlerContact();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts.xml"), handlerContact);
+        parser.parse(new File("contacts"), handlerContact);
         Set<Contact> contacts = handlerContact.getContacts();
         for (Contact contact : contacts) {
             if (contact.getFio().equalsIgnoreCase(name)) {
@@ -93,7 +93,7 @@ public class ContactParserImpl implements DomSaxContactsParser {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         HandlerContact handlerContact = new HandlerContact();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts.xml"), handlerContact);
+        parser.parse(new File("contacts"), handlerContact);
         Set<Contact> contacts = handlerContact.getContacts();
         for (Contact contact : contacts) {
             if (contact.getFio().equalsIgnoreCase(fio)) {

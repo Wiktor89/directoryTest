@@ -205,7 +205,7 @@ public class DomGroupParserImp extends Observable implements DomSaxGroupParser {
             SAXException, XPathExpressionException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document xmlDocument  = builder.parse(new File("contacts.xml"));
+        Document xmlDocument  = builder.parse(new File("contacts"));
 
         Set<String> contacts = new TreeSet<>();
         String titls = "/contacts/contact";

@@ -47,7 +47,7 @@ public class GroupParserImp implements DomSaxGroupParser {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         HandlerContact handlerContact = new HandlerContact();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts.xml"), handlerContact);
+        parser.parse(new File("contacts"), handlerContact);
         Set<Contact> contacts = handlerContact.getContacts();
         for (Contact contact : contacts){
             Group group = contact.getGroup();
@@ -76,7 +76,7 @@ public class GroupParserImp implements DomSaxGroupParser {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         HandlerContact handlerContact = new HandlerContact();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts.xml"), handlerContact);
+        parser.parse(new File("contacts"), handlerContact);
         Set<Contact> contacts = handlerContact.getContacts();
         for (Contact contact : contacts){
             Group group = contact.getGroup();
