@@ -14,6 +14,7 @@ public class Group {
      */
     @JacksonXmlProperty(localName = "id", isAttribute = true)
     private String id;
+
     @JacksonXmlProperty(localName = "title")
     private String title;
 

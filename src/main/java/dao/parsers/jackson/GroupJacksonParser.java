@@ -14,17 +14,12 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Observable;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  *
@@ -149,7 +144,7 @@ public class GroupJacksonParser extends Observable implements DomSaxGroupParser 
         Set<String> contacts = new TreeSet<>();
         ObjectMapper objectMapper = new XmlMapper();
         Contacts employees = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts")), StandardCharsets.UTF_8),
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
                 Contacts.class);
         List<Contact> contact = employees.getContact();
         for (Contact contactJac : contact){
@@ -166,13 +161,12 @@ public class GroupJacksonParser extends Observable implements DomSaxGroupParser 
                 Paths.get("groups.xml")), StandardCharsets.UTF_8),
                 Groups.class);
         List<Group> groups = groupsList.getGroup();
+        for (Group group1 : groups){
+            System.out.println(group1);
+        }
         XmlMapper mapper = new XmlMapper();
         mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
-        for (Group group : groups){
-
-//            mapper.configure();
-        }
-
+        mapper.writeValue(new File("test.xml"),groups);
 
 
     }

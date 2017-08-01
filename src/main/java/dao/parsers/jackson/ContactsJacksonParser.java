@@ -8,7 +8,6 @@ import models.Group;
 import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.SAXException;
 import views.ViewChangContact;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -73,7 +72,7 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
         boolean result = false;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts")), StandardCharsets.UTF_8),
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
                 Contacts.class);
         List<Contact> contactsList = contacts.getContact();
         for (Contact contact : contactsList){
@@ -100,7 +99,7 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
         boolean result = false;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts")), StandardCharsets.UTF_8),
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
                 Contacts.class);
         List<Contact> contactsList = contacts.getContact();
         for (Contact contact : contactsList){
@@ -140,7 +139,7 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
         Set<models.Contact> contactsSet = new TreeSet<>();
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts")), StandardCharsets.UTF_8),
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
                 Contacts.class);
         List<Contact> contactsList = contacts.getContact();
         for (Contact contact : contactsList){
@@ -160,7 +159,7 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
         boolean result = false;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts")), StandardCharsets.UTF_8),
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
                 Contacts.class);
         List<Contact> contactsList = contacts.getContact();
         for (Contact contact : contactsList){
@@ -177,11 +176,12 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
         models.Contact contact1 = null;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts")), StandardCharsets.UTF_8),
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
                 Contacts.class);
         List<Contact> contactsList = contacts.getContact();
         for (Contact contact : contactsList){
             if (contact.getName().equalsIgnoreCase(fio)){
+                contact1 = new models.Contact();
                 contact1.setFio(contact.getName());
                 contact1.setPhone(contact.getPhone());
                 contact1.setEmail(contact.getEmail());
@@ -197,7 +197,7 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
         String name = null;
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts")), StandardCharsets.UTF_8),
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
                 Contacts.class);
         List<Contact> contactsList = contacts.getContact();
         for (Contact contact : contactsList){
@@ -211,13 +211,22 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
 
     public static void main(String[] args) throws IOException {
 
-//        Contact contact = (Contact) entity;
+
+        ObjectMapper objectMapper = new XmlMapper();
+        Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Contacts.class);
+        List<Contact> contactsList = contacts.getContact();
+
+
         Contact contact = new Contact();
-//        contact.setName(contact.getFio());
-//        contact.setPhone(contact.getPhone());
-//        contact.setEmail(contact.getEmail());
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File("contacts"), contact);
+        contact.setName("asd");
+        contact.setPhone("dsadas");
+        contact.setEmail("dsawe");
+        contactsList.add(contact);
+
+        XmlMapper mapper = new XmlMapper();
+        mapper.writeValue(new File("cotacts.xml"),contactsList);
 
 
 
