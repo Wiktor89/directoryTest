@@ -104,6 +104,7 @@ public class DomContactParserImp extends Observable implements DomSaxContactsPar
     @Override
     public boolean updateContact(List<String> attContact) throws ParserConfigurationException,
             IOException, SAXException, TransformerException {
+        boolean result = false;
         String oldName = attContact.get(0);
         String newName = attContact.get(1);
         String newPhone = attContact.get(2);
@@ -117,43 +118,44 @@ public class DomContactParserImp extends Observable implements DomSaxContactsPar
             NodeList nodeChildList = nodeList.item(i).getChildNodes();
             for (int j = 0; j < nodeChildList.getLength(); j++) {
                 Node node = nodeChildList.item(j);
-                if (node instanceof  Element && node.getTextContent().equalsIgnoreCase(oldName)){
+                if (node instanceof Element && node.getTextContent().equalsIgnoreCase(oldName)) {
                     for (int k = 0; k < nodeChildList.getLength(); k++) {
                         Node childPhone = nodeChildList.item(k);
-                        switch (childPhone.getNodeName()){
-                            case "name":{
-                                System.out.println("name");
+                        switch (childPhone.getNodeName()) {
+                            case "name": {
                                 childPhone.setTextContent(newName);
                                 break;
-                            }case "phone":{
-                                System.out.println("phone");
+                            }
+                            case "phone": {
                                 childPhone.setTextContent(newPhone);
                                 break;
-                            }case "email":{
-                                System.out.println("email");
+                            }
+                            case "email": {
                                 childPhone.setTextContent(newEmail);
                                 break;
-                            }default:break;
+                            }
+                            default:
+                                break;
                         }
-                        Set<Contact> contacts = null;
-                        try {
-                            contacts = getContacts();
-                        } catch (XPathExpressionException e) {
-                            e.printStackTrace();
-                        }
-                        model.update(this,contacts);
                     }
-
+                    result = true;
                 }
-
+            }
             }
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(xmlDocument);
-            StreamResult streamResult = new StreamResult(new File("contacts"));
+            StreamResult streamResult = new StreamResult(new File("contacts.xml"));
             transformer.transform(domSource, streamResult);
-        }
-        return false;
+            Set<Contact> contacts = null;
+            try {
+                contacts = getContacts();
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+            }
+            model.update(this,contacts);
+
+        return result;
     }
 
     @Override
@@ -179,20 +181,20 @@ public class DomContactParserImp extends Observable implements DomSaxContactsPar
                         TransformerFactory transformerFactory = TransformerFactory.newInstance();
                         Transformer transformer = transformerFactory.newTransformer();
                         DOMSource domSource = new DOMSource(xmlDocument);
-                        StreamResult streamResult = new StreamResult(new File("contacts"));
+                        StreamResult streamResult = new StreamResult(new File("contacts.xml"));
                         transformer.transform(domSource, streamResult);
                         result = true;
-                        Set<Contact> contacts = null;
-                        try {
-                            contacts = getContacts();
-                        } catch (XPathExpressionException e) {
-                            e.printStackTrace();
-                        }
-                        model.update(this,contacts);
                     }
                 }
             }
         }
+        Set<Contact> contacts = null;
+        try {
+            contacts = getContacts();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        model.update(this,contacts);
         return result;
     }
 
@@ -216,19 +218,19 @@ public class DomContactParserImp extends Observable implements DomSaxContactsPar
                     TransformerFactory transformerFactory = TransformerFactory.newInstance();
                     Transformer transformer = transformerFactory.newTransformer();
                     DOMSource domSource = new DOMSource(document);
-                    StreamResult streamResult = new StreamResult(new File("contacts"));
+                    StreamResult streamResult = new StreamResult(new File("contacts.xml"));
                     transformer.transform(domSource, streamResult);
                     result = true;
-                    Set<Contact> contacts = null;
-                    try {
-                        contacts = getContacts();
-                    } catch (XPathExpressionException e) {
-                        e.printStackTrace();
-                    }
-                    model.update(this,contacts);
                 }
             }
         }
+        Set<Contact> contacts = null;
+        try {
+            contacts = getContacts();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        model.update(this,contacts);
 
         return result;
     }
@@ -252,19 +254,19 @@ public class DomContactParserImp extends Observable implements DomSaxContactsPar
                     TransformerFactory transformerFactory = TransformerFactory.newInstance();
                     Transformer transformer = transformerFactory.newTransformer();
                     DOMSource domSource = new DOMSource(document);
-                    StreamResult streamResult = new StreamResult(new File("contacts"));
+                    StreamResult streamResult = new StreamResult(new File("contacts.xml"));
                     transformer.transform(domSource, streamResult);
                     result = true;
-                    Set<Contact> contacts = null;
-                    try {
-                        contacts = getContacts();
-                    } catch (XPathExpressionException e) {
-                        e.printStackTrace();
-                    }
-                    model.update(this,contacts);
                 }
             }
         }
+        Set<Contact> contacts = null;
+        try {
+            contacts = getContacts();
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        model.update(this,contacts);
 
         return result;
     }

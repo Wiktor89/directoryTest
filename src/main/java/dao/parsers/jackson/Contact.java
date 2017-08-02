@@ -1,11 +1,12 @@
 package dao.parsers.jackson;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import models.Entity;
 
 /**
  *Модель контакта для jackson
  */
 
-public final class Contact {
+public final class Contact implements Entity {
 
     /**
      * name

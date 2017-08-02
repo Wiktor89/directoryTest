@@ -8,6 +8,7 @@ import models.Entity;
 import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.SAXException;
 import views.ViewChangContact;
+import views.ViewChangGroup;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
@@ -22,37 +23,38 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
- *
+ *Jac парсер для группы
  */
 public class GroupJacksonParser extends Observable implements DomSaxGroupParser {
 
-    private ViewChangContact model = null;
+    private ViewChangGroup model = null;
 
     public GroupJacksonParser() {
-        model = ViewChangContact.getViewChangContact();
+        model = ViewChangGroup.getViewChangGroup();
     }
 
     @Override
     public void addGroup(Entity entity) throws ParserConfigurationException,
             TransformerException, IOException, SAXException {
-//        File file = new File("groups.xml");
-//        if (file.exists()){
-//            Group group = (Group) entity;
-//            Group groupJac = new Group();
-//            groupJac.setName(group.getName());
-//            ObjectMapper objectMapper = new XmlMapper();
-//            objectMapper.writeValue(file,groupJac);
-//        }
-
-        Set<String> groupss = null;
-        try {
-            groupss = getGroups();
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
+        models.Group group = (models.Group) entity;
+        Group group1 = new Group();
+        group1.setId(String.valueOf(group.getId()));
+        group1.setTitle(group.getName());
+        ObjectMapper objectMapper = new XmlMapper();
+        Groups groupsList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
+                Paths.get("groups.xml")), StandardCharsets.UTF_8),
+                Groups.class);
+        List<Group> groups = groupsList.getGroup();
+        groups.add(group1);
+        groupsList.setGroupJacs(groups);
+        XmlMapper mapper = new XmlMapper();
+        mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+        mapper.writeValue(new File("groups.xml"),groupsList);
+        Set<String> groupss = new TreeSet<>();
+        for (Group group2 : groups){
+            groupss.add(group2.getTitle());
         }
         model.update(this,groupss);
-
-
 
     }
 
@@ -61,23 +63,25 @@ public class GroupJacksonParser extends Observable implements DomSaxGroupParser 
             SAXException, XPathExpressionException, TransformerException, IOException {
         boolean result = false;
         ObjectMapper objectMapper = new XmlMapper();
-        Groups employees = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
+        Groups groupsList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
                 Paths.get("groups.xml")), StandardCharsets.UTF_8),
                 Groups.class);
-        List<Group> groups = employees.getGroup();
+        List<Group> groups = groupsList.getGroup();
         for (Group group : groups){
             if (group.getTitle().equalsIgnoreCase(name)){
                 groups.remove(group);
                 result = true;
-                Set<String> groupss = null;
-                try {
-                    groupss = getGroups();
-                } catch (XPathExpressionException e) {
-                    e.printStackTrace();
-                }
-                model.update(this,groupss);
+                break;
             }
         }
+        XmlMapper mapper = new XmlMapper();
+        mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+        mapper.writeValue(new File("groups.xml"),groupsList);
+        Set<String> groupss = new TreeSet<>();
+        for (Group group2 : groups){
+            groupss.add(group2.getTitle());
+        }
+        model.update(this,groupss);
         return result;
     }
 
@@ -94,6 +98,9 @@ public class GroupJacksonParser extends Observable implements DomSaxGroupParser 
         for (Group group : groups){
             if (group.getTitle().equalsIgnoreCase(oldName)){
                 group.setTitle(newName);
+                XmlMapper mapper = new XmlMapper();
+                mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+                mapper.writeValue(new File("groups.xml"),employees);
                 Set<String> groupss = null;
                 try {
                     groupss = getGroups();
@@ -155,19 +162,4 @@ public class GroupJacksonParser extends Observable implements DomSaxGroupParser 
         return contacts;
     }
 
-    public static void main(String[] args) throws IOException, XMLStreamException {
-        ObjectMapper objectMapper = new XmlMapper();
-        Groups groupsList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("groups.xml")), StandardCharsets.UTF_8),
-                Groups.class);
-        List<Group> groups = groupsList.getGroup();
-        for (Group group1 : groups){
-            System.out.println(group1);
-        }
-        XmlMapper mapper = new XmlMapper();
-        mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
-        mapper.writeValue(new File("test.xml"),groups);
-
-
-    }
 }

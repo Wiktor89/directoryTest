@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *Отображение
@@ -160,18 +161,22 @@ public class ViewImpl implements View {
             if (this.controller.existContact(fio)){
                 getGroups();
                 String name = getNameGroup();
-                if (this.controller.existGroup(name)){
-                    attContact.add(0, fio);
-                    attContact.add(1, name);
-                    this.controller.appGroupContact(attContact);
-                }else {
-                    view.getNoGroup();
+                try {
+                    if (this.controller.existGroup(name)){
+                        attContact.add(0, fio);
+                        attContact.add(1, name);
+                        this.controller.appGroupContact(attContact);
+                    }else {
+                        view.getNoGroup();
+                    }
+                } catch (XPathExpressionException e) {
+                    System.out.println("appGroupContact");
                 }
             }else {
                 view.notFound();
             }
         } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
-            e.printStackTrace();
+            System.out.println("не поддерживается");
         }
     }
 
@@ -198,22 +203,26 @@ public class ViewImpl implements View {
             if (this.controller.existContact(fio)){
                 Contact contact = this.controller.getContact(fio);
                 String name = getNameGroup();
-                if (this.controller.existGroup(name)){
-                    try {
+                try {
+                    if (this.controller.existGroup(name)){
                         try {
-                            this.controller.removeGroupContact(fio);
-                        } catch (TransformerException e) {
-                            e.printStackTrace();
+                            try {
+                                this.controller.removeGroupContact(fio);
+                            } catch (TransformerException e) {
+                                System.out.println("a");
+                            }
+                        } catch (IOException | ParserConfigurationException | SAXException e) {
+                            System.out.println("b");
                         }
-                    } catch (IOException | ParserConfigurationException | SAXException e) {
-                        e.printStackTrace();
                     }
+                } catch (XPathExpressionException e) {
+                    System.out.println("removeGroupContact");
                 }
             }else {
                 view.getNoContact();
             }
         } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
-            e.printStackTrace();
+            System.out.println("не поддерживается");
         }
     }
 
@@ -271,6 +280,8 @@ public class ViewImpl implements View {
                 }
             } catch (ParserConfigurationException | IOException | SAXException e) {
                 System.out.println("не поддерживается");
+            } catch (XPathExpressionException e) {
+                System.out.println("removeGroup");
             }
         }else {
             view.emptyLine();
@@ -300,34 +311,35 @@ public class ViewImpl implements View {
             }
         } catch (ParserConfigurationException | IOException | SAXException e) {
             System.out.println("не поддерживается");
+        } catch (XPathExpressionException e) {
+            System.out.println("updateGroup");
         }
     }
 
     @Override
     public void getGroups(){
         System.out.println("Список доступных групп");
-        Set<String> groups = null;
         try {
+            Set<String> groups = new TreeSet<>();
             groups = this.controller.getGroups();
-        } catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException | TransformerConfigurationException e) {
-            e.printStackTrace();
-        }
-        if (!groups.isEmpty()){
-            for (String group : groups){
-                System.out.println(group);
+            if (!groups.isEmpty()){
+                for (String group : groups){
+                    System.out.println(group);
+                }
             }
-        }else {
-            view.emptyList();
+        } catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException | TransformerConfigurationException e) {
+            System.out.println("нет доступных групп");
+            view.pageActionContact();
         }
     }
 
     public void getContactsGroup(){
         getGroups();
-        Set<String> contacts = null;
+        Set<String> contacts = new TreeSet<>();
         try {
             contacts = this.controller.getContactsGroup(getNameGroup());
         } catch (ParserConfigurationException | IOException | XPathExpressionException | SAXException e) {
-            e.printStackTrace();
+            System.out.println("не найденно");
         }
         for (String contact : contacts){
             System.out.println(contact);

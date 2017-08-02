@@ -62,7 +62,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean existGroup(String name) throws IOException, SAXException, ParserConfigurationException {
+    public boolean existGroup(String name) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
         return this.dao.existGroup(name);
     }
 }

@@ -2,11 +2,12 @@ package dao.parsers.jackson;
 
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import models.Entity;
 
 /**
  *Модель группы jackson
  */
-public class Group {
+public class Group implements Entity {
 
     /**
      * title

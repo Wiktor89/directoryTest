@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ *Обертка для групп
  */
 @JacksonXmlRootElement(localName = "groups")
 public final class Groups {
@@ -37,6 +37,5 @@ public final class Groups {
                 "groupJacs=" + group +
                 '}';
     }
-
 
 }

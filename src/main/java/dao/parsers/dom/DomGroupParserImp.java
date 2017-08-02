@@ -5,7 +5,6 @@ import models.Entity;
 import models.Group;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import views.ViewChangContact;
 import views.ViewChangGroup;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -151,30 +150,20 @@ public class DomGroupParserImp extends Observable implements DomSaxGroupParser {
     }
 
     @Override
-    public boolean existGroup(String name) {
+    public boolean existGroup(String name) throws ParserConfigurationException,
+            IOException, SAXException, XPathExpressionException {
         boolean result = false;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = null;
-        try {
             builder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
+
         Document xmlDocument  = null;
-        try {
             xmlDocument = builder.parse(new File("groups.xml"));
-        } catch (SAXException | IOException e) {
-            e.printStackTrace();
-        }
         String title = "/groups/group/title";
         XPath xPath = XPathFactory.newInstance().newXPath();
         NodeList nodeList = null;
-        try {
             nodeList = (NodeList) xPath.compile(title)
                     .evaluate(xmlDocument, XPathConstants.NODESET);
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
-        }
         for (int i = 0; i < nodeList.getLength(); i++) {
             if (nodeList.item(i).getFirstChild().getNodeValue().equalsIgnoreCase(name)){
                 result = true;
@@ -183,7 +172,7 @@ public class DomGroupParserImp extends Observable implements DomSaxGroupParser {
         return result;
     }
 
-    @Override
+        @Override
     public Set<String> getGroups() throws ParserConfigurationException
             , SAXException, XPathExpressionException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

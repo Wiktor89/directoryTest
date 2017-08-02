@@ -20,7 +20,7 @@ import java.io.OutputStream;
 import java.util.*;
 
 /**
- *Реализация Sax парсера для группы
+ *Sax парсера для группы
  */
 public class GroupParserImp implements DomSaxGroupParser {
 

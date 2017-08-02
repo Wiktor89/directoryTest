@@ -1,8 +1,6 @@
 package service;
 
 import dao.DomSaxContactsParser;
-import dao.parsers.dom.DomContactParserImp;
-import dao.parsers.dom.DomGroupParserImp;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;

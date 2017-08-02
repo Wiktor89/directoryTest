@@ -39,7 +39,7 @@ public interface DomSaxGroupParser  {
     /**
      *Смотрим есть группа в списке
      */
-    boolean existGroup(String name) throws ParserConfigurationException, SAXException, IOException;
+    boolean existGroup(String name) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException;
 
     /**
      *Список групп

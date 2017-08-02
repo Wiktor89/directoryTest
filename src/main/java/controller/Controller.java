@@ -82,7 +82,7 @@ public interface Controller {
     /**
      * Проверяет группу на сущ.
      */
-    boolean existGroup(String name) throws ParserConfigurationException, SAXException, IOException;
+    boolean existGroup(String name) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException;
 
     /**
      * Поиск по имени

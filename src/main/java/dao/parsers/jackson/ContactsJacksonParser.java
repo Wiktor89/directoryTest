@@ -2,6 +2,7 @@ package dao.parsers.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import dao.DomSaxContactsParser;
 import models.Entity;
 import models.Group;
@@ -22,7 +23,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- *
+ *Jac парсер для контакта
  */
 public class ContactsJacksonParser extends Observable implements DomSaxContactsParser {
 
@@ -35,59 +36,101 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
     @Override
     public void addContact(Entity entity) throws TransformerException,
             IOException, SAXException, ParserConfigurationException {
-//        Contact contact = (Contact) entity;
-//        Contact contactJac = new Contact();
-//        contactJac.setName(contact.getFio());
-//        contactJac.setPhone(contact.getPhone());
-//        contactJac.setEmail(contact.getEmail());
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.writeValue(new File("contacts"), contactJac);
-        Set<models.Contact> contacts = null;
-        try {
-            contacts = getContacts();
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
+        File file = new File("contacts.xml");
+        models.Contact contactModel = (models.Contact) entity;
+        Contact contactJac = new Contact();
+        contactJac.setName(contactModel.getFio());
+        contactJac.setPhone(contactModel.getPhone());
+        contactJac.setEmail(contactModel.getEmail());
+        contactJac.setGroup(contactModel.getGroup().getName());
+
+        ObjectMapper objectMapper = new XmlMapper();
+        Contacts contactList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Contacts.class);
+
+        List<Contact> contacts = contactList.getContact();
+
+        contacts.add(contactJac);
+
+        Set<models.Contact> contacts1 = new TreeSet<>();
+        for (Contact contact : contacts){
+            models.Contact contactMo = new models.Contact();
+            contactMo.setPhone(contact.getPhone());
+            contactMo.setFio(contact.getName());
+            contactMo.setEmail(contact.getEmail());
+            contactMo.setGroup(new Group(contact.getGroup()));
+            contacts1.add(contactMo);
         }
-        model.update(this,contacts);
+
+        XmlMapper mapper = new XmlMapper();
+        mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+        mapper.writeValue(file,contactList);
+        model.update(this,contacts1);
+
+
     }
 
     @Override
     public boolean updateContact(List<String> attContact) throws ParserConfigurationException,
             IOException, SAXException, TransformerException {
+        boolean result = false;
+        File file = new File("contacts.xml");
 
+        ObjectMapper objectMapper = new XmlMapper();
+        Contacts contactList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Contacts.class);
 
-        Set<models.Contact> contacts = null;
-        try {
-            contacts = getContacts();
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
+        List<Contact> contacts = contactList.getContact();
+        for (Contact contact : contacts){
+            if (contact.getName().equalsIgnoreCase(attContact.get(0))){
+                contact.setName(attContact.get(1));
+                contact.setPhone(attContact.get(2));
+                contact.setEmail(attContact.get(3));
+            }
         }
-        model.update(this,contacts);
-        return false;
+        XmlMapper mapper = new XmlMapper();
+        mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+        mapper.writeValue(file,contactList);
+        Set<models.Contact> contacts1 = new TreeSet<>();
+        for (Contact contact : contacts){
+            models.Contact contactMo = new models.Contact();
+            contactMo.setFio(contact.getName());
+            contactMo.setPhone(contact.getPhone());
+            contactMo.setEmail(contact.getEmail());
+            contactMo.setGroup(new Group(contact.getGroup()));
+            contacts1.add(contactMo);
+            result = true;
+        }
+        model.update(this,contacts1);
+
+        return result;
     }
 
     @Override
     public boolean removeContact(String fio) throws IOException, SAXException,
             ParserConfigurationException, TransformerException {
         boolean result = false;
+        File file = new File("contacts.xml");
         ObjectMapper objectMapper = new XmlMapper();
-        Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
+        Contacts contactList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
                 Paths.get("contacts.xml")), StandardCharsets.UTF_8),
                 Contacts.class);
-        List<Contact> contactsList = contacts.getContact();
-        for (Contact contact : contactsList){
+        List<Contact> contacts = contactList.getContact();
+        for (Contact contact : contacts){
             if (contact.getName().equalsIgnoreCase(fio)){
-                contactsList.remove(contact);
+                contacts.remove(contact);
                 result = true;
-                Set<models.Contact> contactss = null;
-                try {
-                    contactss = getContacts();
-                } catch (XPathExpressionException e) {
-                    e.printStackTrace();
-                }
-                model.update(this,contacts);
+                break;
             }
         }
+        XmlMapper mapper = new XmlMapper();
+        mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+        mapper.writeValue(file,contactList);
+
+        Set<models.Contact> contacts1 = new TreeSet<>();
+        model.update(this,contacts1);
         return result;
     }
 
@@ -97,40 +140,50 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
         String fio = attContact.get(0);
         String name = attContact.get(1);
         boolean result = false;
+        File file = new File("contacts.xml");
         ObjectMapper objectMapper = new XmlMapper();
-        Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
+        Contacts contactList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
                 Paths.get("contacts.xml")), StandardCharsets.UTF_8),
                 Contacts.class);
-        List<Contact> contactsList = contacts.getContact();
-        for (Contact contact : contactsList){
+
+        List<Contact> contacts = contactList.getContact();
+        for (Contact contact : contacts){
             if (contact.getName().equalsIgnoreCase(fio)){
                 contact.setGroup(name);
-                result = true;
-                Set<models.Contact> contactss = null;
-                try {
-                    contactss = getContacts();
-                } catch (XPathExpressionException e) {
-                    e.printStackTrace();
-                }
-                model.update(this,contacts);
             }
         }
+        XmlMapper mapper = new XmlMapper();
+        mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+        mapper.writeValue(file,contactList);
+
+        Set<models.Contact> contacts1 = new TreeSet<>();
+        model.update(this,contacts1);
         return result;
     }
 
     @Override
     public boolean removeGroupContact(String fio) throws IOException, SAXException,
             ParserConfigurationException, TransformerException {
+        boolean result  = false;
+        File file = new File("contacts.xml");
+        ObjectMapper objectMapper = new XmlMapper();
+        Contacts contactList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
+                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
+                Contacts.class);
 
-
-        Set<models.Contact> contacts = null;
-        try {
-            contacts = getContacts();
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
+        List<Contact> contacts = contactList.getContact();
+        for (Contact contact : contacts){
+            if (contact.getName().equalsIgnoreCase(fio)){
+                contact.setGroup("нет группы");
+            }
         }
-        model.update(this,contacts);
-        return false;
+        XmlMapper mapper = new XmlMapper();
+        mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+        mapper.writeValue(file,contactList);
+
+        Set<models.Contact> contacts1 = new TreeSet<>();
+        model.update(this,contacts1);
+        return result;
     }
 
     @Override
@@ -145,9 +198,9 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
         for (Contact contact : contactsList){
             models.Contact contact1 = new models.Contact();
             contact1.setFio(contact.getName());
+            contact1.setGroup(new Group(contact.getGroup()));
             contact1.setPhone(contact.getPhone());
             contact1.setEmail(contact.getEmail());
-            contact1.setGroup(new Group(contact.getGroup()));
             contactsSet.add(contact1);
         }
         return contactsSet;
@@ -208,27 +261,4 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
         return name;
     }
 
-
-    public static void main(String[] args) throws IOException {
-
-
-        ObjectMapper objectMapper = new XmlMapper();
-        Contacts contacts = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
-                Paths.get("contacts.xml")), StandardCharsets.UTF_8),
-                Contacts.class);
-        List<Contact> contactsList = contacts.getContact();
-
-
-        Contact contact = new Contact();
-        contact.setName("asd");
-        contact.setPhone("dsadas");
-        contact.setEmail("dsawe");
-        contactsList.add(contact);
-
-        XmlMapper mapper = new XmlMapper();
-        mapper.writeValue(new File("cotacts.xml"),contactsList);
-
-
-
-    }
 }

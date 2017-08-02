@@ -113,7 +113,7 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public boolean existGroup(String name) throws ParserConfigurationException, SAXException, IOException {
+    public boolean existGroup(String name) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         return this.serviceGroup.existGroup(name);
     }
 
@@ -149,23 +149,27 @@ public class ControllerImpl implements Controller{
     }
 
     private void validationStorage() {
-        Map<String,String> stringMap = new HashMap<>();
-        stringMap.put("contact.xsd","contacts.xml");
-        stringMap.put("group.xsd","groups.xml");
+        File contacts = new File("contacts.xml");
+        File groups = new File("groups.xml");
+        if (contacts.exists() | groups.exists()){
+            Map<String,String> stringMap = new HashMap<>();
+            stringMap.put("contact.xsd","contacts.xml");
+            stringMap.put("group.xsd","groups.xml");
 
-        for (Map.Entry<String,String> entry : stringMap.entrySet()){
-            String schemaXsd = entry.getKey();
-            String validatorXml = entry.getValue();
-            try {
-                SchemaFactory factory =
-                        SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                Schema schema = factory.newSchema(new File(schemaXsd));
-                Validator validator = schema.newValidator();
-                validator.validate(new StreamSource(new File(validatorXml)));
-            } catch (IOException e){
-                System.out.println("Exception: "+e.getMessage());
-            }catch(SAXException e1){
-                System.out.println("SAX Exception: "+e1.getMessage());
+            for (Map.Entry<String,String> entry : stringMap.entrySet()){
+                String schemaXsd = entry.getKey();
+                String validatorXml = entry.getValue();
+                try {
+                    SchemaFactory factory =
+                            SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                    Schema schema = factory.newSchema(new File(schemaXsd));
+                    Validator validator = schema.newValidator();
+                    validator.validate(new StreamSource(new File(validatorXml)));
+                } catch (IOException e){
+                    System.out.println("Exception: "+e.getMessage());
+                }catch(SAXException e1){
+                    System.out.println("SAX Exception: "+e1.getMessage());
+                }
             }
         }
     }

@@ -30,6 +30,7 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
         this.fio = fio;
         this.phone = phone;
         this.email = email;
+        this.group = new Group("нет группы");
     }
 
     public Contact(String fio,String phone) {
@@ -83,7 +84,7 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
                 "Ф И О = " + fio   +
                 ", телефон = " + phone +
                 ", email = " + email +
-                ", группа = "  +
+                ", группа = " + group.getName()+
                 "} ";
     }
 

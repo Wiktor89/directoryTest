@@ -2,12 +2,12 @@
     <xs:element name="groups">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="group">
+                <xs:element name="group" maxOccurs="unbounded" minOccurs="0">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element type="xs:string" name="title"/>
                         </xs:sequence>
-                        <xs:attribute type="xs:byte" name="id"/>
+                        <xs:attribute type="xs:byte" name="id" use="optional"/>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
