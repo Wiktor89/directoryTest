@@ -1,8 +1,8 @@
-package parsers.sax;
+package dao.sax;
 
-import dao.DomSaxGroups;
-import parsers.handler.ContactHandler;
-import parsers.handler.GroupHandler;
+import dao.GroupDao;
+import dao.sax.handler.ContactHandler;
+import dao.sax.handler.GroupHandler;
 import models.Contact;
 import models.Entity;
 import models.Group;
@@ -19,7 +19,7 @@ import java.util.*;
 /**
  *Sax парсера для группы
  */
-public class SaxGroupsImp implements DomSaxGroups {
+public class GroupsImp implements GroupDao {
 
 
     @Override

@@ -1,6 +1,5 @@
 package dao;
 
-import javafx.beans.Observable;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
@@ -15,7 +14,7 @@ import java.util.Set;
 /**
  *
  */
-public interface DomSaxContacts {
+public interface ContactDao {
 
     /**
      *Добавление контакта

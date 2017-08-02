@@ -1,4 +1,4 @@
-package parsers.jackson;
+package dao.jackson;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import models.Entity;
 

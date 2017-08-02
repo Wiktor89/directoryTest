@@ -1,6 +1,6 @@
 package service;
 
-import dao.DomSaxContacts;
+import dao.ContactDao;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
@@ -24,17 +24,17 @@ public class ContactServiceImpl implements ContactService{
      * groups
      * dao
      */
-    private DomSaxContacts dao = null;
+    private ContactDao dao = null;
 
-    public ContactServiceImpl(DomSaxContacts dao) {
+    public ContactServiceImpl(ContactDao dao) {
         this.dao = dao;
     }
 
-    public DomSaxContacts getDao() {
+    public ContactDao getDao() {
         return dao;
     }
 
-    public void setDao(DomSaxContacts dao) {
+    public void setDao(ContactDao dao) {
         this.dao = dao;
     }
 

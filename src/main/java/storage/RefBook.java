@@ -14,8 +14,8 @@ import java.util.*;
 public class RefBook extends Observable implements  Serializable {
 
     private static RefBook refBook;
-    private Set<Contact> contacts = new TreeSet<>(new ContactFioComparator());
-    private Set<Group> groups = new TreeSet<>(new GroupNameComparator());
+    private Set<Contact> contacts = new TreeSet<>();
+    private Set<Group> groups = new TreeSet<>();
     private List<Observer> observers = new ArrayList<>();
 
     public static RefBook getRefBook (){

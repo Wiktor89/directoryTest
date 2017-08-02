@@ -1,6 +1,6 @@
-package parsers.dom;
+package dao.dom;
 
-import dao.DomSaxGroups;
+import dao.GroupDao;
 import models.Entity;
 import models.Group;
 import org.w3c.dom.*;
@@ -25,11 +25,11 @@ import java.util.*;
 /**
  *Dom парсер для групп
  */
-public class DomGroupsImp extends Observable implements DomSaxGroups {
+public class GroupsImp extends Observable implements GroupDao {
 
     private ViewChangGroup model = null;
 
-    public DomGroupsImp() {
+    public GroupsImp() {
         model = ViewChangGroup.getViewChangGroup();
     }
 

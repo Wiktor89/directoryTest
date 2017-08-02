@@ -1,9 +1,9 @@
-package parsers.jackson;
+package dao.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
-import dao.DomSaxContacts;
+import dao.ContactDao;
 import models.Entity;
 import models.Group;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +25,7 @@ import java.util.TreeSet;
 /**
  *Jac парсер для контакта
  */
-public class ContactsJackson extends Observable implements DomSaxContacts {
+public class ContactsJackson extends Observable implements ContactDao {
 
     private ViewChangContact model = null;
 

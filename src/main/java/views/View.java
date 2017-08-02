@@ -8,7 +8,7 @@ import java.io.IOException;
 public interface View {
 
     /**
-     * Действия с контакта
+     * Действия с контактjjv
      */
     void actionContact() throws IOException ;
 

@@ -47,28 +47,18 @@ public class ControllerImpl implements Controller{
 
     public ControllerImpl() {
         validationStorage();
-        AbstractFactoryDaoGroups abstractFactoryDaoGroups = new AbstractFactoryDaoGroups();
-        AbstractFactoryDaoContacts abstractFactoryDaoContacts = new AbstractFactoryDaoContacts();
-        this.serviceContact = new ContactServiceImpl(abstractFactoryDaoContacts.getContactParser());
-        this.serviceGroup = new GroupServiceImpl(abstractFactoryDaoGroups.getGroupParser());
+        this.serviceContact = new ContactServiceImpl(DaoFactory.getContactDao());
+        this.serviceGroup = new GroupServiceImpl(DaoFactory.getGroupDao());
     }
 
     @Override
     public void addEntity(List<String> attrEntity,String command) throws IOException,
             TransformerException, ParserConfigurationException, SAXException {
-        FactoryEntity factoryEntity = create(command);
-        Entity entity = factoryEntity.creatingEntity(attrEntity);
-
+        Entity entity = EntityFactory.create(command,attrEntity);
         if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
             this.serviceContact.addContact(entity);
         if (command.equalsIgnoreCase(String.valueOf(TeamList.gro)))
             this.serviceGroup.addGroup(entity);
-    }
-
-     FactoryEntity create (String command) throws IOException{
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.con))) return new FactoryEntityContacts();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new FactoryEntityGroups();
-        throw new IOException();
     }
 
     @Override
@@ -173,6 +163,5 @@ public class ControllerImpl implements Controller{
             }
         }
     }
-
 
 }

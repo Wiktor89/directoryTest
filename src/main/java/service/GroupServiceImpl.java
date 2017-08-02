@@ -1,6 +1,6 @@
 package service;
 
-import dao.DomSaxGroups;
+import dao.GroupDao;
 import models.Entity;
 import org.xml.sax.SAXException;
 
@@ -23,9 +23,9 @@ public class GroupServiceImpl implements GroupService {
      * groups
      * dao
      */
-    private DomSaxGroups dao = null;
+    private GroupDao dao = null;
 
-    public GroupServiceImpl(DomSaxGroups dao) {
+    public GroupServiceImpl(GroupDao dao) {
         this.dao = dao;
     }
 

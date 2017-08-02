@@ -1,4 +1,4 @@
-package parsers.handler;
+package dao.sax.handler;
 
 import models.Contact;
 import models.Group;

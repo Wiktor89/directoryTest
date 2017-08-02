@@ -1,7 +1,7 @@
-package parsers.sax;
+package dao.sax;
 
-import dao.DomSaxContacts;
-import parsers.handler.ContactHandler;
+import dao.ContactDao;
+import dao.sax.handler.ContactHandler;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
@@ -18,7 +18,7 @@ import java.util.Set;
 /**
  *Sax парсера для контакта
  */
-public class SaxContactImpl implements DomSaxContacts {
+public class ContactsImpl implements ContactDao {
 
     @Override
     public void addContact(Entity entity) throws IOException {

@@ -1,4 +1,4 @@
-package parsers.handler;
+package dao.sax.handler;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

@@ -1,6 +1,6 @@
 package views;
 
-import dao.DomSaxContacts;
+import dao.ContactDao;
 import models.Contact;
 import org.xml.sax.SAXException;
 
@@ -30,10 +30,10 @@ public class ViewChangContact implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof DomSaxContacts) {
+        if (o instanceof ContactDao) {
             Set<Contact> contacts = null;
             try {
-                contacts = ((DomSaxContacts) o).getContacts();
+                contacts = ((ContactDao) o).getContacts();
             } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
                 e.printStackTrace();
             }

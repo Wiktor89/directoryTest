@@ -1,9 +1,9 @@
-package parsers.jackson;
+package dao.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
-import dao.DomSaxGroups;
+import dao.GroupDao;
 import models.Entity;
 import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.SAXException;
@@ -23,7 +23,7 @@ import java.util.*;
 /**
  *Jac парсер для группы
  */
-public class GroupsJackson extends Observable implements DomSaxGroups {
+public class GroupsJackson extends Observable implements GroupDao {
 
     private ViewChangGroup model = null;
 
