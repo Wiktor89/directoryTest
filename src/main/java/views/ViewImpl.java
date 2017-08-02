@@ -89,9 +89,7 @@ public class ViewImpl implements View {
             attContact.add(3,"нет группы");
             try {
                 this.controller.addEntity(attContact,command);
-            } catch (TransformerException | ParserConfigurationException e) {
-                e.printStackTrace();
-            } catch (SAXException e) {
+            } catch (TransformerException | ParserConfigurationException | SAXException e) {
                 e.printStackTrace();
             }
             view.getSuc();
@@ -170,7 +168,7 @@ public class ViewImpl implements View {
                         view.getNoGroup();
                     }
                 } catch (XPathExpressionException e) {
-                    System.out.println("appGroupContact");
+                    System.out.println("не поддерживается");
                 }
             }else {
                 view.notFound();

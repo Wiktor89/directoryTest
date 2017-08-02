@@ -1,17 +1,15 @@
-package dao.parsers.jackson;
+package parsers.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
-import dao.DomSaxGroupParser;
+import dao.DomSaxGroups;
 import models.Entity;
 import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.SAXException;
-import views.ViewChangContact;
 import views.ViewChangGroup;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -25,11 +23,11 @@ import java.util.*;
 /**
  *Jac парсер для группы
  */
-public class GroupJacksonParser extends Observable implements DomSaxGroupParser {
+public class GroupsJackson extends Observable implements DomSaxGroups {
 
     private ViewChangGroup model = null;
 
-    public GroupJacksonParser() {
+    public GroupsJackson() {
         model = ViewChangGroup.getViewChangGroup();
     }
 

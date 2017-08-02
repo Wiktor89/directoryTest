@@ -1,9 +1,9 @@
-package factory;
+package factories;
 
-import dao.DomSaxContactsParser;
-import dao.parsers.dom.DomContactParserImp;
-import dao.parsers.jackson.ContactsJacksonParser;
-import dao.parsers.sax.ContactParserImpl;
+import dao.DomSaxContacts;
+import parsers.dom.DomContactImp;
+import parsers.jackson.ContactsJackson;
+import parsers.sax.SaxContactImpl;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,21 +13,21 @@ import java.util.Properties;
 /**
  *
  */
-public class ContactDaoFactory {
+public class AbstractFactoryDaoContacts {
 
-   public DomSaxContactsParser getContactParser (){
-        DomSaxContactsParser parser = createGroupParser(command());
+   public DomSaxContacts getContactParser (){
+        DomSaxContacts parser = createGroupParser(command());
         return parser;
 
     }
 
-    static DomSaxContactsParser createGroupParser(String command){
+    static DomSaxContacts createGroupParser(String command){
         if (command.equalsIgnoreCase("dom")){
-            return new DomContactParserImp();
+            return new DomContactImp();
         }if(command.equalsIgnoreCase("sax")){
-            return new ContactParserImpl();
+            return new SaxContactImpl();
         }if (command.equalsIgnoreCase("jac")){
-            return new ContactsJacksonParser();
+            return new ContactsJackson();
         }
         return null;
     }

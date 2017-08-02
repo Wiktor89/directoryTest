@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  *
  */
-public interface DomSaxContactsParser  {
+public interface DomSaxContacts {
 
     /**
      *Добавление контакта

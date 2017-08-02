@@ -1,6 +1,6 @@
 package views;
 
-import dao.DomSaxGroupParser;
+import dao.DomSaxGroups;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,10 +31,10 @@ public class ViewChangGroup implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof DomSaxGroupParser){
+        if (o instanceof DomSaxGroups){
             Set<String> groups  = null;
             try {
-                groups = ((DomSaxGroupParser) o).getGroups();
+                groups = ((DomSaxGroups) o).getGroups();
             } catch (ParserConfigurationException | IOException | TransformerConfigurationException | XPathExpressionException | SAXException e) {
                 e.printStackTrace();
             }

@@ -1,6 +1,6 @@
 package controller;
 
-import factory.*;
+import factories.*;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
@@ -47,17 +47,17 @@ public class ControllerImpl implements Controller{
 
     public ControllerImpl() {
         validationStorage();
-        GroupDaoFactory groupDaoFactory = new GroupDaoFactory();
-        ContactDaoFactory contactDaoFactory = new ContactDaoFactory();
-        this.serviceContact = new ContactServiceImpl(contactDaoFactory.getContactParser());
-        this.serviceGroup = new GroupServiceImpl(groupDaoFactory.getGroupParser());
+        AbstractFactoryDaoGroups abstractFactoryDaoGroups = new AbstractFactoryDaoGroups();
+        AbstractFactoryDaoContacts abstractFactoryDaoContacts = new AbstractFactoryDaoContacts();
+        this.serviceContact = new ContactServiceImpl(abstractFactoryDaoContacts.getContactParser());
+        this.serviceGroup = new GroupServiceImpl(abstractFactoryDaoGroups.getGroupParser());
     }
 
     @Override
     public void addEntity(List<String> attrEntity,String command) throws IOException,
             TransformerException, ParserConfigurationException, SAXException {
-        EntityFactory entityFactory = create(command);
-        Entity entity = entityFactory.creatingEntity(attrEntity);
+        FactoryEntity factoryEntity = create(command);
+        Entity entity = factoryEntity.creatingEntity(attrEntity);
 
         if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
             this.serviceContact.addContact(entity);
@@ -65,9 +65,9 @@ public class ControllerImpl implements Controller{
             this.serviceGroup.addGroup(entity);
     }
 
-     EntityFactory create (String command) throws IOException{
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.con))) return new ContactFactory();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new GroupFactory();
+     FactoryEntity create (String command) throws IOException{
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.con))) return new FactoryEntityContacts();
+        if (command.equalsIgnoreCase(String.valueOf(TeamList.gro))) return new FactoryEntityGroups();
         throw new IOException();
     }
 

@@ -1,17 +1,16 @@
-package dao.parsers.handler;
+package parsers.handler;
 
-import models.Group;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import sorted.GroupNameComparator;
+
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
  *
  */
-public class HandlerGroup extends DefaultHandler {
+public class GroupHandler extends DefaultHandler {
 
     private int id;
     private String data;

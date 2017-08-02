@@ -1,11 +1,9 @@
-package dao.parsers.jackson;
+package parsers.jackson;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  *Обертка для групп

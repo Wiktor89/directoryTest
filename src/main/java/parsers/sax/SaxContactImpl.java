@@ -1,7 +1,7 @@
-package dao.parsers.sax;
+package parsers.sax;
 
-import dao.DomSaxContactsParser;
-import dao.parsers.handler.HandlerContact;
+import dao.DomSaxContacts;
+import parsers.handler.ContactHandler;
 import models.Contact;
 import models.Entity;
 import org.xml.sax.SAXException;
@@ -18,7 +18,7 @@ import java.util.Set;
 /**
  *Sax парсера для контакта
  */
-public class ContactParserImpl implements DomSaxContactsParser {
+public class SaxContactImpl implements DomSaxContacts {
 
     @Override
     public void addContact(Entity entity) throws IOException {
@@ -49,10 +49,10 @@ public class ContactParserImpl implements DomSaxContactsParser {
     public Set<Contact> getContacts() throws ParserConfigurationException,
             SAXException, IOException, XPathExpressionException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        HandlerContact handlerContact = new HandlerContact();
+        ContactHandler contactHandler = new ContactHandler();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts.xml"), handlerContact);
-        Set<Contact> contacts = handlerContact.getContacts();
+        parser.parse(new File("contacts.xml"), contactHandler);
+        Set<Contact> contacts = contactHandler.getContacts();
         return contacts;
     }
 
@@ -60,10 +60,10 @@ public class ContactParserImpl implements DomSaxContactsParser {
     public boolean existContact(String name) throws ParserConfigurationException, SAXException, IOException {
         boolean result = false;
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        HandlerContact handlerContact = new HandlerContact();
+        ContactHandler contactHandler = new ContactHandler();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts.xml"), handlerContact);
-        Set<Contact> contacts = handlerContact.getContacts();
+        parser.parse(new File("contacts.xml"), contactHandler);
+        Set<Contact> contacts = contactHandler.getContacts();
         for (Contact contact : contacts) {
             if (contact.getFio().equalsIgnoreCase(name)) {
                 result = true;
@@ -91,10 +91,10 @@ public class ContactParserImpl implements DomSaxContactsParser {
     public String searchName(String fio) throws ParserConfigurationException,
             SAXException, IOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        HandlerContact handlerContact = new HandlerContact();
+        ContactHandler contactHandler = new ContactHandler();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts.xml"), handlerContact);
-        Set<Contact> contacts = handlerContact.getContacts();
+        parser.parse(new File("contacts.xml"), contactHandler);
+        Set<Contact> contacts = contactHandler.getContacts();
         for (Contact contact : contacts) {
             if (contact.getFio().equalsIgnoreCase(fio)) {
                 return contact.getFio();

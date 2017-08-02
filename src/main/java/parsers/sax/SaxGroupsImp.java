@@ -1,8 +1,8 @@
-package dao.parsers.sax;
+package parsers.sax;
 
-import dao.DomSaxGroupParser;
-import dao.parsers.handler.HandlerContact;
-import dao.parsers.handler.HandlerGroup;
+import dao.DomSaxGroups;
+import parsers.handler.ContactHandler;
+import parsers.handler.GroupHandler;
 import models.Contact;
 import models.Entity;
 import models.Group;
@@ -11,18 +11,15 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 
 /**
  *Sax парсера для группы
  */
-public class GroupParserImp implements DomSaxGroupParser {
+public class SaxGroupsImp implements DomSaxGroups {
 
 
     @Override
@@ -45,10 +42,10 @@ public class GroupParserImp implements DomSaxGroupParser {
             SAXException, IOException {
         boolean result = false;
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        HandlerContact handlerContact = new HandlerContact();
+        ContactHandler contactHandler = new ContactHandler();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts"), handlerContact);
-        Set<Contact> contacts = handlerContact.getContacts();
+        parser.parse(new File("contacts"), contactHandler);
+        Set<Contact> contacts = contactHandler.getContacts();
         for (Contact contact : contacts){
             Group group = contact.getGroup();
             if (group.getName().equalsIgnoreCase(name)){
@@ -62,10 +59,10 @@ public class GroupParserImp implements DomSaxGroupParser {
     public Set<String> getGroups() throws ParserConfigurationException, SAXException
             , IOException, XPathExpressionException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        HandlerGroup handlerGroup = new HandlerGroup();
+        GroupHandler groupHandler = new GroupHandler();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("groups.xml"), handlerGroup);
-        Set<String> groups = handlerGroup.getGroups();
+        parser.parse(new File("groups.xml"), groupHandler);
+        Set<String> groups = groupHandler.getGroups();
         return groups;
     }
 
@@ -74,10 +71,10 @@ public class GroupParserImp implements DomSaxGroupParser {
             ParserConfigurationException {
         Set<String> contactsS = new TreeSet<>();
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        HandlerContact handlerContact = new HandlerContact();
+        ContactHandler contactHandler = new ContactHandler();
         SAXParser parser = factory.newSAXParser();
-        parser.parse(new File("contacts"), handlerContact);
-        Set<Contact> contacts = handlerContact.getContacts();
+        parser.parse(new File("contacts"), contactHandler);
+        Set<Contact> contacts = contactHandler.getContacts();
         for (Contact contact : contacts){
             Group group = contact.getGroup();
             if (group.getName().equalsIgnoreCase(name)){

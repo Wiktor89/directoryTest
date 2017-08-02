@@ -1,9 +1,9 @@
-package factory;
+package factories;
 
-import dao.DomSaxGroupParser;
-import dao.parsers.dom.DomGroupParserImp;
-import dao.parsers.jackson.GroupJacksonParser;
-import dao.parsers.sax.GroupParserImp;
+import dao.DomSaxGroups;
+import parsers.dom.DomGroupsImp;
+import parsers.jackson.GroupsJackson;
+import parsers.sax.SaxGroupsImp;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,21 +13,21 @@ import java.util.Properties;
 /**
  *
  */
-public class GroupDaoFactory {
+public class AbstractFactoryDaoGroups {
 
-    public DomSaxGroupParser getGroupParser (){
-        DomSaxGroupParser parser = createGroupParser(command());
+    public DomSaxGroups getGroupParser (){
+        DomSaxGroups parser = createGroupParser(command());
         return parser;
     }
 
-    static DomSaxGroupParser createGroupParser (String command){
+    static DomSaxGroups createGroupParser (String command){
 
         if (command.equalsIgnoreCase("dom")){
-            return new DomGroupParserImp();
+            return new DomGroupsImp();
         }if(command.equalsIgnoreCase("sax")){
-            return new GroupParserImp();
+            return new SaxGroupsImp();
         }if (command.equalsIgnoreCase("jac")){
-            return new GroupJacksonParser();
+            return new GroupsJackson();
         }
         return null;
     }

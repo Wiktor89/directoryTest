@@ -1,4 +1,4 @@
-package factory;
+package factories;
 
 import models.Contact;
 import models.Entity;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  *
  */
-public class ContactFactory implements EntityFactory {
+public class FactoryEntityContacts implements FactoryEntity {
 
     @Override
     public Entity creatingEntity(List<String> attrEntity) {

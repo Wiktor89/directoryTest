@@ -1,6 +1,6 @@
-package dao.parsers.dom;
+package parsers.dom;
 
-import dao.DomSaxContactsParser;
+import dao.DomSaxContacts;
 import models.Contact;
 import models.Entity;
 import models.Group;
@@ -29,11 +29,11 @@ import java.util.TreeSet;
 /**
  *Dom парсер для контакта
  */
-public class DomContactParserImp extends Observable implements DomSaxContactsParser {
+public class DomContactImp extends Observable implements DomSaxContacts {
 
     private ViewChangContact model = null;
 
-    public DomContactParserImp() {
+    public DomContactImp() {
         model = ViewChangContact.getViewChangContact();
     }
 

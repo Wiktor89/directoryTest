@@ -1,4 +1,4 @@
-package factory;
+package factories;
 
 import models.Entity;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Фабрика для создания контактов и групп
  */
-public interface EntityFactory {
+public interface FactoryEntity {
 
      /**
       * Создание сущности

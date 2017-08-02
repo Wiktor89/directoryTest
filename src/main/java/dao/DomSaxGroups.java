@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  *
  */
-public interface DomSaxGroupParser  {
+public interface DomSaxGroups {
 
     /**
      *Добавление группы

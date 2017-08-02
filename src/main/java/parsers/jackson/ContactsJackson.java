@@ -1,9 +1,9 @@
-package dao.parsers.jackson;
+package parsers.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
-import dao.DomSaxContactsParser;
+import dao.DomSaxContacts;
 import models.Entity;
 import models.Group;
 import org.apache.commons.lang3.StringUtils;
@@ -25,11 +25,11 @@ import java.util.TreeSet;
 /**
  *Jac парсер для контакта
  */
-public class ContactsJacksonParser extends Observable implements DomSaxContactsParser {
+public class ContactsJackson extends Observable implements DomSaxContacts {
 
     private ViewChangContact model = null;
 
-    public ContactsJacksonParser() {
+    public ContactsJackson() {
         model = ViewChangContact.getViewChangContact();
     }
 
@@ -139,7 +139,6 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
             ParserConfigurationException, TransformerException {
         String fio = attContact.get(0);
         String name = attContact.get(1);
-        boolean result = false;
         File file = new File("contacts.xml");
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contactList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
@@ -158,13 +157,12 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
 
         Set<models.Contact> contacts1 = new TreeSet<>();
         model.update(this,contacts1);
-        return result;
+        return true;
     }
 
     @Override
     public boolean removeGroupContact(String fio) throws IOException, SAXException,
             ParserConfigurationException, TransformerException {
-        boolean result  = false;
         File file = new File("contacts.xml");
         ObjectMapper objectMapper = new XmlMapper();
         Contacts contactList = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(
@@ -183,7 +181,7 @@ public class ContactsJacksonParser extends Observable implements DomSaxContactsP
 
         Set<models.Contact> contacts1 = new TreeSet<>();
         model.update(this,contacts1);
-        return result;
+        return true;
     }
 
     @Override

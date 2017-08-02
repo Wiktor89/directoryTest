@@ -1,12 +1,10 @@
 package views;
 
-import dao.DomSaxContactsParser;
-import dao.DomSaxGroupParser;
+import dao.DomSaxContacts;
 import models.Contact;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.Observable;
@@ -32,10 +30,10 @@ public class ViewChangContact implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof DomSaxContactsParser) {
+        if (o instanceof DomSaxContacts) {
             Set<Contact> contacts = null;
             try {
-                contacts = ((DomSaxContactsParser) o).getContacts();
+                contacts = ((DomSaxContacts) o).getContacts();
             } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
                 e.printStackTrace();
             }

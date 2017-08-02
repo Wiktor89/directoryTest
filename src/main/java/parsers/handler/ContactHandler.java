@@ -1,18 +1,18 @@
-package dao.parsers.handler;
+package parsers.handler;
 
 import models.Contact;
 import models.Group;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import sorted.ContactFioComparator;
+
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
  *
  */
-public class HandlerContact extends DefaultHandler {
+public class ContactHandler extends DefaultHandler {
 
 
     private String data;
