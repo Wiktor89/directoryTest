@@ -2,11 +2,8 @@ package factories;
 
 import dao.ContactDao;
 import dao.GroupDao;
-import dao.dom.ContactsImp;
-import dao.jackson.ContactsJackson;
-import dao.jackson.GroupsJackson;
-import dao.sax.ContactsImpl;
-import dao.sax.GroupsImp;
+import dao.jackson.ContactsDaoImpl;
+import dao.jackson.GroupsDaoImpl;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,11 +22,11 @@ public class DaoFactory {
     public static ContactDao getContactDao(){
         String[] command1 = command();
         if (command1[1].equalsIgnoreCase("dom")){
-            return new ContactsImp();
+            return new dao.dom.ContactsDaoImpl();
         }if(command1[1].equalsIgnoreCase("sax")){
-            return new ContactsImpl();
+            return new dao.sax.ContactsDaoImpl();
         }if (command1[1].equalsIgnoreCase("jac")){
-            return new ContactsJackson();
+            return new ContactsDaoImpl();
         }
         return null;
     }
@@ -37,11 +34,11 @@ public class DaoFactory {
     public static GroupDao getGroupDao(){
         String[] command1 = command();
         if (command1[0].equalsIgnoreCase("dom")){
-            return new dao.dom.GroupsImp();
+            return new dao.dom.GroupsDaoImpl();
         }if(command1[0].equalsIgnoreCase("sax")){
-            return new GroupsImp();
+            return new dao.sax.GroupsDaoImpl();
         }if (command1[0].equalsIgnoreCase("jac")){
-            return new GroupsJackson();
+            return new GroupsDaoImpl();
         }
         return null;
     }

@@ -25,11 +25,11 @@ import java.util.*;
 /**
  *Dom парсер для групп
  */
-public class GroupsImp extends Observable implements GroupDao {
+public class GroupsDaoImpl extends Observable implements GroupDao {
 
     private ViewChangGroup model = null;
 
-    public GroupsImp() {
+    public GroupsDaoImpl() {
         model = ViewChangGroup.getViewChangGroup();
     }
 

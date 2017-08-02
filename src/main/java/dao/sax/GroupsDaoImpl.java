@@ -19,7 +19,7 @@ import java.util.*;
 /**
  *Sax парсера для группы
  */
-public class GroupsImp implements GroupDao {
+public class GroupsDaoImpl implements GroupDao {
 
 
     @Override

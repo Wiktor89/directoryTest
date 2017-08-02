@@ -25,11 +25,11 @@ import java.util.TreeSet;
 /**
  *Jac парсер для контакта
  */
-public class ContactsJackson extends Observable implements ContactDao {
+public class ContactsDaoImpl extends Observable implements ContactDao {
 
     private ViewChangContact model = null;
 
-    public ContactsJackson() {
+    public ContactsDaoImpl() {
         model = ViewChangContact.getViewChangContact();
     }
 

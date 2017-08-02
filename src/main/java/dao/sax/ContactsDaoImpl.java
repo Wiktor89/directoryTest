@@ -18,7 +18,7 @@ import java.util.Set;
 /**
  *Sax парсера для контакта
  */
-public class ContactsImpl implements ContactDao {
+public class ContactsDaoImpl implements ContactDao {
 
     @Override
     public void addContact(Entity entity) throws IOException {

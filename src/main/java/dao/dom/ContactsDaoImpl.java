@@ -29,11 +29,11 @@ import java.util.TreeSet;
 /**
  *Dom парсер для контакта
  */
-public class ContactsImp extends Observable implements ContactDao {
+public class ContactsDaoImpl extends Observable implements ContactDao {
 
     private ViewChangContact model = null;
 
-    public ContactsImp() {
+    public ContactsDaoImpl() {
         model = ViewChangContact.getViewChangContact();
     }
 

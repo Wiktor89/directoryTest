@@ -23,11 +23,11 @@ import java.util.*;
 /**
  *Jac парсер для группы
  */
-public class GroupsJackson extends Observable implements GroupDao {
+public class GroupsDaoImpl extends Observable implements GroupDao {
 
     private ViewChangGroup model = null;
 
-    public GroupsJackson() {
+    public GroupsDaoImpl() {
         model = ViewChangGroup.getViewChangGroup();
     }
 
