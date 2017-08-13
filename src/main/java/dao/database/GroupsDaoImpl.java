@@ -14,8 +14,12 @@ import java.util.*;
  */
 public class GroupsDaoImpl extends Observable implements GroupDao {
 	
-	private WrapperGroup wrapperGroup = new WrapperGroup();
+	private MapperGroup mapperGroup = new MapperGroup();
 	private List<Observer> observerList = new ArrayList<>();
+	private Contact contact;
+	private Set<Group> groups;
+	private Set<Contact> contacts;
+	private Set<User> users;
 	
 	public GroupsDaoImpl() {
 		ViewChangGroup viewChangGroup =ViewChangGroup.getViewChangGroup();
@@ -98,111 +102,128 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 	
 	@Override
 	public boolean existGroup(String name) throws SQLException {
-		return this.wrapperGroup.existGroup(name);
+		boolean result = false;
+		Connection connection = ConnectingDataBase.getConnection();
+		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group(?)")) {
+			statement.setString(1,name);
+			result = this.mapperGroup.existGroup(statement.executeQuery());
+		}finally {
+			try {
+				if (!connection.isClosed()){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 	
 	@Override
 	public Set<Group> getGroups() {
-		return this.wrapperGroup.getGroups();
+		Connection connection = ConnectingDataBase.getConnection();
+		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_groups()")) {
+			groups = this.mapperGroup.getGroups(statement.executeQuery());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(!connection.isClosed()){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return groups;
 	}
 	
 	@Override
 	public Set<Contact> getContactsGroup(String name) throws SQLException {
-		return this.wrapperGroup.getContactsGroup(name);
+		Connection connection = ConnectingDataBase.getConnection();
+		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contacts_group(?)")) {
+			statement.setString(1,name);
+			contacts = this.mapperGroup.getContactsGroup(statement.executeQuery());
+		}finally {
+			try {
+				if (!connection.isClosed()){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return contacts;
 	}
 	
 	@Override
 	public Integer numberUsers() throws SQLException {
-		return this.wrapperGroup.analyticInf("SELECT number_users()");
+		return this.mapperGroup.analyticInf("SELECT number_users()");
 	}
 	
 	@Override
 	public Integer numberContacts(String name) throws SQLException {
-	 return this.wrapperGroup.analyticInf("SELECT number_contacts('"+name+"')");
+	 return this.mapperGroup.analyticInf("SELECT number_contacts('"+name+"')");
 		
 	}
 	
 	@Override
 	public Integer quantityGroupsUser(String name) throws SQLException {
-		return this.wrapperGroup.analyticInf("SELECT quantity_groups_user('"+name+"')");
+		return this.mapperGroup.analyticInf("SELECT quantity_groups_user('"+name+"')");
 	}
 	
 	@Override
 	public Integer averageNumberContactsGroups() throws SQLException {
-		return this.wrapperGroup.analyticInf("SELECT average_number_contacts_groups()");
+		return this.mapperGroup.analyticInf("SELECT average_number_contacts_groups()");
 	}
 	
 	@Override
 	public Integer averageNumberContactsUser() throws SQLException {
-		return this.wrapperGroup.analyticInf("SELECT average_number_contacts_user()");
+		return this.mapperGroup.analyticInf("SELECT average_number_contacts_user()");
 	}
 	
 	@Override
 	public Set<User> userWithContactsMin_10() throws SQLException {
-		return this.wrapperGroup.userWithContactsMin_10();
+		users = new TreeSet<>();
+		Connection connection = ConnectingDataBase.getConnection();
+		try (PreparedStatement statement = connection.prepareStatement("SELECT user_with_contacts_min_10()")) {
+			users = this.mapperGroup.userWithContactsMin_10(statement.executeQuery());
+		}finally {
+			try {
+				if (!connection.isClosed()){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return users;
 	}
 	
-	
-	
-	 class WrapperGroup {
+	 class MapperGroup {
 		
-		private Contact contact;
 		
-		public Set<Group> getGroups (){
-			Set<Group> groups = new TreeSet<>();
-			Connection connection = ConnectingDataBase.getConnection();
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_groups()")) {
-				ResultSet resultSet = statement.executeQuery();
+		public Set<Group> getGroups (ResultSet resultSet) throws SQLException {
+			groups = new TreeSet<>();
 				while (resultSet.next()){
 					Group group = new Group();
 					group.setId(resultSet.getInt("id"));
 					group.setName(resultSet.getString("title").trim());
 					groups.add(group);
 				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}finally {
-				try {
-					if(!connection.isClosed()){
-						connection.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			
 			return groups;
 		}
 		
-		public boolean existGroup (String name) throws SQLException {
+		public boolean existGroup (ResultSet resultSet) throws SQLException {
 			boolean result = false;
-			Connection connection = ConnectingDataBase.getConnection();
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_groups()")) {
-				ResultSet resultSet = statement.executeQuery();
 				while (resultSet.next()){
-					String title = resultSet.getString("title");
-					if (title.trim().equalsIgnoreCase(name)){
 						result = true;
-						break;
-					}
 				}
-			}finally {
-				try {
-					if (!connection.isClosed()){
-						connection.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
 			return result;
 		}
 		
-		public Set<Contact> getContactsGroup(String name) throws SQLException {
-			Set<Contact> contacts = new TreeSet<>();
-			Connection connection = ConnectingDataBase.getConnection();
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contacts_group(?)")) {
-				statement.setString(1,name);
-				ResultSet resultSet = statement.executeQuery();
+		public Set<Contact> getContactsGroup(ResultSet resultSet) throws SQLException {
 				while (resultSet.next()){
 					contact = new Contact();
 					contact.setId(resultSet.getInt("id"));
@@ -211,15 +232,6 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 					contact.setPhone(resultSet.getString("phone").trim());
 					contacts.add(contact);
 				}
-			}finally {
-				try {
-					if (!connection.isClosed()){
-						connection.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
 			return contacts;
 		}
 		
@@ -243,28 +255,14 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 			return result;
 		}
 		
-		 public Set<User> userWithContactsMin_10() throws SQLException {
-			 Set<User> users = new TreeSet<>();
-			 Connection connection = ConnectingDataBase.getConnection();
-			 try (PreparedStatement statement = connection.prepareStatement("SELECT user_with_contacts_min_10()")) {
-				 ResultSet resultSet = statement.executeQuery();
+		 public Set<User> userWithContactsMin_10(ResultSet resultSet) throws SQLException {
 				 while (resultSet.next()){
 				 	 User user = new User();
 					 user.setLogin(resultSet.getString(1).trim());
 					 users.add(user);
 				 }
-			 }finally {
-				 try {
-					 if (!connection.isClosed()){
-						 connection.close();
-					 }
-				 } catch (SQLException e) {
-					 e.printStackTrace();
-				 }
-			 }
 			 return users;
 		 }
-		
 	}
 }
 
