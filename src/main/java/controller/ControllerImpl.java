@@ -1,25 +1,18 @@
 package controller;
 
-import factories.*;
+import factories.DaoFactory;
+import factories.EntityFactory;
 import models.Contact;
 import models.Entity;
-import org.xml.sax.SAXException;
+import models.Group;
+import models.User;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
 import utilits.TeamList;
-
-import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Set;
 
 /**
  *Реализация контроллера
@@ -46,14 +39,12 @@ public class ControllerImpl implements Controller{
     }
 
     public ControllerImpl() {
-        validationStorage();
         this.serviceContact = new ContactServiceImpl(DaoFactory.getContactDao());
         this.serviceGroup = new GroupServiceImpl(DaoFactory.getGroupDao());
     }
 
     @Override
-    public void addEntity(List<String> attrEntity,String command) throws IOException,
-            TransformerException, ParserConfigurationException, SAXException {
+    public void addEntity(List<String> attrEntity,String command) throws IOException, SQLException {
         Entity entity = EntityFactory.create(command,attrEntity);
         if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
             this.serviceContact.addContact(entity);
@@ -62,106 +53,98 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void updateContact(List<String> attContact) throws ParserConfigurationException,
-            SAXException, IOException, TransformerException {
+    public void updateContact(List<String> attContact) throws SQLException {
           this.serviceContact.updateContact(attContact);
     }
 
     @Override
-    public void removeContact(String fio) throws SAXException, ParserConfigurationException,
-            IOException, TransformerException {
+    public void removeContact(String fio) throws SQLException {
         this.serviceContact.removeContact(fio);
     }
 
     @Override
-    public void appGroupContact(List<String> attContact) throws SAXException, ParserConfigurationException,
-            IOException, TransformerException {
+    public void appGroupContact(List<String> attContact) throws SQLException {
             this.serviceContact.appGroupContact(attContact);
     }
 
     @Override
-    public void removeGroupContact(String fio) throws IOException, SAXException,
-            ParserConfigurationException, TransformerException {
+    public void removeGroupContact(List<String> fio) throws SQLException {
         this.serviceContact.removeGroupContact(fio);
     }
 
     @Override
-    public Set<Contact> getContacts() throws ParserConfigurationException, SAXException,
-            XPathExpressionException, IOException {
+    public Set<Contact> getContacts() throws SQLException {
          return this.serviceContact.getContacts();
     }
 
     @Override
-    public Contact getContact (String fio) throws ParserConfigurationException, SAXException, IOException {
+    public Contact getContact (String fio) throws SQLException {
         return this.serviceContact.getContact(fio);
     }
 
     @Override
-    public boolean existContact(String name) throws ParserConfigurationException,
-            IOException, SAXException, TransformerException {
+    public boolean existContact(String name) throws SQLException {
         return this.serviceContact.existContact(name);
     }
 
     @Override
-    public boolean existGroup(String name) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public boolean existGroup(String name) throws SQLException {
         return this.serviceGroup.existGroup(name);
     }
-
+    
     @Override
-    public String searchName(String fio) throws ParserConfigurationException,
-            SAXException, IOException {
-        return this.serviceContact.searchName(fio);
+    public Integer numberUsers() throws SQLException {
+        return this.serviceGroup.numberUsers();
     }
-
+    
     @Override
-    public Set<String> getContactsGroup(String name) throws ParserConfigurationException, SAXException,
-            XPathExpressionException, IOException {
+    public Integer numberContacts(String name) throws SQLException {
+        return this.serviceGroup.numberContacts(name);
+    }
+    
+    @Override
+    public Integer quantityGroupsUser(String name) throws SQLException {
+        return this.serviceGroup.quantityGroupsUser(name);
+    }
+    
+    @Override
+    public Integer averageNumberContactsGroups() throws SQLException {
+        return this.serviceGroup.averageNumberContactsGroups();
+    }
+    
+    @Override
+    public Integer averageNumberContactsUser() throws SQLException {
+        return this.serviceGroup.averageNumberContactsUser();
+    }
+    
+    @Override
+    public Set<User> userWithContactsMin_10() throws SQLException {
+        return this.serviceGroup.userWithContactsMin_10();
+    }
+    
+    @Override
+    public User authorizationPage(List<String> attr) throws SQLException {
+        return this.serviceContact.authorizationPage(attr);
+    }
+    
+    @Override
+    public Set<Contact> getContactsGroup(String name) throws SQLException {
        return this.serviceGroup.getContactsGroup(name);
     }
 
     @Override
-    public Set<String> getGroups() throws XPathExpressionException, ParserConfigurationException,
-            SAXException, TransformerConfigurationException, IOException {
+    public Set<Group> getGroups() {
         return this.serviceGroup.getGroups();
     }
 
     @Override
-    public void removeGroup(String name) throws ParserConfigurationException, SAXException,
-            XPathExpressionException, TransformerException, IOException {
-        this.serviceGroup.removeGroup(name);
+    public boolean removeGroup(String name) throws SQLException {
+        return this.serviceGroup.removeGroup(name);
     }
 
     @Override
-    public void updateGroup(List<String> attGroup) throws ParserConfigurationException,
-            IOException,
-            SAXException, TransformerException {
-            this.serviceGroup.updateGroup(attGroup);
-    }
-
-    private void validationStorage() {
-        File contacts = new File("contacts.xml");
-        File groups = new File("groups.xml");
-        if (contacts.exists() | groups.exists()){
-            Map<String,String> stringMap = new HashMap<>();
-            stringMap.put("contact.xsd","contacts.xml");
-            stringMap.put("group.xsd","groups.xml");
-
-            for (Map.Entry<String,String> entry : stringMap.entrySet()){
-                String schemaXsd = entry.getKey();
-                String validatorXml = entry.getValue();
-                try {
-                    SchemaFactory factory =
-                            SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                    Schema schema = factory.newSchema(new File(schemaXsd));
-                    Validator validator = schema.newValidator();
-                    validator.validate(new StreamSource(new File(validatorXml)));
-                } catch (IOException e){
-                    System.out.println("Exception: "+e.getMessage());
-                }catch(SAXException e1){
-                    System.out.println("SAX Exception: "+e1.getMessage());
-                }
-            }
-        }
+    public boolean updateGroup(List<String> attGroup) throws SQLException {
+            return this.serviceGroup.updateGroup(attGroup);
     }
 
 }

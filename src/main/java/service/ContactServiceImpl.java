@@ -3,12 +3,9 @@ package service;
 import dao.ContactDao;
 import models.Contact;
 import models.Entity;
-import org.xml.sax.SAXException;
+import models.User;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +15,7 @@ import java.util.Set;
 public class ContactServiceImpl implements ContactService{
 
     /**
-     *consol
+     * console
      * refBook
      * contacts
      * groups
@@ -39,57 +36,54 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void addContact(Entity entity) throws IOException, ParserConfigurationException,
-            SAXException, TransformerException {
+    public void addContact(Entity entity) throws SQLException {
         this.dao.addContact(entity);
     }
 
     @Override
-    public void updateContact(List<String> attContact) throws IOException, SAXException,
-            ParserConfigurationException, TransformerException {
+    public void updateContact(List<String> attContact) throws SQLException {
         this.dao.updateContact(attContact);
     }
 
     @Override
-    public void removeContact(String fio) throws SAXException, TransformerException,
-            ParserConfigurationException, IOException {
+    public void removeContact(String fio) throws SQLException {
         this.dao.removeContact(fio);
 
     }
 
     @Override
-    public void appGroupContact(List<String> attContact) throws SAXException, TransformerException,
-            ParserConfigurationException, IOException {
+    public void appGroupContact(List<String> attContact) throws SQLException {
         this.dao.appGroupContact(attContact);
     }
 
     @Override
-    public void removeGroupContact(String fio) throws ParserConfigurationException,
-            SAXException, IOException, TransformerException {
-        this.dao.removeGroupContact(fio);
+    public void removeGroupContact(List<String> attr) throws SQLException {
+        this.dao.removeGroupContact(attr);
     }
 
     @Override
-    public Set<Contact> getContacts() throws ParserConfigurationException, SAXException,
-            XPathExpressionException, IOException {
+    public Set<Contact> getContacts() throws SQLException {
         return this.dao.getContacts();
     }
 
     @Override
-    public boolean existContact(String name) throws ParserConfigurationException,
-            TransformerException, SAXException, IOException {
+    public boolean existContact(String name) throws SQLException {
         return this.dao.existContact(name);
     }
 
     @Override
-    public Contact getContact(String fio) throws IOException, SAXException, ParserConfigurationException {
+    public Contact getContact(String fio) throws SQLException {
         return this.dao.getContact(fio);
     }
 
     @Override
-    public String searchName(String fio) throws IOException, SAXException,
-            ParserConfigurationException {
+    public Contact searchName(String fio) throws SQLException {
         return this.dao.searchName(fio);
     }
-
+    
+    @Override
+    public User authorizationPage(List<String> attr) throws SQLException {
+        return this.dao.authorizationPage(attr);
+    }
+    
 }

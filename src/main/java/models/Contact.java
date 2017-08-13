@@ -1,6 +1,8 @@
 package models;
 
 import java.io.Serializable;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *Модель контакта
@@ -16,7 +18,8 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
     private String fio;
     private String phone;
     private String email;
-    private Group group;
+    private User user;
+    private Set<Group> group = new TreeSet<>();
 
     public Contact() {
     }
@@ -26,19 +29,32 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
     }
 
     public Contact(String fio, String phone, String email) {
-        super();
         this.fio = fio;
         this.phone = phone;
         this.email = email;
-        this.group = new Group("нет группы");
+        this.group.add(new Group("нет группы"));
     }
-
-    public Contact(String fio,String phone) {
+    
+    public Contact(String fio, String phone) {
         this(fio,phone,"нет информации");
     }
-
-
-
+    
+    public User getUser() {
+        return user;
+    }
+    
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
+    public Set<Group> getGroup() {
+        return group;
+    }
+    
+    public void setGroup(Set<Group> group) {
+        this.group = group;
+    }
+    
     public String getFio() {
         return fio;
     }
@@ -62,14 +78,7 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
+    
 
     /**
      * @return Ф.И.О контакта
@@ -80,11 +89,10 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
 
     @Override
     public String toString() {
-        return "Contact{" +
-                "Ф И О = " + fio   +
+        return "Contact{ id "  +getId()+
+                " Ф И О = " + fio+
                 ", телефон = " + phone +
-                ", email = " + email +
-                ", группа = " + group.getName()+
+                ", email = " + email + "; группы " + group+
                 "} ";
     }
 
@@ -105,13 +113,10 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
     public int hashCode() {
         return super.hashCode();
     }
-
-    public void setId(int id) {
-
-    }
+    
 
     @Override
     public int compareTo(Contact o) {
-        return fio.compareToIgnoreCase(o.getFio());
+        return this.getId()- o.getId();
     }
 }

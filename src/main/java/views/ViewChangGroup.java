@@ -1,6 +1,7 @@
 package views;
 
 import dao.GroupDao;
+import models.Group;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,15 +33,10 @@ public class ViewChangGroup implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof GroupDao){
-            Set<String> groups  = null;
-            try {
-                groups = ((GroupDao) o).getGroups();
-            } catch (ParserConfigurationException | IOException | TransformerConfigurationException | XPathExpressionException | SAXException e) {
-                e.printStackTrace();
-            }
+            Set<Group> groups  = ((GroupDao) o).getGroups();
             if (!groups.isEmpty()){
                 System.out.println("******************************");
-                for (String group : groups){
+                for (Group group : groups){
                     System.out.println(group);
                 }
                 System.out.println("******************************");

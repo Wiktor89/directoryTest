@@ -1,14 +1,12 @@
 package service;
 
 import dao.GroupDao;
+import models.Contact;
 import models.Entity;
-import org.xml.sax.SAXException;
+import models.Group;
+import models.User;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -31,37 +29,62 @@ public class GroupServiceImpl implements GroupService {
 
 
     @Override
-    public Set<String> getContactsGroup(String name) throws ParserConfigurationException,
-            SAXException, XPathExpressionException, IOException {
+    public Set<Contact> getContactsGroup(String name) throws SQLException {
         return this.dao.getContactsGroup(name);
     }
 
     @Override
-    public Set<String> getGroups() throws TransformerConfigurationException, ParserConfigurationException,
-            SAXException, XPathExpressionException, IOException {
+    public Set<Group> getGroups() {
         return this.dao.getGroups();
     }
 
     @Override
-    public void addGroup(Entity entity) throws TransformerException,
-            ParserConfigurationException, IOException, SAXException {
+    public void addGroup(Entity entity) throws SQLException {
         this.dao.addGroup(entity);
     }
 
     @Override
-    public void removeGroup(String name) throws ParserConfigurationException,
-            TransformerException, SAXException, XPathExpressionException, IOException {
-        this.dao.removeGroup(name);
+    public boolean removeGroup(String name) throws SQLException {
+        return this.dao.removeGroup(name);
     }
 
     @Override
-    public void updateGroup(List<String> attGroup) throws ParserConfigurationException, TransformerException
-            , SAXException, IOException {
-        this.dao.updateGroup(attGroup);
+    public boolean updateGroup(List<String> attGroup) throws SQLException {
+        return this.dao.updateGroup(attGroup);
     }
 
     @Override
-    public boolean existGroup(String name) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
+    public boolean existGroup(String name) throws SQLException {
         return this.dao.existGroup(name);
+    }
+    
+    @Override
+    public Integer numberUsers() throws SQLException {
+        return this.dao.numberUsers();
+    }
+    
+    @Override
+    public Integer numberContacts(String name) throws SQLException {
+        return this.dao.numberContacts(name);
+    }
+    
+    @Override
+    public Integer quantityGroupsUser(String name) throws SQLException {
+        return this.dao.quantityGroupsUser(name);
+    }
+    
+    @Override
+    public Integer averageNumberContactsGroups() throws SQLException {
+        return this.dao.averageNumberContactsGroups();
+    }
+    
+    @Override
+    public Integer averageNumberContactsUser() throws SQLException {
+        return this.dao.averageNumberContactsUser();
+    }
+    
+    @Override
+    public Set<User> userWithContactsMin_10() throws SQLException {
+        return this.dao.userWithContactsMin_10();
     }
 }

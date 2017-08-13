@@ -1,13 +1,11 @@
 package service;
 
+import models.Contact;
 import models.Entity;
-import org.xml.sax.SAXException;
+import models.Group;
+import models.User;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
@@ -19,35 +17,63 @@ public interface GroupService {
     /**
      *Список контактов опр. группы
      */
-    Set<String> getContactsGroup(String name) throws ParserConfigurationException,
-            SAXException, XPathExpressionException, IOException;
+    Set<Contact> getContactsGroup(String name) throws SQLException;
 
     /**
      *Список групп
      */
-    Set<String> getGroups() throws TransformerConfigurationException, ParserConfigurationException,
-            SAXException, XPathExpressionException, IOException;
+    Set<Group> getGroups();
 
     /**
      *Добавление группы
      */
-    void addGroup(Entity entity) throws TransformerException,
-            ParserConfigurationException, IOException, SAXException;
+    void addGroup(Entity entity) throws SQLException;
 
     /**
      *Удаление группы
      */
-    void removeGroup(String name) throws ParserConfigurationException,
-            TransformerException, SAXException, XPathExpressionException, IOException;
+    boolean removeGroup(String name) throws SQLException;
 
     /**
      *Обновление  группы
      */
-    void updateGroup(List<String> attGoup) throws ParserConfigurationException, TransformerException
-            , SAXException, IOException;
+    boolean updateGroup(List<String> attGoup) throws SQLException;
 
     /**
      *Смотрим есть группа в списке
      */
-    boolean existGroup(String name) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException;
+    boolean existGroup(String name) throws SQLException;
+    
+    /**
+     * Количество пользователей
+     */
+    Integer numberUsers() throws SQLException;
+    
+    /**
+     * Количество контактов каждого пользователя
+     * @param name
+     */
+    Integer numberContacts(String name) throws SQLException;
+    
+    /**
+     * Количество групп каждого пользователя
+     * @param name
+     */
+    Integer quantityGroupsUser(String name) throws SQLException;
+    
+    /**
+     * Среднее количество контактов в группах
+     */
+    Integer averageNumberContactsGroups() throws SQLException;
+    
+    /**
+     * Среднее количество контактов у пользователя
+     */
+    Integer averageNumberContactsUser() throws SQLException;
+    
+    /**
+     * Пользователь с количеством контактов < 10
+     */
+    Set<User> userWithContactsMin_10() throws SQLException;
+
 }

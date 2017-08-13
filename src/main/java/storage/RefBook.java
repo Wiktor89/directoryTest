@@ -2,9 +2,6 @@ package storage;
 
 import models.Contact;
 import models.Group;
-import sorted.ContactFioComparator;
-import sorted.GroupNameComparator;
-
 import java.io.Serializable;
 import java.util.*;
 

@@ -1,24 +1,23 @@
 package models;
 
-import org.xml.sax.SAXException;
-import views.ViewInf;
+import views.ViewImpl;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.IOException;
-
+import java.sql.SQLException;
 
 /**
  *
  */
 public class Main {
-    public static void main(String[] args) throws TransformerException, ParserConfigurationException, IOException, SAXException, XPathExpressionException {
+    public static void main(String[] args) throws SQLException {
         new Main().goo();
     }
 
-    public void goo() throws TransformerException, ParserConfigurationException, IOException, SAXException, XPathExpressionException {
-        ViewInf viewInf = new ViewInf();
-        viewInf.startPage();
+    public void goo() throws SQLException {
+//        ViewImpl view = new ViewImpl();
+//        view.run();
+        Thread thread = new Thread(new ViewImpl());
+        thread.start();
+    
+    
     }
 }

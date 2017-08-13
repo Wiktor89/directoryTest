@@ -1,380 +1,604 @@
 package views;
 
+
 import controller.ControllerImpl;
 import models.Contact;
-import org.xml.sax.SAXException;
+import models.Group;
+import models.User;
 import utilits.ConsoleReader;
 import utilits.TeamList;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  *Отображение
  */
-public class ViewImpl implements View {
 
-    private ControllerImpl controller = null;
-    private ConsoleReader consol = null;
-    private ViewInf view = null;
-
-
-    public ViewImpl() {
-        this.controller = new ControllerImpl();
-    }
-
-    public ViewInf getView() {
-        return view;
-    }
-
-    public void setView(ViewInf view) {
-        this.view = view;
-    }
-
-    public ControllerImpl getController() {
-        return this.controller;
-    }
-    public void setController(ControllerImpl controller) {
-        this.controller = controller;
-    }
-
-    public ConsoleReader getConsol() {
-        return consol;
-    }
-    public void setConsol(ConsoleReader consol) {
-        this.consol = consol;
-    }
-
-    @Override
-    public void actionContact() throws IOException {
-        String command = this.consol.readString();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.add)))
-            addContact("con");
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.rem)))
-            removeContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.upd)))
-            updateContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.list)))
-            getContacts();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
-            appGroupContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))
-            removeGroupContact();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))
-            getContactInfo();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.ser)))
-            searchName();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
-            view.startPage();
-        view.pageActionContact();
-    }
-
-    @Override
-    public void addContact(String command) throws IOException   {
-        List<String> attContact = new ArrayList<>();
-        String fio = getNameContact();
-        if (fio.trim().length() > 0){
-            attContact.add(0,fio);
-            System.out.println("Введите телефон");
-            attContact.add(1,this.consol.readString());
-            System.out.println("Введите email");
-            attContact.add(2,this.consol.readString());
-            attContact.add(3,"нет группы");
-            try {
-                this.controller.addEntity(attContact,command);
-            } catch (TransformerException | ParserConfigurationException | SAXException e) {
-                e.printStackTrace();
-            }
-            view.getSuc();
-        }else {
-            view.getNoContact();
-        }
-    }
-
-    public void removeContact()  {
-        getContacts();
-        String fio = getNameContact();
-        if (fio.trim().length() > 0){
-                try {
-                    controller.removeContact(fio);
-                } catch (SAXException | TransformerException | IOException | ParserConfigurationException e) {
-                    System.out.println("не поддерживается");
-                }
-                view.getSuc();
-        }else{
-            view.getNoContact();
-        }
-    }
-
-    @Override
-    public String getNameContact()  {
-        System.out.println("Введите Ф И О контакта (обязательное поле)");
-        return  this.consol.readString();
-    }
-
-    @Override
-    public void updateContact()  {
-        getContacts();
-        List<String> attContact = new ArrayList<>();
-        String name = getNameContact();
-        attContact.add(0,name);
-        try {
-            if (this.controller.existContact(name)){
-                System.out.println("Введите новое Ф И О");
-                attContact.add(1,this.consol.readString());
-                if (attContact.get(1).trim().length() > 0){
-                    System.out.println("Введите новый телефон");
-                    attContact.add(2,this.consol.readString());
-                    System.out.println("Введите новый email");
-                    attContact.add(3,this.consol.readString());
-                    try {
-                        this.controller.updateContact(attContact);
-                    } catch (ParserConfigurationException | IOException | SAXException e) {
-                        System.out.println("не поддерживается");
-                    }
-                    view.getSuc();
-                }else {
-                    System.out.println("Вы не ввели Ф И О");
-                }
-            }else {
-                System.out.println("нет контакта");
-            }
-        } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    void appGroupContact() {
-        getContacts();
-        List<String> attContact = new ArrayList<>();
-        String fio = getNameContact();
-        try {
-            if (this.controller.existContact(fio)){
-                getGroups();
-                String name = getNameGroup();
-                try {
-                    if (this.controller.existGroup(name)){
-                        attContact.add(0, fio);
-                        attContact.add(1, name);
-                        this.controller.appGroupContact(attContact);
-                    }else {
-                        view.getNoGroup();
-                    }
-                } catch (XPathExpressionException e) {
-                    System.out.println("не поддерживается");
-                }
-            }else {
-                view.notFound();
-            }
-        } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
-            System.out.println("не поддерживается");
-        }
-    }
-
-    @Override
-    public void getContactInfo() {
-        getContacts();
-        Contact contact = null;
-        try {
-            contact = this.controller.getContact(getNameContact());
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();
-        }
-        if (!(contact == null)){
-            System.out.println(contact);
-        }else {
-            view.getNoContact();
-        }
-    }
-
-    void removeGroupContact() {
-        getContacts();
-        String fio = getNameContact();
-        try {
-            if (this.controller.existContact(fio)){
-                Contact contact = this.controller.getContact(fio);
-                String name = getNameGroup();
-                try {
-                    if (this.controller.existGroup(name)){
-                        try {
-                            try {
-                                this.controller.removeGroupContact(fio);
-                            } catch (TransformerException e) {
-                                System.out.println("a");
-                            }
-                        } catch (IOException | ParserConfigurationException | SAXException e) {
-                            System.out.println("b");
-                        }
-                    }
-                } catch (XPathExpressionException e) {
-                    System.out.println("removeGroupContact");
-                }
-            }else {
-                view.getNoContact();
-            }
-        } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
-            System.out.println("не поддерживается");
-        }
-    }
-
-    @Override
-    public void actionGroup()  {
-        String command = this.consol.readString();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.add)))
-            addGroup("gro");
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.rem)))
-            removeGroup();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.upd)))
-            updateGroup();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.list)))
-            getGroups();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.listc)))
-            getContactsGroup();
-        if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))view.startPage();
-        view.pageActionGroup();
-    }
-
-    public void addGroup (String command) {
-        List<String> attGroup = new ArrayList<>();
-        String name = getNameGroup();
-        if (name.trim().length() > 0){
-            attGroup.add(name);
-            try {
-                try {
-                    this.controller.addEntity(attGroup,command);
-                } catch (TransformerException | ParserConfigurationException | SAXException e) {
-                    e.printStackTrace();
-                }
-                view.getSuc();
-            } catch (IOException e) {
-                System.out.println("не поддерживается");
-            }
-        }else {
-            System.out.println("не ввели имя группы");
-        }
-    }
-
-    public void removeGroup() {
-        getGroups();
-        String name = getNameGroup();
-        if(name.trim().length() > 0){
-            try {
-                if (this.controller.existGroup(name)){
-                    try {
-                        this.controller.removeGroup(name);
-                    } catch (ParserConfigurationException | TransformerException | XPathExpressionException | SAXException | IOException e) {
-                        e.printStackTrace();
-                    }
-                    view.getSuc();
-                }else {
-                    view.getNoGroup();
-                }
-            } catch (ParserConfigurationException | IOException | SAXException e) {
-                System.out.println("не поддерживается");
-            } catch (XPathExpressionException e) {
-                System.out.println("removeGroup");
-            }
-        }else {
-            view.emptyLine();
-        }
-    }
-
-    public void updateGroup() {
-        getGroups();
-        List<String> attGroup = new ArrayList<>();
-        String oldName = getNameGroup();
-        try {
-            if (this.controller.existGroup(oldName)){
-                String newName = getNameGroup();
-                if (newName.trim().length() > 0){
-                    attGroup.add(0,oldName);
-                    attGroup.add(1,newName);
-                    try {
-                        this.controller.updateGroup(attGroup);
-                    } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }else {
-                    view.emptyLine();
-                }
-            }else {
-                view.getNoGroup();
-            }
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            System.out.println("не поддерживается");
-        } catch (XPathExpressionException e) {
-            System.out.println("updateGroup");
-        }
-    }
-
-    @Override
-    public void getGroups(){
-        System.out.println("Список доступных групп");
-        try {
-            Set<String> groups = new TreeSet<>();
-            groups = this.controller.getGroups();
-            if (!groups.isEmpty()){
-                for (String group : groups){
-                    System.out.println(group);
-                }
-            }
-        } catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException | TransformerConfigurationException e) {
-            System.out.println("нет доступных групп");
-            view.pageActionContact();
-        }
-    }
-
-    public void getContactsGroup(){
-        getGroups();
-        Set<String> contacts = new TreeSet<>();
-        try {
-            contacts = this.controller.getContactsGroup(getNameGroup());
-        } catch (ParserConfigurationException | IOException | XPathExpressionException | SAXException e) {
-            System.out.println("не найденно");
-        }
-        for (String contact : contacts){
-            System.out.println(contact);
-        }
-    }
-
-    @Override
-    public String getNameGroup() {
-        System.out.println("Введите имя группы (обязательное поле)");
-        return this.consol.readString();
-    }
-
-    @Override
-    public void searchName() {
-        try {
-            String s = this.controller.searchName(getNameContact());
-            if (s.trim().length() > 0){
-                System.out.println("найден контакт "+s);
-            }else {
-                System.out.println("нет контакта");
-            }
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void getContacts(){
-        Set<Contact> contacts = null;
-        try {
-            contacts = this.controller.getContacts();
-        } catch (ParserConfigurationException | IOException | XPathExpressionException | SAXException e) {
-            e.printStackTrace();
-        }
-        for (Contact contact : contacts){
-            System.out.println(contact.contactInf());
-        }
-    }
-
+public class ViewImpl implements View, Runnable {
+	
+	
+	private ConsoleReader consol = new ConsoleReader();
+	private ControllerImpl controller = new ControllerImpl();
+	
+	@Override
+	public void actionContact() {
+		String command = this.consol.readString();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.add)))
+			addContact("con");
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.rem)))
+			removeContact();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.upd)))
+			updateContact();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.list)))
+			getContacts();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.addg)))
+			appGroupContact();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.remg)))
+			removeGroupContact();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.inf)))
+			getContactInfo();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.ser)))
+			searchName();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
+			startPage();
+		pageActionContact();
+	}//***
+	
+	@Override
+	public void actionGroup() {
+		String command = this.consol.readString();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.add)))
+			addGroup("gro");
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.rem)))
+			removeGroup();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.upd)))
+			updateGroup();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.list)))
+			getGroups();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.listc)))
+			getContactsGroup();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
+			startPage();
+		System.out.println("Не поддерживатеся");
+		pageActionGroup();
+	}//***
+	
+	@Override
+	public void addContact(String command) {
+		List<String> attContact = new ArrayList<>();
+			attContact.add(0,getNameContact());
+			System.out.println("Введите телефон");
+			attContact.add(1,this.consol.readString());
+			System.out.println("Введите email");
+			attContact.add(2,this.consol.readString());
+			attContact.add(3,"нет группы");
+		try {
+			this.controller.addEntity(attContact,command);
+		} catch (IOException e) {
+			System.out.println("Не удалось создать");
+		} catch (SQLException e) {
+			failed();
+		}
+		getSuc();
+	}//***
+	
+	@Override
+	public void updateContact() {
+		List<String> attContact = new ArrayList<>();
+		getContacts();
+		attContact.add(0,getNameContact());
+		try {
+			if (this.controller.existContact(attContact.get(0))) {
+				System.out.println("Введите новое Ф И О");
+				attContact.add(1, getNameContact());
+					System.out.println("Введите новый телефон");
+					String newPhone = this.consol.readString();
+					if (newPhone.trim().length() > 0){
+						attContact.add(2,newPhone);
+					}else {
+						attContact.add(2,"nop");
+						
+					}
+					System.out.println("Введите новый email");
+					String newEmail = this.consol.readString();
+					if (newEmail.trim().length() > 0){
+						attContact.add(3,newEmail);
+					}else {
+						attContact.add(3,"noe");
+					}
+					this.controller.updateContact(attContact);
+					getSuc();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}//***
+	
+	@Override
+	public void getContacts() {
+		Set<Contact> contacts = null;
+		try {
+			contacts = this.controller.getContacts();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		for (Contact contact : contacts){
+			System.out.println(contact.contactInf());
+			Set<Group> groups = contact.getGroup();
+			if (!groups.isEmpty()){
+				System.out.println("группы "+groups);
+			}
+		}
+	}//***
+	
+	@Override
+	public void getGroups() {
+		getGroupsUtilit();
+		pageActionGroup();
+	}//***
+	
+	@Override
+	public void getContactInfo() {
+		getContacts();
+		Contact contact = null;
+		try {
+			contact = this.controller.getContact(getNameContact());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(contact);
+	}//***
+	
+	@Override
+	public String getNameContact() {
+		System.out.println("Введите Ф И О контакта (обязательное поле)");
+		String name = this.consol.readString();
+		if (name.trim().length() > 0){
+			return name;
+		}else {
+			emptyLine();
+			pageActionContact();
+		}
+		return null;
+	}//***
+	
+	@Override
+	public String getNameGroup() {
+		System.out.println("Введите название группы");
+		String name = this.consol.readString();
+		if (name.trim().length() > 0){
+			return name;
+		}else {
+			emptyLine();
+			pageActionGroup();
+		}
+		return null;
+	}//***
+	
+	@Override
+	public void searchName() {
+		Contact contact = null;
+		try {
+			contact = this.controller.getContact(getNameContact());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (contact != null){
+			System.out.println(contact);
+		}else {
+			notFound();
+		}
+		pageActionContact();
+	}//***
+	
+	@Override
+	public void startPage() {
+		while (true) {
+			System.out.println("==========================================\n");
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append("Стартовая страница \n");
+			stringBuilder.append("Действие с контактом введите         --con\n");
+			stringBuilder.append("Действие с группой контактов введите --gro\n");
+			stringBuilder.append("Аналитическая информация             --an\n");
+			stringBuilder.append("Для выхода введите                   --exit\n");
+			System.out.println(stringBuilder);
+			System.out.println("==========================================\n");
+			String command = this.consol.readString();
+			if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
+				pageActionContact();
+			if ((command.equalsIgnoreCase(String.valueOf(TeamList.gro))))
+				pageActionGroup();
+			if ((command.equalsIgnoreCase(String.valueOf(TeamList.an))))
+				pageAnalyticalInf();
+			if ((command.equalsIgnoreCase(String.valueOf(TeamList.exit))))
+				System.exit(0);
+			System.out.println("Команда не поддерживается");
+		}
+	}//***
+	
+	@Override
+	public void pageActionGroup() {
+		StringBuilder stringBuilder = new StringBuilder("Выберите действие для группы\n");
+		stringBuilder.append("Создать группу                      --add\n");
+		stringBuilder.append("Удалить группу                      --rem\n");
+		stringBuilder.append("Редактировать группу                --upd\n");
+		stringBuilder.append("Список групп                        --list\n");
+		stringBuilder.append("Показать список контактов группы    --listc\n");
+		stringBuilder.append("Вверх                               --up\n");
+		System.out.println(stringBuilder);
+		System.out.println("==========================================\n");
+		actionGroup();
+	}//***
+	
+	@Override
+	public void pageActionContact() {
+		StringBuilder stringBuilder = new StringBuilder("Выберите действие для контакта\n");
+		stringBuilder.append("Добавить контакт                --add\n");
+		stringBuilder.append("Удалить контакт                 --rem\n");
+		stringBuilder.append("Найти контакт                   --ser\n");
+		stringBuilder.append("Редактировать контакт           --upd\n");
+		stringBuilder.append("Показать список контактов       --list\n");
+		stringBuilder.append("Добавить контакт в группу       --addg\n");
+		stringBuilder.append("Удалить контакт из группы       --remg\n");
+		stringBuilder.append("Показать информацию о контакте  --inf\n");
+		stringBuilder.append("Вверх                           --up\n");
+		System.out.println(stringBuilder);
+		System.out.println("==========================================\n");
+		actionContact();
+	}//***
+	
+	@Override
+	public void getNoGroup() {
+		System.out.println("нет группы");
+	}
+	
+	@Override
+	public void getGroupsUtilit() {
+		Set<Group> groups = this.controller.getGroups();
+		for (Group group : groups){
+			System.out.println(group);
+		}
+	}
+	
+	@Override
+	public void getSuc() {
+		System.out.println("успешно");
+	}
+	
+	@Override
+	public void emptyLine() {
+		System.out.println("пустая строка");
+	}
+	
+	@Override
+	public void notFound() {
+		System.out.println("не найденно");
+	}
+	
+	@Override
+	public void failed() {
+		System.out.println("не удалось");
+	}
+	
+	@Override
+	public void authorizationPage() {
+		System.out.println("Страница авторизации");
+		List<String> attr = new ArrayList<>();
+		attr.add(0,"Филип");
+		attr.add(1,"root");
+//		attr.add(0,getNameUser());
+//		attr.add(1,getPasswordUser());
+		
+		User user = null;
+		try {
+			user = this.controller.authorizationPage(attr);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (user!= null && user.getAct()){
+			startPage();
+		}else {
+			System.out.println("user отсутствует");
+			authorizationPage();
+		}
+	}
+	
+	@Override
+	public void removeContact() {
+		getContacts();
+		String name = getNameContact();
+		try {
+			if (this.controller.existContact(name)){
+				this.controller.removeContact(name);
+				getSuc();
+			}else {
+				notFound();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}//***
+	
+	@Override
+	public void appGroupContact() {
+		List<String> attContact = new ArrayList<>();
+		getContacts();
+		attContact.add(0,getNameContact());
+		try {
+			if (this.controller.existContact(attContact.get(0))){
+				getGroupsUtilit();
+				attContact.add(1,getNameGroup());
+				try {
+					if (this.controller.existGroup(attContact.get(1))){
+						this.controller.appGroupContact(attContact);
+						getSuc();
+					}
+				} catch (SQLException e) {
+					failed();
+				}
+			}else {
+				System.out.println("нет контакта");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}//***
+	
+	@Override
+	public void removeGroupContact() {
+		List<String> attr = new ArrayList<>();
+		getContacts();
+		attr.add(0,getNameContact());
+		try {
+			if (this.controller.existContact(attr.get(0))){
+				getGroupsUtilit();
+				attr.add(1,getNameGroup());
+				if (this.controller.existGroup(attr.get(1))){
+					this.controller.removeGroupContact(attr);
+					getSuc();
+				}else {
+					System.out.println("нет группы");
+				}
+			}else {
+				System.out.println("нет контакта");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}//***
+	
+	@Override
+	public void addGroup(String command) {
+		List<String> attGroup = new ArrayList<>();
+		attGroup.add(0,getNameGroup());
+		try {
+			this.controller.addEntity(attGroup,command);
+		} catch (IOException e) {
+			System.out.println("не удачно");
+		} catch (SQLException e) {
+			failed();
+		}
+		pageActionGroup();
+	}//***
+	
+	@Override
+	public void removeGroup() {
+		getGroupsUtilit();
+		try {
+			if (controller.removeGroup(getNameGroup())){
+				getSuc();
+			}else {
+				getNoGroup();
+			}
+		} catch (SQLException e) {
+			failed();
+		}
+		pageActionGroup();
+	}//***
+	
+	@Override
+	public void updateGroup() {
+		getGroupsUtilit();
+		List<String> attGroup = new ArrayList<>();
+		attGroup.add(0,getNameGroup().trim());
+		attGroup.add(1,getNameNewGroup().trim());
+		try {
+				if (this.controller.updateGroup(attGroup)){
+					getSuc();
+				}else {
+					getNoGroup();
+				}
+		} catch (SQLException e) {
+			failed();
+		}
+		pageActionGroup();
+	}//***
+	
+	@Override
+	public void getContactsGroup() {
+		getGroupsUtilit();
+		String name = getNameGroup();
+		try {
+			if (this.controller.existGroup(name)){
+				Set<Contact> contacts = this.controller.getContactsGroup(name);
+//				System.out.println(contacts);
+				if (!contacts.isEmpty()){
+					for (Contact contact : contacts){
+						System.out.println(contact.contactInf());
+					}
+				}else {
+					System.out.println("нет контактов");
+				}
+			}
+		} catch (SQLException e) {
+			failed();
+		}
+		pageActionGroup();
+	}//***
+	
+	@Override
+	public void numberUsers() {
+		try {
+			System.out.println("Кол-во пользователей " + this.controller.numberUsers());
+		} catch (SQLException e) {
+			failed();
+		}
+		pageAnalyticalInf();
+	}
+	
+	@Override
+	public void numberContacts() {
+		try {
+			System.out.println("Кол-во контактов " + this.controller.numberContacts(getNameUser()));
+		} catch (SQLException e) {
+			failed();
+		}
+		pageAnalyticalInf();
+	}
+	
+	@Override
+	public void quantityGroupsUser() {
+		try {
+			System.out.println("Кол-во групп " + this.controller.quantityGroupsUser(getNameUser()));
+		} catch (SQLException e) {
+			failed();
+		}
+		pageAnalyticalInf();
+	}
+	
+	@Override
+	public void averageNumberContactsGroups() {
+		try {
+			System.out.println("Среднее количество контактов в группах "
+					+this.controller.averageNumberContactsGroups());
+		} catch (SQLException e) {
+			failed();
+		}
+		pageAnalyticalInf();
+	}
+	
+	@Override
+	public void averageNumberContactsUser() {
+		try {
+			System.out.println("Среднее количество контактов у пользователя "
+					+this.controller.averageNumberContactsUser());
+		} catch (SQLException e) {
+			failed();
+		}
+		pageAnalyticalInf();
+	}
+	
+	@Override
+	public void userWithContactsMin_10() {
+		Set<User> users = null;
+		try {
+			users = this.controller.userWithContactsMin_10();
+		} catch (SQLException e) {
+			failed();
+		}
+		System.out.println("Пользователь с количеством контактов < 10 ");
+		for (User user : users){
+			System.out.println(user.getLogin());
+		}
+		pageAnalyticalInf();
+	}
+	
+	@Override
+	public void pageAnalyticalInf() {
+		StringBuilder stringBuilder = new StringBuilder("Аналитическая информация\n");
+		stringBuilder.append("Кол-во контактов каждого users     --ncon\n");
+		stringBuilder.append("Кол-во групп каждого users         --grus\n");
+		stringBuilder.append("Кол-во контактов < 10              --min10\n");
+		stringBuilder.append("Среднее число контактов в группе   --avrg\n");
+		stringBuilder.append("Среднее число контактов у user     --avru\n");
+		stringBuilder.append("Общее кол-во users                 --users\n");
+		stringBuilder.append("Вверх                              --up\n");
+		System.out.println(stringBuilder);
+		System.out.println("==========================================\n");
+		actionAnalyticalInf();
+	}//***
+	
+	@Override
+	public void actionAnalyticalInf() {
+		String command = this.consol.readString();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.ncon)))
+			numberContacts();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.grus)))
+			quantityGroupsUser();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.min10)))
+			userWithContactsMin_10();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.avrg)))
+			averageNumberContactsGroups();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.avru)))
+			averageNumberContactsUser();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.users)))
+			numberUsers();
+		if (command.equalsIgnoreCase(String.valueOf(TeamList.up)))
+			startPage();
+		System.out.println("Не actionAnalyticalInf поддерживатеся");
+		pageAnalyticalInf();
+	}
+	
+	@Override
+	public String getNameUser() {
+		System.out.println("Введите имя пользователя (обязательное поле)");
+		String name = this.consol.readString();
+		if (name.trim().length() > 0){
+			return name;
+		}else {
+			emptyLine();
+			pageActionGroup();
+		}
+		return null;
+	}
+	
+	@Override
+	public String getPasswordUser() {
+		System.out.println("Введите password пользователя (обязательное поле)");
+		String name = this.consol.readString();
+		if (name.trim().length() > 0){
+			return name;
+		}else {
+			emptyLine();
+			pageActionGroup();
+		}
+		return null;
+	}
+	
+	@Override
+	public String getNameNewGroup() {
+		System.out.println("Введите новое название для группы");
+		String name = this.consol.readString();
+		if (name.trim().length() > 0){
+			return name ;
+		}else {
+			emptyLine();
+			pageActionGroup();
+		}
+		return null;
+	}
+	
+	@Override
+	public void run() {
+//		JFrame jFrame = new JFrame("TEST");
+//		JPanel jPanel = new JPanel();
+//		JTextField jTextField = new JTextField(20);
+//		JButton jButton = new JButton("SEND");
+//		jPanel.add(jTextField);
+//		jPanel.add(jButton);
+//		jFrame.getContentPane().add(BorderLayout.CENTER,jPanel);
+//		jFrame.setSize(400,500);
+//		jFrame.setVisible(true);
+		
+		
+		
+		authorizationPage();
+	}
 }

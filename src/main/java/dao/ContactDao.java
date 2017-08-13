@@ -2,12 +2,9 @@ package dao;
 
 import models.Contact;
 import models.Entity;
-import org.xml.sax.SAXException;
+import models.User;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
@@ -19,49 +16,56 @@ public interface ContactDao {
     /**
      *Добавление контакта
      */
-    void addContact (Entity entity) throws TransformerException, IOException, SAXException, ParserConfigurationException;
+    void addContact (Entity entity) throws SQLException;
 
     /**
      *Обновление контакта
      * @param attContact
      */
-    boolean updateContact(List<String> attContact) throws ParserConfigurationException, IOException, SAXException, TransformerException;
+    boolean updateContact(List<String> attContact) throws SQLException;
 
     /**
      *Удаление контакта
+     * @param fio
      */
-    boolean removeContact(String fio) throws IOException, SAXException, ParserConfigurationException, TransformerException;
+    boolean removeContact(String fio) throws SQLException;
 
     /**
      *Добавить контакту группу
      */
-    boolean appGroupContact(List<String> attContact) throws IOException, SAXException, ParserConfigurationException, TransformerException;
+    boolean appGroupContact(List<String> attContact) throws SQLException;
 
     /**
      *Удаление группы у контакта контакта
+     * @param attr
      */
-    boolean removeGroupContact(String fio) throws IOException, SAXException, ParserConfigurationException, TransformerException;
+    boolean removeGroupContact(List<String> attr) throws SQLException;
 
     /**
      *Список контактов
      */
-    Set<Contact> getContacts() throws ParserConfigurationException,
-            SAXException, IOException, XPathExpressionException;
+    Set<Contact> getContacts() throws SQLException;
 
     /**
      *Проверка контакта на существование
      */
-    boolean existContact(String name) throws ParserConfigurationException, IOException, SAXException, TransformerException;
+    boolean existContact(String name) throws SQLException;
 
     /**
      *Возвращает контакт
      */
-    Contact getContact(String fio) throws ParserConfigurationException, IOException, SAXException;
+    Contact getContact(String fio) throws SQLException;
 
     /**
      *Поиск контакта по имени
      */
-    String searchName (String fio) throws ParserConfigurationException, IOException, SAXException;
+    Contact searchName (String fio) throws SQLException;
+    
+    /**
+     * Страница авторизации
+     * @param attr
+     */
+    User authorizationPage(List<String> attr) throws SQLException;
 
 
 }

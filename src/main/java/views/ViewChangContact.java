@@ -2,11 +2,13 @@ package views;
 
 import dao.ContactDao;
 import models.Contact;
+import models.Group;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -34,7 +36,7 @@ public class ViewChangContact implements Observer {
             Set<Contact> contacts = null;
             try {
                 contacts = ((ContactDao) o).getContacts();
-            } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
             if (!contacts.isEmpty()) {
