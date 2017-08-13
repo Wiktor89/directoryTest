@@ -8,9 +8,6 @@ import models.User;
 import utilits.ConsoleReader;
 import utilits.TeamList;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,15 +18,19 @@ import java.util.Set;
  *Отображение
  */
 
-public class ViewImpl implements View, Runnable {
+public class ViewImpl implements View {
 	
 	
-	private ConsoleReader consol = new ConsoleReader();
+	private ConsoleReader consoleReader = new ConsoleReader();
 	private ControllerImpl controller = new ControllerImpl();
+	
+	public ViewImpl() {
+	
+	}
 	
 	@Override
 	public void actionContact() {
-		String command = this.consol.readString();
+		String command = this.consoleReader.readString();
 		if (command.equalsIgnoreCase(String.valueOf(TeamList.add)))
 			addContact("con");
 		if (command.equalsIgnoreCase(String.valueOf(TeamList.rem)))
@@ -53,7 +54,7 @@ public class ViewImpl implements View, Runnable {
 	
 	@Override
 	public void actionGroup() {
-		String command = this.consol.readString();
+		String command = this.consoleReader.readString();
 		if (command.equalsIgnoreCase(String.valueOf(TeamList.add)))
 			addGroup("gro");
 		if (command.equalsIgnoreCase(String.valueOf(TeamList.rem)))
@@ -75,9 +76,9 @@ public class ViewImpl implements View, Runnable {
 		List<String> attContact = new ArrayList<>();
 			attContact.add(0,getNameContact());
 			System.out.println("Введите телефон");
-			attContact.add(1,this.consol.readString());
+			attContact.add(1,this.consoleReader.readString());
 			System.out.println("Введите email");
-			attContact.add(2,this.consol.readString());
+			attContact.add(2,this.consoleReader.readString());
 			attContact.add(3,"нет группы");
 		try {
 			this.controller.addEntity(attContact,command);
@@ -99,7 +100,7 @@ public class ViewImpl implements View, Runnable {
 				System.out.println("Введите новое Ф И О");
 				attContact.add(1, getNameContact());
 					System.out.println("Введите новый телефон");
-					String newPhone = this.consol.readString();
+					String newPhone = this.consoleReader.readString();
 					if (newPhone.trim().length() > 0){
 						attContact.add(2,newPhone);
 					}else {
@@ -107,7 +108,7 @@ public class ViewImpl implements View, Runnable {
 						
 					}
 					System.out.println("Введите новый email");
-					String newEmail = this.consol.readString();
+					String newEmail = this.consoleReader.readString();
 					if (newEmail.trim().length() > 0){
 						attContact.add(3,newEmail);
 					}else {
@@ -159,7 +160,7 @@ public class ViewImpl implements View, Runnable {
 	@Override
 	public String getNameContact() {
 		System.out.println("Введите Ф И О контакта (обязательное поле)");
-		String name = this.consol.readString();
+		String name = this.consoleReader.readString();
 		if (name.trim().length() > 0){
 			return name;
 		}else {
@@ -172,7 +173,7 @@ public class ViewImpl implements View, Runnable {
 	@Override
 	public String getNameGroup() {
 		System.out.println("Введите название группы");
-		String name = this.consol.readString();
+		String name = this.consoleReader.readString();
 		if (name.trim().length() > 0){
 			return name;
 		}else {
@@ -210,7 +211,7 @@ public class ViewImpl implements View, Runnable {
 			stringBuilder.append("Для выхода введите                   --exit\n");
 			System.out.println(stringBuilder);
 			System.out.println("==========================================\n");
-			String command = this.consol.readString();
+			String command = this.consoleReader.readString();
 			if (command.equalsIgnoreCase(String.valueOf(TeamList.con)))
 				pageActionContact();
 			if ((command.equalsIgnoreCase(String.valueOf(TeamList.gro))))
@@ -527,7 +528,7 @@ public class ViewImpl implements View, Runnable {
 	
 	@Override
 	public void actionAnalyticalInf() {
-		String command = this.consol.readString();
+		String command = this.consoleReader.readString();
 		if (command.equalsIgnoreCase(String.valueOf(TeamList.ncon)))
 			numberContacts();
 		if (command.equalsIgnoreCase(String.valueOf(TeamList.grus)))
@@ -549,7 +550,7 @@ public class ViewImpl implements View, Runnable {
 	@Override
 	public String getNameUser() {
 		System.out.println("Введите имя пользователя (обязательное поле)");
-		String name = this.consol.readString();
+		String name = this.consoleReader.readString();
 		if (name.trim().length() > 0){
 			return name;
 		}else {
@@ -562,7 +563,7 @@ public class ViewImpl implements View, Runnable {
 	@Override
 	public String getPasswordUser() {
 		System.out.println("Введите password пользователя (обязательное поле)");
-		String name = this.consol.readString();
+		String name = this.consoleReader.readString();
 		if (name.trim().length() > 0){
 			return name;
 		}else {
@@ -575,7 +576,7 @@ public class ViewImpl implements View, Runnable {
 	@Override
 	public String getNameNewGroup() {
 		System.out.println("Введите новое название для группы");
-		String name = this.consol.readString();
+		String name = this.consoleReader.readString();
 		if (name.trim().length() > 0){
 			return name ;
 		}else {
@@ -585,20 +586,4 @@ public class ViewImpl implements View, Runnable {
 		return null;
 	}
 	
-	@Override
-	public void run() {
-//		JFrame jFrame = new JFrame("TEST");
-//		JPanel jPanel = new JPanel();
-//		JTextField jTextField = new JTextField(20);
-//		JButton jButton = new JButton("SEND");
-//		jPanel.add(jTextField);
-//		jPanel.add(jButton);
-//		jFrame.getContentPane().add(BorderLayout.CENTER,jPanel);
-//		jFrame.setSize(400,500);
-//		jFrame.setVisible(true);
-		
-		
-		
-		authorizationPage();
-	}
 }

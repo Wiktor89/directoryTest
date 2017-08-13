@@ -13,10 +13,10 @@ public class Main {
     }
 
     public void goo() throws SQLException {
-//        ViewImpl view = new ViewImpl();
-//        view.run();
-        Thread thread = new Thread(new ViewImpl());
-        thread.start();
+        
+        ViewImpl view = new ViewImpl();
+        view.authorizationPage();
+
     
     
     }
