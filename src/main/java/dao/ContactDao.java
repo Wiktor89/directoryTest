@@ -2,6 +2,7 @@ package dao;
 
 import models.Contact;
 import models.Entity;
+import models.Group;
 import models.User;
 
 import java.sql.SQLException;
@@ -66,6 +67,7 @@ public interface ContactDao {
      * @param attr
      */
     User authorizationPage(List<String> attr) throws SQLException;
+   
 
 
 }

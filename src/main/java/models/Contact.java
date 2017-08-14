@@ -19,7 +19,7 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
     private String phone;
     private String email;
     private User user;
-    private Set<Group> group = new TreeSet<>();
+    private Set<Group> groups = new TreeSet<>();
 
     public Contact() {
     }
@@ -32,7 +32,6 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
         this.fio = fio;
         this.phone = phone;
         this.email = email;
-        this.group.add(new Group("нет группы"));
     }
     
     public Contact(String fio, String phone) {
@@ -47,12 +46,12 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
         this.user = user;
     }
     
-    public Set<Group> getGroup() {
-        return group;
+    public Set<Group> getGroups() {
+        return groups;
     }
     
     public void setGroup(Set<Group> group) {
-        this.group = group;
+        this.groups = group;
     }
     
     public String getFio() {
@@ -92,7 +91,7 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
         return "Contact{ id "  +getId()+
                 " Ф И О = " + fio+
                 ", телефон = " + phone +
-                ", email = " + email + "; группы " + group+
+                ", email = " + email + "; группы " +groups+
                 "} ";
     }
 
@@ -106,7 +105,7 @@ public class Contact extends IdentifiedEntity implements Serializable,Comparable
         if (fio != null ? !fio.equals(contact.fio) : contact.fio != null) return false;
         if (phone != null ? !phone.equals(contact.phone) : contact.phone != null) return false;
         if (email != null ? !email.equals(contact.email) : contact.email != null) return false;
-        return group != null ? group.equals(contact.group) : contact.group == null;
+        return groups != null ? groups.equals(contact.groups) : contact.groups == null;
     }
 
     @Override

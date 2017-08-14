@@ -82,12 +82,13 @@ public class ViewImpl implements View {
 			attContact.add(3,"нет группы");
 		try {
 			this.controller.addEntity(attContact,command);
+			getSuc();
 		} catch (IOException e) {
 			System.out.println("Не удалось создать");
 		} catch (SQLException e) {
 			failed();
 		}
-		getSuc();
+		
 	}//***
 	
 	@Override
@@ -132,9 +133,8 @@ public class ViewImpl implements View {
 		}
 		for (Contact contact : contacts){
 			System.out.println(contact.contactInf());
-			Set<Group> groups = contact.getGroup();
-			if (!groups.isEmpty()){
-				System.out.println("группы "+groups);
+			if (!contact.getGroups().isEmpty()){
+				System.out.println(contact.getGroups());
 			}
 		}
 	}//***

@@ -42,7 +42,7 @@ public class ViewChangContact implements Observer {
             if (!contacts.isEmpty()) {
                 System.out.println("******************************");
                 for (Contact contact : contacts) {
-                    System.out.println(contact);
+                    System.out.println(contact.contactInf());
                 }
                 System.out.println("******************************");
             } else {

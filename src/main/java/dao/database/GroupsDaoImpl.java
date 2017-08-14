@@ -69,7 +69,6 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 			return result;
 		}
 	
-	
 	@Override
 	public synchronized boolean updateGroup(List<String> attGroup) throws SQLException {
 		boolean result = false;
@@ -224,13 +223,16 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 		}
 		
 		public Set<Contact> getContactsGroup(ResultSet resultSet) throws SQLException {
+				contacts = new TreeSet<>();
 				while (resultSet.next()){
 					contact = new Contact();
 					contact.setId(resultSet.getInt("id"));
 					contact.setFio(resultSet.getString("fio").trim());
 					contact.setEmail(resultSet.getString("email").trim());
 					contact.setPhone(resultSet.getString("phone").trim());
-					contacts.add(contact);
+					if (contact != null && contact.getFio().trim().length() > 0){
+						contacts.add(contact);
+					}
 				}
 			return contacts;
 		}
