@@ -17,7 +17,7 @@ import java.util.*;
 public class ContactsDaoImpl extends Observable implements ContactDao {
 	
 	private User user;
-	private MapperContact mapperContact = new MapperContact();
+	private ContactMapper contactMapper = new ContactMapper();
 	private List<Observer> observerList = new ArrayList<>();
 	private Set<Contact> contacts;
 	
@@ -108,8 +108,12 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	public synchronized boolean appGroupContact(List<String> attContact) throws SQLException {
 		boolean result;
 		Contact contact = getContact(attContact.get(0));
-		Group group = mapperContact.getGroup(attContact.get(1));
+		Group group;
 		Connection connection = ConnectingDataBase.getConnection();
+		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group(?)")) {
+			statement.setString(1,attContact.get(1));
+			group = this.contactMapper.getGroup(statement.executeQuery());
+		}
 			try (PreparedStatement statement = connection.prepareStatement("SELECT app_contact_group(?,?)")) {
 				statement.setInt(1,contact.getId());
 				statement.setInt(2,group.getId());
@@ -132,8 +136,12 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	public synchronized boolean removeGroupContact(List<String> attr) throws SQLException {
 		boolean result;
 		Contact contact = getContact(attr.get(0));
-		Group group = mapperContact.getGroup(attr.get(1));
+		Group group;
 		Connection connection = ConnectingDataBase.getConnection();
+		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group(?)")){
+			statement.setString(1,attr.get(1));
+			group = this.contactMapper.getGroup(statement.executeQuery());
+		}
 			try (PreparedStatement statement = connection.prepareStatement("SELECT delete_group_contact(?,?)")) {
 				statement.setInt(1,contact.getId());
 				statement.setInt(2,group.getId());
@@ -158,7 +166,7 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 		contacts = new TreeSet<>();
 		Connection connection = ConnectingDataBase.getConnection();
 		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contacts()")) {
-			contacts = this.mapperContact.getContacts(statement.executeQuery());
+			contacts = this.contactMapper.getContacts(statement.executeQuery());
 		}finally {
 			try {
 				if (!connection.isClosed()){
@@ -173,7 +181,7 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	
 	@Override
 	public boolean existContact(String name) throws SQLException {
-		return mapperContact.existContact(name);
+		return contactMapper.existContact(name);
 	}
 	
 	@Override
@@ -182,7 +190,7 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 		Contact contact;
 		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contact(?)")) {
 				statement.setString(1, fio.trim());
-				contact = this.mapperContact.getContact(statement.executeQuery());
+				contact = this.contactMapper.getContact(statement.executeQuery());
 			} finally {
 				try {
 					if (!connection.isClosed()) {
@@ -206,7 +214,7 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_user(?,?)")) {
 			statement.setString(1,attr.get(0).trim());
 			statement.setString(2,attr.get(1).trim());
-			this.user = mapperContact.getUser(attr,statement.executeQuery());
+			this.user = contactMapper.getUser(attr,statement.executeQuery());
 		}finally {
 			try {
 				if (!connection.isClosed()){
@@ -226,7 +234,7 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	}
 	
 	
-	class MapperContact {
+	class ContactMapper {
 		
 		private Group group;
 		private Contact contact;
@@ -285,17 +293,12 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 			return contacts;
 		}
 		
-		private Group getGroup(String name) throws SQLException {
-			Connection connection = ConnectingDataBase.getConnection();
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group(?)")) {
-				statement.setString(1, name);
-				ResultSet resultSet = statement.executeQuery();
+		private Group getGroup(ResultSet resultSet) throws SQLException {
 				while (resultSet.next()) {
 					group = new Group();
 					group.setName(resultSet.getString("title"));
 					group.setId(resultSet.getInt("id"));
 				}
-			}
 			return group;
 			
 		}

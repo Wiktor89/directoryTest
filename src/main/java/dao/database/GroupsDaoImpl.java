@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class GroupsDaoImpl extends Observable implements GroupDao {
 	
-	private MapperGroup mapperGroup = new MapperGroup();
+	private GroupMapper groupMapper = new GroupMapper();
 	private List<Observer> observerList = new ArrayList<>();
 	private Contact contact;
 	private Set<Group> groups;
@@ -105,7 +105,7 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 		Connection connection = ConnectingDataBase.getConnection();
 		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group(?)")) {
 			statement.setString(1,name);
-			result = this.mapperGroup.existGroup(statement.executeQuery());
+			result = this.groupMapper.existGroup(statement.executeQuery());
 		}finally {
 			try {
 				if (!connection.isClosed()){
@@ -122,7 +122,7 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 	public Set<Group> getGroups() {
 		Connection connection = ConnectingDataBase.getConnection();
 		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_groups()")) {
-			groups = this.mapperGroup.getGroups(statement.executeQuery());
+			groups = this.groupMapper.getGroups(statement.executeQuery());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -142,7 +142,7 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 		Connection connection = ConnectingDataBase.getConnection();
 		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contacts_group(?)")) {
 			statement.setString(1,name);
-			contacts = this.mapperGroup.getContactsGroup(statement.executeQuery());
+			contacts = this.groupMapper.getContactsGroup(statement.executeQuery());
 		}finally {
 			try {
 				if (!connection.isClosed()){
@@ -157,28 +157,28 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 	
 	@Override
 	public Integer numberUsers() throws SQLException {
-		return this.mapperGroup.analyticInf("SELECT number_users()");
+		return this.groupMapper.analyticInf("SELECT number_users()");
 	}
 	
 	@Override
 	public Integer numberContacts(String name) throws SQLException {
-	 return this.mapperGroup.analyticInf("SELECT number_contacts('"+name+"')");
+	 return this.groupMapper.analyticInf("SELECT number_contacts('"+name+"')");
 		
 	}
 	
 	@Override
 	public Integer quantityGroupsUser(String name) throws SQLException {
-		return this.mapperGroup.analyticInf("SELECT quantity_groups_user('"+name+"')");
+		return this.groupMapper.analyticInf("SELECT quantity_groups_user('"+name+"')");
 	}
 	
 	@Override
 	public Integer averageNumberContactsGroups() throws SQLException {
-		return this.mapperGroup.analyticInf("SELECT average_number_contacts_groups()");
+		return this.groupMapper.analyticInf("SELECT average_number_contacts_groups()");
 	}
 	
 	@Override
 	public Integer averageNumberContactsUser() throws SQLException {
-		return this.mapperGroup.analyticInf("SELECT average_number_contacts_user()");
+		return this.groupMapper.analyticInf("SELECT average_number_contacts_user()");
 	}
 	
 	@Override
@@ -186,7 +186,7 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 		users = new TreeSet<>();
 		Connection connection = ConnectingDataBase.getConnection();
 		try (PreparedStatement statement = connection.prepareStatement("SELECT user_with_contacts_min_10()")) {
-			users = this.mapperGroup.userWithContactsMin_10(statement.executeQuery());
+			users = this.groupMapper.userWithContactsMin_10(statement.executeQuery());
 		}finally {
 			try {
 				if (!connection.isClosed()){
@@ -199,7 +199,7 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 		return users;
 	}
 	
-	 class MapperGroup {
+	 class GroupMapper {
 		
 		
 		public Set<Group> getGroups (ResultSet resultSet) throws SQLException {
