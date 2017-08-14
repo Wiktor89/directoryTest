@@ -18,13 +18,16 @@ import java.util.Set;
  *Отображение
  */
 
-public class ViewImpl implements View {
+public class ViewImpl implements View, Runnable {
 	
 	
 	private ConsoleReader consoleReader = new ConsoleReader();
 	private ControllerImpl controller = new ControllerImpl();
+	private Thread thread;
 	
 	public ViewImpl() {
+		this.thread = new Thread(this);
+		thread.start();
 	
 	}
 	
@@ -586,4 +589,8 @@ public class ViewImpl implements View {
 		return null;
 	}
 	
+	@Override
+	public void run() {
+		authorizationPage();
+	}
 }

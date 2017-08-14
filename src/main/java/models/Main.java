@@ -15,7 +15,9 @@ public class Main {
     public void goo() throws SQLException {
         
         ViewImpl view = new ViewImpl();
-        view.authorizationPage();
+        ViewImpl view1 = new ViewImpl();
+        ViewImpl view2 = new ViewImpl();
+        
 
     
     
