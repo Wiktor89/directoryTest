@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class GroupsDaoImpl extends Observable implements GroupDao {
 	
-	private static GroupsDaoImpl groupsDao;
+	private static volatile GroupsDaoImpl groupsDao;
 	private List<Observer> observerList = new ArrayList<>();
 	
 	private GroupsDaoImpl() {
@@ -24,7 +24,11 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 	
 	public static GroupsDaoImpl getGroupsDaoImpl(){
 		if (groupsDao == null){
-			groupsDao = new GroupsDaoImpl();
+			synchronized (GroupsDaoImpl.class){
+				if (groupsDao == null){
+					groupsDao = new GroupsDaoImpl();
+				}
+			}
 		}
 		return groupsDao;
 	}

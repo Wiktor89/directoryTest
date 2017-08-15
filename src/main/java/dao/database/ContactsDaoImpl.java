@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class ContactsDaoImpl extends Observable implements ContactDao {
 	
-	private static ContactsDaoImpl contactsDao;
+	private static volatile ContactsDaoImpl contactsDao;
 	private List<Observer> observerList = new ArrayList<>();
 	private User user;
 	private Set<Contact> contacts;
@@ -28,7 +28,11 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	
 	public static ContactsDaoImpl getContactsDaoImpl(){
 		if (contactsDao == null){
-			contactsDao = new ContactsDaoImpl();
+			synchronized (ContactsDaoImpl.class){
+				if (contactsDao == null){
+					contactsDao = new ContactsDaoImpl();
+				}
+			}
 		}
 		return contactsDao;
 	}

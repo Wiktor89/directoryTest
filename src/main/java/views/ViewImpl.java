@@ -105,7 +105,7 @@ public class ViewImpl implements View, Runnable {
 				attContact.add(1, getNameContact());
 					System.out.println("Введите новый телефон");
 					String newPhone = this.consoleReader.readString();
-					if (newPhone.trim().length() > 0){
+					if (newPhone.length() > 0){
 						attContact.add(2,newPhone);
 					}else {
 						attContact.add(2,"nop");
@@ -113,7 +113,7 @@ public class ViewImpl implements View, Runnable {
 					}
 					System.out.println("Введите новый email");
 					String newEmail = this.consoleReader.readString();
-					if (newEmail.trim().length() > 0){
+					if (newEmail.length() > 0){
 						attContact.add(3,newEmail);
 					}else {
 						attContact.add(3,"noe");
@@ -170,7 +170,7 @@ public class ViewImpl implements View, Runnable {
 	public String getNameContact() {
 		System.out.println("Введите Ф И О контакта (обязательное поле)");
 		String name = this.consoleReader.readString();
-		if (name.trim().length() > 0){
+		if (name.length() > 0){
 			return name;
 		}else {
 			emptyLine();
@@ -183,7 +183,7 @@ public class ViewImpl implements View, Runnable {
 	public String getNameGroup() {
 		System.out.println("Введите название группы");
 		String name = this.consoleReader.readString();
-		if (name.trim().length() > 0){
+		if (name.length() > 0){
 			return name;
 		}else {
 			emptyLine();
@@ -417,8 +417,8 @@ public class ViewImpl implements View, Runnable {
 	public void updateGroup() {
 		getGroupsUtilit();
 		List<String> attGroup = new ArrayList<>();
-		attGroup.add(0,getNameGroup().trim());
-		attGroup.add(1,getNameNewGroup().trim());
+		attGroup.add(0,getNameGroup());
+		attGroup.add(1,getNameNewGroup());
 		try {
 				if (this.controller.updateGroup(attGroup)){
 					getSuc();
@@ -560,7 +560,7 @@ public class ViewImpl implements View, Runnable {
 	public String getNameUser() {
 		System.out.println("Введите имя пользователя (обязательное поле)");
 		String name = this.consoleReader.readString();
-		if (name.trim().length() > 0){
+		if (name.length() > 0){
 			return name;
 		}else {
 			emptyLine();
@@ -573,7 +573,7 @@ public class ViewImpl implements View, Runnable {
 	public String getPasswordUser() {
 		System.out.println("Введите password пользователя (обязательное поле)");
 		String name = this.consoleReader.readString();
-		if (name.trim().length() > 0){
+		if (name.length() > 0){
 			return name;
 		}else {
 			emptyLine();
@@ -586,7 +586,7 @@ public class ViewImpl implements View, Runnable {
 	public String getNameNewGroup() {
 		System.out.println("Введите новое название для группы");
 		String name = this.consoleReader.readString();
-		if (name.trim().length() > 0){
+		if (name.length() > 0){
 			return name ;
 		}else {
 			emptyLine();

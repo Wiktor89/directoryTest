@@ -23,7 +23,7 @@ public class ConsoleReader implements AutoCloseable {
     public String readString(){
         String line = null;
         try {
-            line = this.reader.readLine();
+            line = this.reader.readLine().trim();
         } catch (IOException e) {
             e.printStackTrace();
         }
