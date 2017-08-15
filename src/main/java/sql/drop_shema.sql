@@ -11,6 +11,7 @@ DROP FUNCTION public.get_contacts();
 DROP FUNCTION public.get_contacts_group(CHAR);
 DROP FUNCTION public.get_group(CHAR);
 DROP FUNCTION public.get_groups();
+DROP FUNCTION public.get_groups_contact(INTEGER);
 DROP FUNCTION public.get_user(CHAR, CHAR);
 DROP FUNCTION public.number_contacts(CHAR);
 DROP FUNCTION public.number_users();
