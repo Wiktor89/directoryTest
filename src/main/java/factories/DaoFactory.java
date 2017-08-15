@@ -2,6 +2,8 @@ package factories;
 
 import dao.ContactDao;
 import dao.GroupDao;
+import dao.database.ContactsDaoImpl;
+import dao.database.GroupsDaoImpl;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,10 +19,10 @@ public class DaoFactory {
     }
 
     public static ContactDao getContactDao(){
-        return new dao.database.ContactsDaoImpl();
+        return ContactsDaoImpl.getContactsDaoImpl();
     }
     public static GroupDao getGroupDao(){
-        return new dao.database.GroupsDaoImpl();
+        return  GroupsDaoImpl.getGroupsDaoImpl();
     }
 
     public static String [] command (){

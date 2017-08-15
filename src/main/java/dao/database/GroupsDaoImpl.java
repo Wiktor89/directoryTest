@@ -14,16 +14,19 @@ import java.util.*;
  */
 public class GroupsDaoImpl extends Observable implements GroupDao {
 	
-	private GroupMapper groupMapper = new GroupMapper();
+	private static GroupsDaoImpl groupsDao;
 	private List<Observer> observerList = new ArrayList<>();
-	private Contact contact;
-	private Set<Group> groups;
-	private Set<Contact> contacts;
-	private Set<User> users;
 	
-	public GroupsDaoImpl() {
-		ViewChangGroup viewChangGroup =ViewChangGroup.getViewChangGroup();
+	private GroupsDaoImpl() {
+		ViewChangGroup viewChangGroup = ViewChangGroup.getViewChangGroup();
 		observerList.add(viewChangGroup);
+	}
+	
+	public static GroupsDaoImpl getGroupsDaoImpl(){
+		if (groupsDao == null){
+			groupsDao = new GroupsDaoImpl();
+		}
+		return groupsDao;
 	}
 	
 	@Override
@@ -75,8 +78,8 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 		Connection connection = ConnectingDataBase.getConnection();
 		if (existGroup(attGroup.get(0))) {
 			try (PreparedStatement statement = connection.prepareStatement("SELECT update_group(?,?)")) {
-				statement.setString(2, attGroup.get(0));
-				statement.setString(1, attGroup.get(1));
+				statement.setString(2, attGroup.get(0).trim());
+				statement.setString(1, attGroup.get(1).trim());
 				statement.execute();
 				result = true;
 				notifyObserver();
@@ -101,11 +104,11 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 	
 	@Override
 	public boolean existGroup(String name) throws SQLException {
-		boolean result = false;
+		boolean result;
 		Connection connection = ConnectingDataBase.getConnection();
 		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group(?)")) {
 			statement.setString(1,name);
-			result = this.groupMapper.existGroup(statement.executeQuery());
+			result = GroupMapper.existGroup(statement.executeQuery());
 		}finally {
 			try {
 				if (!connection.isClosed()){
@@ -120,9 +123,10 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 	
 	@Override
 	public Set<Group> getGroups() {
+		Set<Group> groups = null;
 		Connection connection = ConnectingDataBase.getConnection();
 		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_groups()")) {
-			groups = this.groupMapper.getGroups(statement.executeQuery());
+			groups = GroupMapper.getGroups(statement.executeQuery());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -140,9 +144,10 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 	@Override
 	public Set<Contact> getContactsGroup(String name) throws SQLException {
 		Connection connection = ConnectingDataBase.getConnection();
+		Set<Contact> contacts;
 		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contacts_group(?)")) {
 			statement.setString(1,name);
-			contacts = this.groupMapper.getContactsGroup(statement.executeQuery());
+			contacts = GroupMapper.getContactsGroup(statement.executeQuery());
 		}finally {
 			try {
 				if (!connection.isClosed()){
@@ -157,36 +162,63 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 	
 	@Override
 	public Integer numberUsers() throws SQLException {
-		return this.groupMapper.analyticInf("SELECT number_users()");
+		Integer numberUsers;
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT number_users()")) {
+			numberUsers = GroupMapper.analyticInf(statement.executeQuery());
+		}
+		return numberUsers;
 	}
 	
 	@Override
 	public Integer numberContacts(String name) throws SQLException {
-	 return this.groupMapper.analyticInf("SELECT number_contacts('"+name+"')");
+		Integer numberUsers;
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT number_contacts(?)")) {
+			 statement.setString(1,name);
+			 numberUsers = GroupMapper.analyticInf(statement.executeQuery());
+		}
+		return numberUsers;
 		
 	}
 	
 	@Override
 	public Integer quantityGroupsUser(String name) throws SQLException {
-		return this.groupMapper.analyticInf("SELECT quantity_groups_user('"+name+"')");
+		Integer numberUsers;
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT quantity_groups_user(?)")) {
+			 statement.setString(1,name);
+			 numberUsers = GroupMapper.analyticInf(statement.executeQuery());
+		}
+		return numberUsers;
 	}
 	
 	@Override
 	public Integer averageNumberContactsGroups() throws SQLException {
-		return this.groupMapper.analyticInf("SELECT average_number_contacts_groups()");
+		Integer numberUsers;
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT average_number_contacts_groups()")) {
+			 numberUsers = GroupMapper.analyticInf(statement.executeQuery());
+		}
+		return numberUsers;
 	}
 	
 	@Override
 	public Integer averageNumberContactsUser() throws SQLException {
-		return this.groupMapper.analyticInf("SELECT average_number_contacts_user()");
+		Integer numberUsers;
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT average_number_contacts_user()")) {
+			 numberUsers = GroupMapper.analyticInf(statement.executeQuery());
+		}
+		return numberUsers;
 	}
 	
 	@Override
 	public Set<User> userWithContactsMin_10() throws SQLException {
-		users = new TreeSet<>();
+		Set<User> users;
 		Connection connection = ConnectingDataBase.getConnection();
 		try (PreparedStatement statement = connection.prepareStatement("SELECT user_with_contacts_min_10()")) {
-			users = this.groupMapper.userWithContactsMin_10(statement.executeQuery());
+			users = GroupMapper.userWithContactsMin_10(statement.executeQuery());
 		}finally {
 			try {
 				if (!connection.isClosed()){
@@ -199,11 +231,11 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 		return users;
 	}
 	
-	 class GroupMapper {
+	 static class GroupMapper {
 		
 		
-		public Set<Group> getGroups (ResultSet resultSet) throws SQLException {
-			groups = new TreeSet<>();
+		public static Set<Group> getGroups (ResultSet resultSet) throws SQLException {
+			Set<Group> groups = new TreeSet<>();
 				while (resultSet.next()){
 					Group group = new Group();
 					group.setId(resultSet.getInt("id"));
@@ -214,7 +246,7 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 			return groups;
 		}
 		
-		public boolean existGroup (ResultSet resultSet) throws SQLException {
+		public static boolean existGroup (ResultSet resultSet) throws SQLException {
 			boolean result = false;
 				while (resultSet.next()){
 						result = true;
@@ -222,10 +254,10 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 			return result;
 		}
 		
-		public Set<Contact> getContactsGroup(ResultSet resultSet) throws SQLException {
-				contacts = new TreeSet<>();
+		public static Set<Contact> getContactsGroup(ResultSet resultSet) throws SQLException {
+				Set<Contact> contacts = new TreeSet<>();
 				while (resultSet.next()){
-					contact = new Contact();
+					Contact contact = new Contact();
 					contact.setId(resultSet.getInt("id"));
 					contact.setFio(resultSet.getString("fio").trim());
 					contact.setEmail(resultSet.getString("email").trim());
@@ -237,27 +269,16 @@ public class GroupsDaoImpl extends Observable implements GroupDao {
 			return contacts;
 		}
 		
-		public Integer analyticInf (String nameFunction) throws SQLException {
+		public static Integer analyticInf (ResultSet resultSet) throws SQLException {
 			Integer result = 0;
-			Connection connection = ConnectingDataBase.getConnection();
-			try (PreparedStatement statement = connection.prepareStatement(nameFunction)) {
-				ResultSet resultSet = statement.executeQuery();
 				while (resultSet.next()){
 					result = resultSet.getInt(1);
 				}
-			}finally {
-				try {
-					if (!connection.isClosed()){
-						connection.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
 			return result;
 		}
 		
-		 public Set<User> userWithContactsMin_10(ResultSet resultSet) throws SQLException {
+		 public static Set<User> userWithContactsMin_10(ResultSet resultSet) throws SQLException {
+			Set<User> users = new TreeSet<>();
 				 while (resultSet.next()){
 				 	 User user = new User();
 					 user.setLogin(resultSet.getString(1).trim());

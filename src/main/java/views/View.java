@@ -29,7 +29,7 @@ public interface View {
     /**
      * Список контактов
      */
-    void getContacts();
+    boolean getContacts();
 
     /**
      * Список групп

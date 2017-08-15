@@ -127,19 +127,24 @@ public class ViewImpl implements View, Runnable {
 	}//***
 	
 	@Override
-	public void getContacts() {
-		Set<Contact> contacts = null;
+	public boolean getContacts() {
+		boolean result = false;
 		try {
-			contacts = this.controller.getContacts();
+			Set<Contact> contacts = this.controller.getContacts();
+			if (!contacts.isEmpty()){
+				result = true;
+				for (Contact contact : contacts){
+					System.out.println(contact.contactInf());
+				}
+				
+			}else {
+				notFound();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		for (Contact contact : contacts){
-			System.out.println(contact.contactInf());
-			if (!contact.getGroups().isEmpty()){
-				System.out.println(contact.getGroups());
-			}
-		}
+		
+		return result;
 	}//***
 	
 	@Override
@@ -150,14 +155,15 @@ public class ViewImpl implements View, Runnable {
 	
 	@Override
 	public void getContactInfo() {
-		getContacts();
-		Contact contact = null;
-		try {
-			contact = this.controller.getContact(getNameContact());
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if(getContacts()) {
+			Contact contact = null;
+			try {
+				contact = this.controller.getContact(getNameContact());
+				System.out.println(contact);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		System.out.println(contact);
 	}//***
 	
 	@Override

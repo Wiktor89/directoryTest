@@ -153,14 +153,11 @@ $$;
 --  Функция возвращает контакт
 
 --  Функция возвращает список контактов***
-create function get_contacts() returns TABLE (id INTEGER, fio CHARACTER,
-email CHARACTER, phone CHARACTER, user_id INTEGER, groups CHARACTER)
+create function get_contacts() returns SETOF contacts
 LANGUAGE plpgsql
 AS $$
 BEGIN
-RETURN QUERY SELECT contacts.*, groups.title FROM contacts LEFT JOIN contact_group
-ON contacts.id = contact_group.contact_id
-LEFT JOIN groups ON contact_group.group_id = groups.id;
+RETURN QUERY SELECT contacts.* FROM contacts;
 END;
 $$;
 --  Функция возвращает список контактов
@@ -242,4 +239,17 @@ RETURN QUERY SELECT groups.* FROM groups WHERE title = name;
 END;
 $$;
 --  Функция возвращает группу
+
+--  Функция возвращает группы контакта***
+CREATE FUNCTION get_groups_contact (_id INTEGER)
+RETURNS SETOF groups
+LANGUAGE plpgsql
+AS $$
+BEGIN
+RETURN QUERY SELECT groups.* FROM contacts JOIN  contact_group ON contacts.id = contact_group.contact_id
+JOIN groups ON contact_group.group_id = groups.id WHERE contacts.id = _id;
+END;
+$$;
+--  Функция возвращает группы контакта
+
 
