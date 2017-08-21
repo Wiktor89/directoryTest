@@ -1,13 +1,9 @@
 package controller;
 
-import jdk.internal.org.xml.sax.SAXException;
 import models.Contact;
 import models.Group;
 import models.User;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,17 +17,18 @@ public interface Controller {
     /**
      *Обновление контакта
      */
-    void updateContact(List<String> attContact) throws ParserConfigurationException, SAXException, IOException, TransformerException, SQLException;
+    void updateContact(List<String> attContact) throws IOException, SQLException;
 
     /**
      *Удаление контакта
+     * @param id
      */
-    void removeContact(String fio) throws SAXException, ParserConfigurationException, IOException, TransformerException, SQLException;
+    void removeContact(Integer id) throws  IOException, SQLException;
 
     /**
      *Добавить контакту группу
      */
-    void appGroupContact(List<String> attContact) throws SAXException, ParserConfigurationException, IOException, TransformerException, SQLException;
+    void appGroupContact(List<String> attContact) throws  IOException,  SQLException;
 
     /**
      *Удаление группы у контакта контакта
@@ -42,14 +39,12 @@ public interface Controller {
     /**
      *Список контактов
      */
-    Set<Contact> getContacts() throws ParserConfigurationException, SAXException,
-		    XPathExpressionException, IOException, SQLException;
+    Set<Contact> getContacts() throws IOException, SQLException;
 
     /**
      *Список контактов опр. группы
      */
-    Set<Contact> getContactsGroup(String name) throws ParserConfigurationException, SAXException,
-		    XPathExpressionException, IOException, SQLException;
+    Set<Contact> getContactsGroup(String name) throws IOException, SQLException;
 
     /**
      *Список групп
@@ -59,38 +54,32 @@ public interface Controller {
     /**
      *Удаление группы
      */
-    boolean removeGroup(String name) throws ParserConfigurationException, SAXException,
-		    XPathExpressionException, TransformerException, IOException, SQLException;
+    boolean removeGroup(String name) throws  IOException, SQLException;
 
     /**
      *Обновление  группы
      */
-    boolean updateGroup(List<String> attGoup) throws ParserConfigurationException, IOException,
-		    SAXException, TransformerException, SQLException;
+    boolean updateGroup(List<String> attGroup) throws  IOException, SQLException;
 
     /**
      * Создание сущности
      */
-    void addEntity (List<String> attrEntity,String command) throws IOException, TransformerException,
-		    ParserConfigurationException, SAXException, SQLException;
+    void addEntity (List<String> attrEntity,String command) throws IOException,  SQLException;
 
     /**
      * Возвращает контакт
      */
-    Contact getContact(String fio) throws ParserConfigurationException,
-		    SAXException, IOException, SQLException;
+    Contact getContact(String fio) throws  IOException, SQLException;
 
     /**
      * Проверяет контакт на сущ.
      */
-    boolean existContact(String name) throws ParserConfigurationException, IOException,
-		    SAXException, TransformerException, SQLException;
+    boolean existContact(String name) throws  IOException, SQLException;
 
     /**
      * Проверяет группу на сущ.
      */
-    boolean existGroup(String name) throws ParserConfigurationException, SAXException,
-		    IOException, XPathExpressionException, SQLException;
+    boolean existGroup(String name) throws IOException, SQLException;
 	
 	/**
 	 * Количество пользователей

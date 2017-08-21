@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add group</title>
+    <script>
+        function validate() {
+            var  valid = true;
+            var name = document.getElementById("title");
+            if (name.value == ''){
+                alert("Введите название группы");
+                valid = false;
+            }
+            return valid;
+        }
+    </script>
+    <style type="text/css">
+        #centerLayer {
+            width: 400px; /* Ширина слоя в пикселах */
+            margin: 0 auto; /* Отступ слева и справа */
+            background: #acff77; /* Цвет фона */
+            padding: 10px; /* Поля вокруг текста */
+            text-align: start; /* Выравнивание содержимого слоя по левому краю */
+        }
+    </style>
+</head>
+<body>
+<div id="centerLayer">
+<form action="/addGroup" method="POST" onsubmit="return validate();">
+    Введите название группы <input type="text" name="title" id="title" placeholder="Введите название группы"/><br/>
+    <input type="submit" value="SAVE GROUP">
+    <p><a href="/listGroups" methods="get">Список групп</a></p>
+    <p><a href="/updateGroup" methods="get">Обновить группу</a></p>
+    <p><a href="/getContactsGroup" methods="get">Показать контакты группы</a></p>
+    <p><a href="/selection">Назад</a></p>
+</form>
+</div>
+</body>
+</html>

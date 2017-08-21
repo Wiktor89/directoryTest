@@ -2,7 +2,6 @@ package dao;
 
 import models.Contact;
 import models.Entity;
-import models.Group;
 import models.User;
 
 import java.sql.SQLException;
@@ -27,9 +26,9 @@ public interface ContactDao {
 
     /**
      *Удаление контакта
-     * @param fio
+     * @param id
      */
-    boolean removeContact(String fio) throws SQLException;
+    boolean removeContact(Integer id) throws SQLException;
 
     /**
      *Добавить контакту группу
@@ -67,7 +66,11 @@ public interface ContactDao {
      * @param attr
      */
     User authorizationPage(List<String> attr) throws SQLException;
-   
+    
+    /**
+     *Возвращает контакт
+     */
+    Contact getContact(Integer id) throws SQLException;
 
 
 }

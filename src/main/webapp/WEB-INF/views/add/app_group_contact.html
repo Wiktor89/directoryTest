@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>App group contact</title>
+    <style type="text/css">
+        #centerLayer {
+            width: 400px; /* Ширина слоя в пикселах */
+            margin: 0 auto; /* Отступ слева и справа */
+            background: #acff85; /* Цвет фона */
+            padding: 10px; /* Поля вокруг текста */
+            text-align: start; /* Выравнивание содержимого слоя по левому краю */
+        }
+    </style>
+    <script>
+        function validate() {
+            var  valid = true;
+            var name = document.getElementById("fioval");
+            if (name.value == ''){
+                alert("Пустое поле");
+                valid = false;
+            }
+            return valid;
+        }
+    </script>
+</head>
+<body>
+<div id="centerLayer">
+    <form action="/appContactGroup" method="POST" onsubmit="return validate();">
+        FIO: <input type="text" name="fio" id="fioval" placeholder="Введите ФИО"/><br/>
+        <p></p>
+        Group: <input type="text" name="group" placeholder="Название группы"/><br/>
+        <p></p>
+        <input type="submit" name="appGroup" value="ADD GROUP" aria-controls="gfg"/><br/>
+        <p></p>
+        <input type="submit" name="remGroup" value="REM GROUP" aria-controls="gfg"/><br/>
+
+        <p><a href="/addContact">Назад</a></p>
+    </form>
+</div>
+</body>
+</html>

@@ -230,7 +230,7 @@ $$;
 --  Функция возвращает пользователя
 
 --  Функция возвращает группу***
-CREATE FUNCTION get_group (name CHARACTER)
+CREATE FUNCTION get_group_name (name CHARACTER)
 RETURNS SETOF groups
 LANGUAGE plpgsql
 AS $$
@@ -251,5 +251,38 @@ JOIN groups ON contact_group.group_id = groups.id WHERE contacts.id = _id;
 END;
 $$;
 --  Функция возвращает группы контакта
+
+--  Функция обновляет users***
+CREATE FUNCTION update_users (_id INTEGER, _enable BOOLEAN)
+RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+BEGIN
+UPDATE users SET enable = _enable WHERE id = _id;
+END;
+$$;
+--  Функция обновляет users
+
+--  Функция обновляет users***
+CREATE FUNCTION update_users (_id INTEGER, _enable BOOLEAN)
+  RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  UPDATE users SET enable = _enable WHERE id = _id;
+END;
+$$;
+--  Функция обновляет users
+
+--  Функция возвращает контакт***
+CREATE FUNCTION get_contact (_id INTEGER)
+RETURNS SETOF contacts
+LANGUAGE plpgsql
+AS $$
+BEGIN
+RETURN QUERY SELECT * FROM contacts WHERE id = _id;
+END;
+$$;
+--  Функция возвращает контакт
 
 

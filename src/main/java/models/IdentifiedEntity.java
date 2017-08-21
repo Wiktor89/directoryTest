@@ -13,7 +13,11 @@ public abstract class IdentifiedEntity implements Serializable,Entity {
 
     public IdentifiedEntity() {
     }
-
+    
+    public IdentifiedEntity(int id) {
+        this.id = id;
+    }
+    
     public void setId(int id) {
         this.id = id;
     }

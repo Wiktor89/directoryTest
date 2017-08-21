@@ -1,23 +1,41 @@
 package models;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
  * Модель пользователя
  */
 public class User extends IdentifiedEntity implements Comparable<User> {
 	
-	private boolean act;
+	private boolean enable;
 	private String login;
 	private String password;
+	private Set<Role> role = new TreeSet<>();
 	
 	public User() {
 	}
 	
-	public boolean getAct() {
-		return act;
+	public User(String login, int id, boolean enable) {
+		super(id);
+		this.login = login;
+		this.enable = enable;
 	}
 	
-	public void setAct(boolean act) {
-		this.act = act;
+	public Set<Role> getRole() {
+		return role;
+	}
+	
+	public void setRole(Set<Role> role) {
+		this.role = role;
+	}
+	
+	public boolean getEnable() {
+		return enable;
+	}
+	
+	public void setEnable(boolean enable) {
+		this.enable = enable;
 	}
 	
 	public String getLogin() {
@@ -39,7 +57,7 @@ public class User extends IdentifiedEntity implements Comparable<User> {
 	@Override
 	public String toString() {
 		return "User{" +
-				"login='" + getLogin()+
+				"login=" + getLogin()+ " role " + role+
 				'}';
 	}
 	

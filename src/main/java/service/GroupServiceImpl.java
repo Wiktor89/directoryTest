@@ -1,6 +1,7 @@
 package service;
 
 import dao.GroupDao;
+import factories.DaoFactory;
 import models.Contact;
 import models.Entity;
 import models.Group;
@@ -23,8 +24,8 @@ public class GroupServiceImpl implements GroupService {
      */
     private GroupDao dao = null;
 
-    public GroupServiceImpl(GroupDao dao) {
-        this.dao = dao;
+    public GroupServiceImpl() {
+        this.dao = DaoFactory.getGroupDao();
     }
 
 
@@ -42,20 +43,20 @@ public class GroupServiceImpl implements GroupService {
     public void addGroup(Entity entity) throws SQLException {
         this.dao.addGroup(entity);
     }
-
-    @Override
-    public boolean removeGroup(String name) throws SQLException {
-        return this.dao.removeGroup(name);
+    
+    
+    public boolean removeGroup(Integer id) throws SQLException {
+        return this.dao.removeGroup(id);
     }
 
     @Override
-    public boolean updateGroup(List<String> attGroup) throws SQLException {
-        return this.dao.updateGroup(attGroup);
+    public boolean updateGroup(Integer id, String name) throws SQLException {
+        return this.dao.updateGroup(id, name);
     }
 
     @Override
-    public boolean existGroup(String name) throws SQLException {
-        return this.dao.existGroup(name);
+    public boolean existGroup(Integer id) throws SQLException {
+        return this.dao.existGroup(id);
     }
     
     @Override

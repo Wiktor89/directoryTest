@@ -6,7 +6,6 @@ import models.Group;
 import models.User;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,17 +31,20 @@ public interface GroupService {
     /**
      *Удаление группы
      */
-    boolean removeGroup(String name) throws SQLException;
+    boolean removeGroup(Integer id) throws SQLException;
 
     /**
      *Обновление  группы
+     * @param id
+     * @param name
      */
-    boolean updateGroup(List<String> attGoup) throws SQLException;
+    boolean updateGroup(Integer id, String name) throws SQLException;
 
     /**
      *Смотрим есть группа в списке
+     * @param id
      */
-    boolean existGroup(String name) throws SQLException;
+    boolean existGroup(Integer id) throws SQLException;
     
     /**
      * Количество пользователей

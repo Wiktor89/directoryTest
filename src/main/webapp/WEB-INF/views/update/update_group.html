@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Group</title>
+    <script>
+        function validate() {
+            var  valid = true;
+            var name = document.getElementById("title");
+            if (name.value == ''){
+                alert("Введите название группы");
+                valid = false;
+            }
+            return valid;
+        }
+    </script>
+    <style type="text/css">
+        #centerLayer {
+            width: 400px; /* Ширина слоя в пикселах */
+            margin: 0 auto; /* Отступ слева и справа */
+            background: #acff77; /* Цвет фона */
+            padding: 10px; /* Поля вокруг текста */
+            text-align: start; /* Выравнивание содержимого слоя по левому краю */
+        }
+    </style>
+</head>
+<body>
+<div id="centerLayer">
+    <form action="/addGroup" method="POST" onsubmit="return validate();">
+        Введите название группы <input type="text" name="title" id="title" placeholder="Введите название группы"/><br/>
+        <input type="submit" value="UPDATE">
+        <p><a href="/selection">Назад</a></p>
+    </form>
+</div>
+</body>
+</html>

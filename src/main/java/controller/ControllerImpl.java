@@ -1,6 +1,5 @@
 package controller;
 
-import factories.DaoFactory;
 import factories.EntityFactory;
 import models.Contact;
 import models.Entity;
@@ -9,6 +8,7 @@ import models.User;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
 import utilits.TeamList;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -39,8 +39,8 @@ public class ControllerImpl implements Controller{
     }
 
     public ControllerImpl() {
-        this.serviceContact = new ContactServiceImpl(DaoFactory.getContactDao());
-        this.serviceGroup = new GroupServiceImpl(DaoFactory.getGroupDao());
+        this.serviceContact = new ContactServiceImpl();
+        this.serviceGroup = new GroupServiceImpl();
     }
 
     @Override
@@ -58,8 +58,8 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void removeContact(String fio) throws SQLException {
-        this.serviceContact.removeContact(fio);
+    public void removeContact(Integer id) throws SQLException {
+        this.serviceContact.removeContact(id);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class ControllerImpl implements Controller{
 
     @Override
     public boolean updateGroup(List<String> attGroup) throws SQLException {
-            return this.serviceGroup.updateGroup(attGroup);
+            return this.serviceGroup.updateGroup(attGroup, );
     }
 
 }

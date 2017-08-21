@@ -1,6 +1,7 @@
 package service;
 
 import dao.ContactDao;
+import factories.DaoFactory;
 import models.Contact;
 import models.Entity;
 import models.User;
@@ -23,8 +24,8 @@ public class ContactServiceImpl implements ContactService{
      */
     private ContactDao dao = null;
 
-    public ContactServiceImpl(ContactDao dao) {
-        this.dao = dao;
+    public ContactServiceImpl() {
+        this.dao = DaoFactory.getContactDao();
     }
 
     public ContactDao getDao() {
@@ -46,8 +47,8 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public void removeContact(String fio) throws SQLException {
-        this.dao.removeContact(fio);
+    public void removeContact(Integer id) throws SQLException {
+        this.dao.removeContact(id);
 
     }
 

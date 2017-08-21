@@ -312,7 +312,7 @@ public class ViewImpl implements View, Runnable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (user!= null && user.getAct()){
+		if (user!= null && user.getEnable()){
 			startPage();
 		}else {
 			System.out.println("user отсутствует");
@@ -326,7 +326,7 @@ public class ViewImpl implements View, Runnable {
 		String name = getNameContact();
 		try {
 			if (this.controller.existContact(name)){
-				this.controller.removeContact(name);
+				this.controller.removeContact(1);
 				getSuc();
 			}else {
 				notFound();
@@ -438,7 +438,6 @@ public class ViewImpl implements View, Runnable {
 		try {
 			if (this.controller.existGroup(name)){
 				Set<Contact> contacts = this.controller.getContactsGroup(name);
-//				System.out.println(contacts);
 				if (!contacts.isEmpty()){
 					for (Contact contact : contacts){
 						System.out.println(contact.contactInf());

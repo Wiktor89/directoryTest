@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Contact</title>
+    <style type="text/css">
+        #centerLayer {
+            width: 400px; /* Ширина слоя в пикселах */
+            margin: 0 auto; /* Отступ слева и справа */
+            background: #acff85; /* Цвет фона */
+            padding: 10px; /* Поля вокруг текста */
+            text-align: start; /* Выравнивание содержимого слоя по левому краю */
+        }
+    </style>
+    <script>
+        function validate() {
+            var  valid = true;
+            var name = document.getElementById("fioval");
+            if (name.value == ''){
+                alert("Введите ФИО");
+                valid = false;
+            }
+            return valid;
+        }
+    </script>
+</head>
+<body>
+<div id="centerLayer">
+    <form action="/addContact" method="POST" onsubmit="return validate();">
+        FIO: <input type="text" name="fio" id="fioval" placeholder="Введите ФИО"/><br/>
+        <p></p>
+        Phone: <input type="text" name="phone" placeholder="Введите телефон"/><br/>
+        <p></p>
+        Email: <input type="email" name="email" placeholder="Введите email"/><br/>
+        <p></p>
+        <input type="submit" name="addContact" value="UPDATE" aria-controls="gfg"/><br/>
+        <p></p>
+        <p><a href="/selection">Назад</a></p>
+    </form>
+</div>
+
+</body>
+</html>

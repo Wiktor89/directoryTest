@@ -18,15 +18,16 @@ CREATE TABLE IF NOT EXISTS public.users
 (
   id SERIAL PRIMARY KEY NOT NULL,
   login CHAR(100) NOT NULL,
-  password CHAR(100) NOT NULL
+  password CHAR(100) NOT NULL,
+  enable BOOLEAN NOT NULL
 );
 CREATE UNIQUE INDEX users_login_uindex ON public.users (login);
 COMMENT ON TABLE public.users IS 'таблица пользователей';
 
 INSERT  INTO users (login, password) VALUES
-  ('Филип','root'),
-  ('Николай','root'),
-  ('Жанна','root');
+  ('A','root'),
+  ('B','root'),
+  ('C','root');
 
 
 CREATE TABLE IF NOT EXISTS public.contacts(
@@ -50,5 +51,23 @@ CREATE TABLE IF NOT EXISTS public.contact_group
   CONSTRAINT contact_group_group_id_fk FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE public.role
+(
+  id SERIAL PRIMARY KEY NOT NULL,
+  title CHAR(50) NOT NULL,
+  description CHARACTER
+);
+CREATE UNIQUE INDEX role_title_uindex ON public.role (title);
+
+
+CREATE TABLE public.user_role
+(
+  user_id INTEGER NOT NULL,
+  role_id INTEGER NOT NULL,
+  CONSTRAINT user_role_users_id_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT user_role_role_id_fk FOREIGN KEY (role_id) REFERENCES role (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE UNIQUE INDEX user_role_user_id_uindex ON public.user_role (user_id);
+CREATE UNIQUE INDEX user_role_role_id_uindex ON public.user_role (role_id);
 -- COPY public.contact_group(contact_id, group_id)
 -- FROM 'D:\sql\contacts_groups.csv' WITH DELIMITER ',' CSV;

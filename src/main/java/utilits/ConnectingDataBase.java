@@ -1,40 +1,35 @@
 package utilits;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 /**
- * Предоставляет коннект в БД
+ *
  */
 public class ConnectingDataBase {
 	
 	
-	public ConnectingDataBase() {
+	
+	
+	public ConnectingDataBase(){
+	
 	}
 	
 	public static Connection getConnection() {
-		Properties properties = new Properties();
+		InitialContext initialContext = null;
+		DataSource dataSource = null;
 		Connection connection = null;
-		
 		try {
-			properties.load(new FileInputStream(new File("configDb.properties")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			String url = String.valueOf(properties.get("url"));
-			String login = String.valueOf(properties.get("user"));
-			String password = String.valueOf(properties.get("password"));
-			connection = DriverManager.getConnection(url, login, password);
-		} catch (SQLException e) {
+			initialContext = new InitialContext();
+			dataSource = (DataSource) initialContext.lookup("java:/comp/env/jdbc/postgres");
+			connection = dataSource.getConnection();
+		} catch (NamingException | SQLException e) {
 			e.printStackTrace();
 		}
 		return connection;
+		
 	}
 }

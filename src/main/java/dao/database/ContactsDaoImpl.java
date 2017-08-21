@@ -6,9 +6,11 @@ import models.Entity;
 import models.Group;
 import models.User;
 import utilits.ConnectingDataBase;
-import views.ViewChangContact;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -22,8 +24,8 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	private Set<Contact> contacts;
 	
 	private ContactsDaoImpl() {
-		ViewChangContact viewChangContact = ViewChangContact.getViewChangContact();
-		observerList.add(viewChangContact);
+//		ViewChangContact viewChangContact = ViewChangContact.getViewChangContact();
+//		observerList.add(viewChangContact);
 	}
 	
 	public static ContactsDaoImpl getContactsDaoImpl(){
@@ -40,32 +42,23 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	@Override
 	public synchronized void  addContact(Entity entity) throws SQLException {
 		Contact contact = (Contact) entity;
-		Connection connection = ConnectingDataBase.getConnection();
-		try (PreparedStatement statement = connection.prepareStatement("SELECT add_contact(?,?,?,?)")) {
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT add_contact(?,?,?,?)")) {
 			statement.setString(1,contact.getFio());
 			statement.setString(2,contact.getPhone());
 			statement.setString(3,contact.getEmail());
 			statement.setInt(4,this.user.getId());
 			statement.execute();
-			notifyObserver();
-		}finally {
-			try {
-				if (!connection.isClosed()){
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
 	@Override
 	public synchronized boolean updateContact(List<String> attContact) throws SQLException {
 		boolean result;
-		Contact oldContact = getContact(attContact.get(0));
+		Contact oldContact = getContact(Integer.parseInt(attContact.get(0)));
 		Connection connection = ConnectingDataBase.getConnection();
 		try (PreparedStatement statement = connection.prepareStatement("SELECT update_contact(?,?,?,?,?)")) {
-			statement.setInt(1,oldContact.getId());
+			statement.setInt(1, Integer.parseInt(attContact.get(0)));
 			statement.setString(2,attContact.get(1));
 			if (!(attContact.get(2).equalsIgnoreCase("nop"))){
 				statement.setString(3,attContact.get(2));
@@ -77,9 +70,8 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 			}else {
 				statement.setString(4,oldContact.getEmail());
 			}
-			statement.setInt(5,this.user.getId());
+			statement.setInt(5,6);
 			statement.execute();
-			notifyObserver();
 			result = true;
 		}finally {
 			try {
@@ -94,22 +86,12 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	}
 	
 	@Override
-	public synchronized boolean removeContact(String fio) throws SQLException {
+	public synchronized boolean removeContact(Integer id) throws SQLException {
 		boolean result;
-		Integer id = getContact(fio).getId();
-		Connection connection = ConnectingDataBase.getConnection();
-		try (PreparedStatement statement = connection.prepareStatement("SELECT delete_contact(?)")) {
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT delete_contact(?)")) {
 			statement.setInt(1,id);
 			result = statement.execute();
-			notifyObserver();
-		}finally {
-			try {
-				if (!connection.isClosed()){
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		return result;
 	}
@@ -121,7 +103,7 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 		Contact contact = getContact(attContact.get(0));
 		Group group;
 		Connection connection = ConnectingDataBase.getConnection();
-		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group(?)")) {
+		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group_name(?)")) {
 			statement.setString(1,attContact.get(1));
 			group = ContactMapper.getGroup(statement.executeQuery());
 		}
@@ -129,7 +111,6 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 				statement.setInt(1,contact.getId());
 				statement.setInt(2,group.getId());
 				statement.execute();
-				notifyObserver();
 				result = true;
 			}finally {
 				try {
@@ -149,7 +130,7 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 		Contact contact = getContact(attr.get(0));
 		Group group;
 		Connection connection = ConnectingDataBase.getConnection();
-		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group(?)")){
+		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_group_name(?)")){
 			statement.setString(1,attr.get(1));
 			group = ContactMapper.getGroup(statement.executeQuery());
 		}
@@ -158,7 +139,6 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 				statement.setInt(2,group.getId());
 				statement.execute();
 				result = true;
-				notifyObserver();
 			}finally {
 				try {
 					if (!connection.isClosed()){
@@ -175,23 +155,14 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	@Override
 	public Set<Contact> getContacts() throws SQLException {
 		contacts = new TreeSet<>();
-		Connection connection = ConnectingDataBase.getConnection();
-		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contacts()")) {
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contacts()")) {
 			contacts = ContactMapper.getContacts(statement.executeQuery());
 			for (Contact contact : contacts){
 				try (PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM get_groups_contact(?)")) {
 					statement1.setInt(1,contact.getId());
 					contact.setGroup(ContactMapper.getGroups(statement1.executeQuery()));
 				}
-				
-			}
-		}finally {
-			try {
-				if (!connection.isClosed()){
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
 			}
 		}
 		return contacts;
@@ -199,17 +170,22 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	
 	@Override
 	public boolean existContact(String name) throws SQLException {
-		return ContactMapper.existContact(name);
+		boolean result;
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contact(?)")) {
+			statement.setString(1, name);
+			result = ContactMapper.existContact(statement.executeQuery(),name);
+		}
+		return result;
 	}
 	
 	@Override
 	public Contact getContact(String fio) throws SQLException {
-		
 		Contact contact;
 		try (Connection connection = ConnectingDataBase.getConnection();
 		     PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contact(?)")) {
-				statement.setString(1, fio.trim());
-				contact = ContactMapper.getContact(statement.executeQuery());
+			statement.setString(1, fio.trim());
+			contact = ContactMapper.getContact(statement.executeQuery());
 			PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM get_groups_contact(?)");
 			statement1.setInt(1,contact.getId());
 			contact.setGroup(ContactMapper.getGroups(statement1.executeQuery()));
@@ -224,21 +200,32 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	
 	@Override
 	public User authorizationPage(List<String> attr) throws SQLException {
-		Connection connection = ConnectingDataBase.getConnection();
-		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_user(?,?)")) {
-			statement.setString(1,attr.get(0).trim());
-			statement.setString(2,attr.get(1).trim());
-			this.user = ContactMapper.getUser(attr,statement.executeQuery());
-		}finally {
-			try {
-				if (!connection.isClosed()){
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_user(?,?)")) {
+			statement.setString(1, attr.get(0));
+			statement.setString(2, attr.get(1));
+			user = ContactMapper.getUser(statement.executeQuery());
+			if (user != null && user.getEnable()) {
+				PreparedStatement statement1 = connection.prepareStatement("SELECT FROM update_users(?,?)");
+				statement1.setInt(1, user.getId());
+				statement1.setBoolean(2, user.getEnable());
+				statement1.execute();
 			}
+			
 		}
-		return this.user;
+		return user;
+	}
+	
+	@Override
+	public Contact getContact(Integer id) throws SQLException {
+		Contact contact;
+		try (Connection connection = ConnectingDataBase.getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contact(?)")) {
+			statement.setInt(1, id);
+			contact = ContactMapper.getContact(statement.executeQuery());
+			
+		}
+		return contact;
 	}
 	
 	public void notifyObserver() throws SQLException {
@@ -262,27 +249,14 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 			return contact;
 		}
 		
-		private static boolean existContact(String name) throws SQLException {
+		private static boolean existContact(ResultSet resultSet,String name) throws SQLException {
 			boolean result = false;
-			Connection connection = ConnectingDataBase.getConnection();
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contact(?)")) {
-				statement.setString(1, name);
-				ResultSet resultSet = statement.executeQuery();
 				while (resultSet.next()) {
 					if (resultSet.getString("fio").trim().equalsIgnoreCase(name)) {
 						result = true;
 						break;
 					}
 				}
-			} finally {
-				try {
-					if (!connection.isClosed()) {
-						connection.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
 			return result;
 		}
 		
@@ -303,25 +277,22 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 		private static Group getGroup(ResultSet resultSet) throws SQLException {
 			Group group = new Group();
 			while (resultSet.next()) {
-				group.setName(resultSet.getString("title"));
+				group.setName(resultSet.getString("title").trim());
 				group.setId(resultSet.getInt("id"));
 				}
 			return group;
 			
 		}
 		
-		public static User getUser(List<String> attr, ResultSet resultSet) throws SQLException {
-			User user = new User();
+		public static User getUser(ResultSet resultSet) throws SQLException {
 			while (resultSet.next()) {
-				String login = resultSet.getString("login").trim();
-				if (login.equalsIgnoreCase(attr.get(0).trim())
-						&& resultSet.getString("password").trim().equalsIgnoreCase(attr.get(1).trim())) {
-					user.setAct(true);
-					user.setLogin(login);
-					user.setId(resultSet.getInt("id"));
+				boolean enable = resultSet.getBoolean("enable");
+				if (!enable){
+					String login = resultSet.getString("login").trim();
+					return new User(login,resultSet.getInt("id"),!enable);
 				}
 			}
-			return user;
+			return null;
 		}
 		
 		public static Set<Group> getGroups (ResultSet resultSet) throws SQLException {
@@ -332,4 +303,5 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 			return groups;
 		}
 	}
+
 }

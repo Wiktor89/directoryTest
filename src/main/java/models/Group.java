@@ -1,8 +1,6 @@
 package models;
 
 import java.io.Serializable;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *Модель группы
@@ -43,7 +41,7 @@ public class Group extends IdentifiedEntity implements Serializable,Comparable<G
 
     @Override
     public String toString() {
-        return " имя группы - "+ name;
+        return  name;
     }
 
     /**
