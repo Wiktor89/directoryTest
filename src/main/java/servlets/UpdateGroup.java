@@ -56,6 +56,6 @@ public class UpdateGroup extends HttpServlet {
 				out.print(HtmlPage.getHtmlPageUpdate(group));
 			}
 		}
-		
+		out.close();
 	}
 }

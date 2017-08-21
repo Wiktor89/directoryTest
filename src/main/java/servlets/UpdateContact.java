@@ -37,17 +37,16 @@ public class UpdateContact extends HttpServlet {
 		String fio = request.getParameter("fio");
 		attrContact.add(1, fio);
 		if (fio.trim().length() > 0) {
-			if (request.getParameter("phone") != null) {
+			if (request.getParameter("phone").trim().length() > 0) {
 				attrContact.add(2, request.getParameter("phone"));
 			} else {
 				attrContact.add(2, "nop");
 			}
-			if (request.getParameter("email") != null) {
+			if (request.getParameter("email").trim().length() > 0) {
 				attrContact.add(3, request.getParameter("email"));
 			} else {
-				attrContact.add(2, "noe");
+				attrContact.add(3, "noe");
 			}
-			System.out.println(attrContact);
 			try {
 				service.updateContact(attrContact);
 			} catch (SQLException e) {
@@ -75,6 +74,6 @@ public class UpdateContact extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		out.close();
 	}
 }
