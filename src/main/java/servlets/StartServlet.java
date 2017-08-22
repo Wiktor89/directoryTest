@@ -28,8 +28,11 @@ public class StartServlet extends HttpServlet {
 		attrUser.add(1,request.getParameter("password"));
 			try {
 				User user = contactService.authorizationPage(attrUser);
-				if (user != null && user.getEnable()) response.sendRedirect("/selection");
-				else request.getRequestDispatcher("/WEB-INF/views/exception/exsPageLogin.html").forward(request,response);
+				if (user != null && user.getEnable()){
+					response.sendRedirect("/selection");
+				}else request.getRequestDispatcher("/WEB-INF/views/exception/exsPageLogin.html")
+						.forward(request,response);
+				
 				
 			} catch (SQLException e) {
 				e.printStackTrace();

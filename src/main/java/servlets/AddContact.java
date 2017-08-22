@@ -2,6 +2,7 @@ package servlets;
 
 import factories.EntityFactory;
 import models.Entity;
+import models.User;
 import service.ContactServiceImpl;
 import service.GroupServiceImpl;
 
@@ -21,6 +22,7 @@ import java.util.List;
 @WebServlet("/addContact")
 public class AddContact extends HttpServlet {
 	
+	private User user;
 	private ContactServiceImpl serviceContact = null;
 	private GroupServiceImpl serviceGroup = null;
 	
@@ -36,9 +38,9 @@ public class AddContact extends HttpServlet {
 		attContact.add(1,request.getParameter("phone"));
 		attContact.add(2,request.getParameter("email"));
 		try {
-			System.out.println(attContact);
 			Entity entity = EntityFactory.create("con",attContact);
 			this.serviceContact.addContact(entity);
+			System.out.println();
 		} catch (IOException | SQLException e) {
 		}
 		response.sendRedirect("/addContact");

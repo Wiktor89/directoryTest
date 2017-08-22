@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
 
 
+
     <properties>
         <postgresql.version>42.0.0</postgresql.version>
         <junit>4.11</junit>
@@ -41,7 +42,7 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <server>TomcatServer</server>
-                    <path>/startServlet</path>
+                    <path>/directory</path>
                 </configuration>
             </plugin>
 

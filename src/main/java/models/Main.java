@@ -1,12 +1,7 @@
 package models;
 
 import dao.database.ContactsDaoImpl;
-import utilits.ConnectingDataBase;
-import utilits.ConnectingDataBaseProp;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +17,7 @@ public class Main {
     public void goo() throws SQLException {
     
         ContactsDaoImpl contactsDao = ContactsDaoImpl.getContactsDaoImpl();
-        List<String> strings = new ArrayList<>();
+        List<String> strings = new ArrayList<String>();
         strings.add(0,"A");
         strings.add(1,"root");
         User user = contactsDao.authorizationPage(strings);
