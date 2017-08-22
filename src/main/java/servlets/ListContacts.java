@@ -35,7 +35,9 @@ public class ListContacts extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			Set<Contact> contacts = service.getContacts();
+			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
+			request.setCharacterEncoding ("UTF-8");
 			out.print(HtmlPage.getHtmlPageRem(contacts));
 			out.close();
 			service.removeContact(Integer.valueOf(request.getParameter("id")));

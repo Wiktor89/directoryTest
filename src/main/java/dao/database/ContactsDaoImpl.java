@@ -157,11 +157,13 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 		contacts = new TreeSet<>();
 		try (Connection connection = ConnectingDataBase.getConnection();
 		     PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_contacts()")) {
-			contacts = ContactMapper.getContacts(statement.executeQuery());
-			for (Contact contact : contacts){
-				try (PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM get_groups_contact(?)")) {
-					statement1.setInt(1,contact.getId());
-					contact.setGroup(ContactMapper.getGroups(statement1.executeQuery()));
+			for (Contact contact : ContactMapper.getContacts(statement.executeQuery())){
+				if (contact.getUser().getId() == user.getId()){
+					try (PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM get_groups_contact(?)")) {
+						statement1.setInt(1,contact.getId());
+						contact.setGroup(ContactMapper.getGroups(statement1.executeQuery()));
+						contacts.add(contact);
+					}
 				}
 			}
 		}
@@ -269,6 +271,7 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 				contact.setFio(resultSet.getString("fio").trim());
 				contact.setPhone(resultSet.getString("phone").trim());
 				contact.setEmail(resultSet.getString("email").trim());
+				contact.setUser(new User(resultSet.getInt("user_id")));
 				contacts.add(contact);
 			}
 			return contacts;

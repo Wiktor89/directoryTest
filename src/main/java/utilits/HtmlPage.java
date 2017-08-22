@@ -13,7 +13,7 @@ public class HtmlPage {
 	public static StringBuilder getHtmlPageRem(Set<Contact> contacts) {
 		StringBuilder stringBuilder = new StringBuilder("<!DOCTYPE html>\n");
 		stringBuilder.append("<html lang=\"en\">\n");
-		stringBuilder.append("<head>\n<meta charset=\"UTF-8\">\n<title>List Contacts</title>\n<style>" +
+		stringBuilder.append("<head>\n<meta charset=utf-8>\n<title>List Contacts</title>\n<style>" +
 				"table{\n width: 100%;\nbackground: white;\ncolor: white;\nborder-spacing: 1px;\n}" +
 				"td, th{\nbackground: maroon;\npadding: 5px;\n}\n</style>" +
 				"</head>\n");

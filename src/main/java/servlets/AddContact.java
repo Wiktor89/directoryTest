@@ -36,6 +36,7 @@ public class AddContact extends HttpServlet {
 		attContact.add(1,request.getParameter("phone"));
 		attContact.add(2,request.getParameter("email"));
 		try {
+			System.out.println(attContact);
 			Entity entity = EntityFactory.create("con",attContact);
 			this.serviceContact.addContact(entity);
 		} catch (IOException | SQLException e) {

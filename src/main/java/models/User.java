@@ -22,6 +22,10 @@ public class User extends IdentifiedEntity implements Comparable<User> {
 		this.enable = enable;
 	}
 	
+	public User(int id) {
+		super(id);
+	}
+	
 	public Set<Role> getRole() {
 		return role;
 	}
