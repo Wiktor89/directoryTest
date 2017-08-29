@@ -3,7 +3,7 @@
     <Resource
             name="jdbc/postgres"
             auth="Container"
-            type="javax.sql.DataSource"
+            type="javax.sql.sql.DataSource"
             driverClassName="org.postgresql.Driver"
             url="jdbc:postgresql://localhost:5432/directory"
             username="postgres"

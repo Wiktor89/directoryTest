@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/directory</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">root</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
+        <property name="swow_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+        <property name="current_session_context_class">thread</property>
+
+
+        <mapping class="net.directory.models.User"/>
+        <mapping class="net.directory.models.IdentifiedEntity"/>
+        <mapping class="net.directory.models.Contact"/>
+        <mapping class="net.directory.models.Group"/>
+        <mapping class="net.directory.models.Role"/>
+        <mapping class="net.directory.models.User"/>
+
+
+    </session-factory>
+</hibernate-configuration>
