@@ -1,10 +1,14 @@
 package net.directory.service;
 
-import net.directory.dao.hibernate.GroupsDaoImp;
+import net.directory.dao.GroupDao;
 import net.directory.models.Contact;
 import net.directory.models.Entity;
 import net.directory.models.Group;
 import net.directory.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Set;
@@ -12,6 +16,8 @@ import java.util.Set;
 /**
  *Сервис для контакта
  */
+@Service
+@Transactional
 public class GroupServiceImpl implements GroupService {
 
     /**
@@ -21,13 +27,14 @@ public class GroupServiceImpl implements GroupService {
      * groups
      * net.directory.dao
      */
-    private GroupsDaoImp dao;
+    GroupDao dao;
     
-    public GroupServiceImpl() {
-        this.dao = GroupsDaoImp.getGroupsDaoImpl();
-    }
-    
-    public void setDao(GroupsDaoImp dao) {
+//    public GroupServiceImpl() {
+//        this.dao = GroupsDaoImp.getGroupsDaoImpl();
+//    }
+    @Autowired(required = true)
+    @Qualifier(value = "groupDao")
+    public void setDao(GroupDao dao) {
         this.dao = dao;
     }
     
@@ -47,7 +54,6 @@ public class GroupServiceImpl implements GroupService {
     }
     
     
-
     @Override
     public boolean updateGroup(Integer id, String name) throws SQLException {
         return this.dao.updateGroup(id, name);
@@ -74,6 +80,7 @@ public class GroupServiceImpl implements GroupService {
     }
     
     @Override
+    @Transactional
     public Integer averageNumberContactsGroups() throws SQLException {
         return this.dao.averageNumberContactsGroups();
     }
@@ -89,7 +96,7 @@ public class GroupServiceImpl implements GroupService {
     }
     
     @Override
-    public boolean removeGroup(Integer id) {
+    public boolean removeGroup(Integer id) throws SQLException {
             return this.dao.removeGroup(id);
     }
     

@@ -1,4 +1,4 @@
-package net.directory.dao.database;
+package net.directory.database;
 
 import net.directory.dao.GroupDao;
 import net.directory.models.Contact;

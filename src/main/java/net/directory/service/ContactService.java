@@ -17,7 +17,7 @@ public interface ContactService {
     /**
      *Добавление контакта
      */
-    void addContact (Entity entity) throws IOException, SQLException;
+    void addContact (Entity entity) throws  SQLException;
 
     /**
      *Обновление контакта

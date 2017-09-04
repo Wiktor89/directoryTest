@@ -1,9 +1,13 @@
 package net.directory.service;
 
-import net.directory.dao.hibernate.ContactsDaoImpl;
+import net.directory.dao.ContactDao;
 import net.directory.models.Contact;
 import net.directory.models.Entity;
 import net.directory.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,6 +16,8 @@ import java.util.Set;
 /**
  *Сервис для группы
  */
+@Service
+@Transactional
 public class ContactServiceImpl implements ContactService{
 
     /**
@@ -21,12 +27,18 @@ public class ContactServiceImpl implements ContactService{
      * groups
      * net.directory.dao
      */
-    private ContactsDaoImpl dao;
-
-    public ContactServiceImpl() {
-        this.dao = ContactsDaoImpl.getContactsDaoImpl();
+    
+    private ContactDao dao;
+    
+//    public ContactServiceImpl() {
+//        this.dao = ContactsDaoImpl.getContactsDaoImpl();
+//    }
+    @Autowired(required = true)
+    @Qualifier(value = "contactDao")
+    public void setDao(ContactDao dao) {
+        this.dao = dao;
     }
-
+    
     @Override
     public void addContact(Entity entity) throws SQLException {
         this.dao.addContact(entity);
@@ -77,5 +89,7 @@ public class ContactServiceImpl implements ContactService{
     public User authorizationPage(List<String> attr) throws SQLException {
         return this.dao.authorizationPage(attr);
     }
+    
+    
     
 }

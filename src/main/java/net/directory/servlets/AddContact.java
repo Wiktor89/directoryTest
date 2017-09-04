@@ -2,9 +2,10 @@ package net.directory.servlets;
 
 import net.directory.factories.EntityFactory;
 import net.directory.models.Entity;
-import net.directory.service.ContactServiceImpl;
-import net.directory.service.GroupServiceImpl;
+import net.directory.service.ContactService;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,14 +23,14 @@ import java.util.List;
 @WebServlet("/addContact")
 public class AddContact extends HttpServlet {
 	
+	private ApplicationContext context;
 	private static final Logger LOGGER = Logger.getLogger(AddContact.class);
-	private ContactServiceImpl serviceContact = null;
-	private GroupServiceImpl serviceGroup = null;
+	private ContactService serviceContact = null;
 	
-	public AddContact() {
-		this.serviceContact = new ContactServiceImpl();
-		this.serviceGroup = new GroupServiceImpl();
-	}
+//	public AddContact() {
+//		this.serviceContact = new ContactServiceImpl();
+//		this.serviceGroup = new GroupServiceImpl();
+//	}
 	
 	protected void doPost(HttpServletRequest request,
 	                      HttpServletResponse response) throws ServletException, IOException {
@@ -42,7 +43,6 @@ public class AddContact extends HttpServlet {
 			this.serviceContact.addContact(entity);
 		} catch (IOException | SQLException e) {
 			LOGGER.error("Could not add contact");
-			e.printStackTrace();
 		}
 		response.sendRedirect("/addContact");
 	}
@@ -53,4 +53,13 @@ public class AddContact extends HttpServlet {
 				.forward(request,response);
 	}
 	
+	@Override
+	public void init() throws ServletException {
+//		this.context = new FileSystemXmlApplicationContext("C:/Users/Wiktor/IdeaProjects/directory/src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml");
+//		this.context = new ClassPathXmlApplicationContext("mvc-dispatcher-servlet.xml");
+//		serviceContact = (ContactService) this.context.getBean("contactService");
+		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
+						this.getServletContext());
+		serviceContact = (ContactService) context.getBean("contactService");
+	}
 }

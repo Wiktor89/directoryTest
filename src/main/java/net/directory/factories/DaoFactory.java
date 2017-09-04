@@ -2,8 +2,8 @@ package net.directory.factories;
 
 import net.directory.dao.ContactDao;
 import net.directory.dao.GroupDao;
-import net.directory.dao.database.ContactsDaoImpl;
-import net.directory.dao.database.GroupsDaoImpl;
+import net.directory.database.ContactsDaoImpl;
+import net.directory.database.GroupsDaoImpl;
 
 import java.io.FileInputStream;
 import java.io.IOException;

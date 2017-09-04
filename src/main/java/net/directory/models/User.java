@@ -26,7 +26,7 @@ public class User extends IdentifiedEntity implements Comparable<User> {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Contact> listContacts;
-	
+
 	public User() {
 	}
 	
