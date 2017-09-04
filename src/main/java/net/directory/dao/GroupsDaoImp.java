@@ -5,6 +5,7 @@ import net.directory.models.Entity;
 import net.directory.models.Group;
 import net.directory.models.User;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -71,8 +72,9 @@ public class GroupsDaoImp implements GroupDao {
 	public boolean updateGroup(Integer id, String name)  {
 		boolean result = false;
 		Session ses  = sessionFactory.getCurrentSession();
-		Group group = (Group) ses.createQuery("update Group set name =: name where id =: _id")
-				.setParameter("name", name).setParameter("_id", id).uniqueResult();
+		Group group = (Group) ses.get(Group.class,new Integer(id));
+		group.setName(name);
+		ses.update(group);
 		LOGGER.info("Update "+group);
 		LOGGER.debug("Update "+group);
 		return result;
@@ -104,9 +106,11 @@ public class GroupsDaoImp implements GroupDao {
 	
 	@Override
 	public Set<Contact> getContactsGroup(String name) {
+		Set<Contact> contact = new TreeSet<>();
 		Session ses = sessionFactory.getCurrentSession();
-		Group group = (Group) ses.createCriteria(Group.class).add(Restrictions.eq("name", name)).uniqueResult();
-		Set<Contact> contact = group.getContact();
+		Criteria criteria = ses.createCriteria(Group.class);
+		Group group = (Group) criteria.add(Restrictions.eq("name", name)).uniqueResult();
+		contact.addAll(group.getContact());
 		LOGGER.info("get contacts group = "+group+" contacts = "+contact);
 		LOGGER.debug("get contacts group = "+group+" contacts = "+contact);
 		return contact;
@@ -115,7 +119,7 @@ public class GroupsDaoImp implements GroupDao {
 	@Override
 	public Integer numberUsers()  {
 		Session ses  = sessionFactory.getCurrentSession();
-		int size = ses.createQuery("select count(*) from User ").list().size();
+		int size = ses.createQuery("from User").list().size();
 		LOGGER.info("number users * "+size);
 		LOGGER.debug("number users * "+size);
 		return size;
@@ -135,14 +139,11 @@ public class GroupsDaoImp implements GroupDao {
 	public Integer quantityGroupsUser(String name)  {
 		int countGroups = 0;
 		Session ses = sessionFactory.getCurrentSession();
-		List groups = ses.createQuery("from User  ").list();
-		User user = null;
-		for (Object o : groups){
-			user = (User) o;
-			if (user.getListContacts().isEmpty()){
-				for (Contact contact : user.getListContacts()){
-					countGroups = contact.getGroups().size() + countGroups;
-				}
+		Criteria criteria = ses.createCriteria(User.class);
+		User user = (User) criteria.add(Restrictions.eq("login", name)).uniqueResult();
+		for (Contact contact : user.getListContacts()){
+			if (!contact.getGroups().isEmpty() && contact.getGroups().size() > 0){
+				countGroups += contact.getGroups().size();
 			}
 		}
 		LOGGER.info("Quantity groups user "+ user);

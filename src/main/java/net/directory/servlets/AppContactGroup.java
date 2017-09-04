@@ -1,8 +1,9 @@
 package net.directory.servlets;
 
 import net.directory.service.ContactService;
-import net.directory.service.ContactServiceImpl;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,12 +21,13 @@ import java.util.List;
 @WebServlet("/appContactGroup")
 public class AppContactGroup extends HttpServlet {
 	
+	private ApplicationContext context;
 	private static final Logger LOGGER = Logger.getLogger(AppContactGroup.class);
-	private ContactService service = new ContactServiceImpl();
+	private ContactService serviceContact;
 	
-	public AppContactGroup() {
-		this.service = new ContactServiceImpl();
-	}
+//	public AppContactGroup() {
+//		this.serviceContact = new ContactServiceImpl();
+//	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -34,7 +36,7 @@ public class AppContactGroup extends HttpServlet {
 		attr.add(1,request.getParameter("group").trim());
 		if(request.getParameter("appGroup") != null){
 			try {
-				service.appGroupContact(attr);
+				serviceContact.appGroupContact(attr);
 			} catch (SQLException e) {
 				LOGGER.error("");
 				request.getRequestDispatcher("/WEB-INF/views/exception/no_group_contact.html")
@@ -42,7 +44,7 @@ public class AppContactGroup extends HttpServlet {
 			}
 		}else if (request.getParameter("remGroup") != null){
 			try {
-				service.removeGroupContact(attr);
+				serviceContact.removeGroupContact(attr);
 			} catch (SQLException e) {
 				request.getRequestDispatcher("/WEB-INF/views/exception/no_group_contact.html")
 						.forward(request,response);
@@ -56,5 +58,12 @@ public class AppContactGroup extends HttpServlet {
 			throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/views/add/app_group_contact.html")
 				.forward(request,response);
+	}
+	
+	@Override
+	public void init() throws ServletException {
+		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
+				this.getServletContext());
+		serviceContact = (ContactService) context.getBean("contactService");
 	}
 }

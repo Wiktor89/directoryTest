@@ -1,6 +1,7 @@
 package net.directory.servlets;
 
 import net.directory.models.Group;
+import net.directory.service.GroupService;
 import net.directory.service.GroupServiceImpl;
 import net.directory.utilits.HtmlPage;
 import org.apache.log4j.Logger;
@@ -25,10 +26,10 @@ public class ListGroups extends HttpServlet {
 	
 	private ApplicationContext context;
 	private static final Logger LOGGER = Logger.getLogger(ListGroups.class);
-	private GroupServiceImpl service = null;
+	private GroupService serviceGroup;
 	
 	public ListGroups() {
-		this.service = new GroupServiceImpl();
+		this.serviceGroup = new GroupServiceImpl();
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -37,12 +38,19 @@ public class ListGroups extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Set<Group> groups = service.getGroups();
+		Set<Group> groups = null;
+		try {
+			groups = serviceGroup.getGroups();
+		} catch (SQLException e) {
+			LOGGER.error("No groups");
+			request.getRequestDispatcher("/addGroup")
+					.forward(request,response);
+		}
 		PrintWriter out = response.getWriter();
 		out.print(HtmlPage.getHtmlPage(groups));
 		out.close();
 		try {
-			service.removeGroup(Integer.valueOf(request.getParameter("id")));
+			serviceGroup.removeGroup(Integer.valueOf(request.getParameter("id")));
 		} catch (SQLException e) {
 			LOGGER.error("Do not display group list");
 			request.getRequestDispatcher("/addGroup")
@@ -55,6 +63,6 @@ public class ListGroups extends HttpServlet {
 	public void init() throws ServletException {
 		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
 				this.getServletContext());
-		context.getBean("groupService");
+		serviceGroup = (GroupService)  context.getBean("groupService");
 	}
 }

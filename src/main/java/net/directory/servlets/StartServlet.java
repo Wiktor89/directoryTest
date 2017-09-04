@@ -2,8 +2,9 @@ package net.directory.servlets;
 
 import net.directory.models.User;
 import net.directory.service.ContactService;
-import net.directory.service.ContactServiceImpl;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,8 +22,9 @@ import java.util.List;
 @WebServlet("/startServlet")
 public class StartServlet extends HttpServlet {
 	
+	private ApplicationContext context;
 	private static final Logger LOGGER = Logger.getLogger(StartServlet.class);
-	private ContactService contactService = new ContactServiceImpl();
+	private ContactService serviceContact;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -30,7 +32,7 @@ public class StartServlet extends HttpServlet {
 		attrUser.add(0,request.getParameter("login"));
 		attrUser.add(1,request.getParameter("password"));
 			try {
-				User user = contactService.authorizationPage(attrUser);
+				User user = serviceContact.authorizationPage(attrUser);
 				if (user != null && user.getEnable()){
 					response.sendRedirect("/selection");
 				}else request.getRequestDispatcher("/WEB-INF/views/exception/exsPageLogin.html")
@@ -46,5 +48,12 @@ public class StartServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/views/start-page/loginPage.html")
 				.forward(request,response);
+	}
+	
+	@Override
+	public void init() throws ServletException {
+		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
+				this.getServletContext());
+		serviceContact = (ContactService) context.getBean("contactService");
 	}
 }

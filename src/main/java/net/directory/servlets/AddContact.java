@@ -55,9 +55,6 @@ public class AddContact extends HttpServlet {
 	
 	@Override
 	public void init() throws ServletException {
-//		this.context = new FileSystemXmlApplicationContext("C:/Users/Wiktor/IdeaProjects/directory/src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml");
-//		this.context = new ClassPathXmlApplicationContext("mvc-dispatcher-servlet.xml");
-//		serviceContact = (ContactService) this.context.getBean("contactService");
 		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
 						this.getServletContext());
 		serviceContact = (ContactService) context.getBean("contactService");

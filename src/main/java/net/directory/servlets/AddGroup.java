@@ -2,8 +2,11 @@ package net.directory.servlets;
 
 import net.directory.factories.EntityFactory;
 import net.directory.models.Entity;
+import net.directory.service.GroupService;
 import net.directory.service.GroupServiceImpl;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,8 +24,9 @@ import java.util.List;
 @WebServlet("/addGroup")
 public class AddGroup extends HttpServlet {
 	
+	private ApplicationContext context;
 	private static final Logger LOGGER = Logger.getLogger(AddGroup.class);
-	private GroupServiceImpl serviceGroup = null;
+	private GroupService serviceGroup;
 	
 	public AddGroup() {
 		this.serviceGroup = new GroupServiceImpl();
@@ -47,5 +51,11 @@ public class AddGroup extends HttpServlet {
 			throws ServletException, IOException {
 		request.getRequestDispatcher("WEB-INF/views/add/addGroup.html")
 				.forward(request,response);
+	}
+	@Override
+	public void init() throws ServletException {
+		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
+				this.getServletContext());
+		serviceGroup = (GroupService) context.getBean("groupService");
 	}
 }

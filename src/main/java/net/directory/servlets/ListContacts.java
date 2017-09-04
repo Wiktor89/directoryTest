@@ -1,9 +1,11 @@
 package net.directory.servlets;
 
 import net.directory.models.Contact;
-import net.directory.service.ContactServiceImpl;
+import net.directory.service.ContactService;
 import net.directory.utilits.HtmlPage;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,11 +23,13 @@ import java.util.Set;
 @WebServlet("/listContacts")
 public class ListContacts extends HttpServlet {
 	
-	private ContactServiceImpl service = null;
+	private ApplicationContext context;
+	private ContactService serviceContact;
 	private static final Logger LOGGER = Logger.getLogger(ListContacts.class);
-	public ListContacts() {
-		this.service = new ContactServiceImpl();
-	}
+	
+//	public ListContacts() {
+//		this.serviceContact = new ContactServiceImpl();
+//	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -35,20 +39,24 @@ public class ListContacts extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			Set<Contact> contacts = service.getContacts();
+			Set<Contact> contacts = serviceContact.getContacts();
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			request.setCharacterEncoding ("UTF-8");
 			out.print(HtmlPage.getHtmlPageRem(contacts));
 			out.close();
-			service.removeContact(Integer.valueOf(request.getParameter("id")));
+			serviceContact.removeContact(Integer.valueOf(request.getParameter("id")));
 		} catch (SQLException e) {
 			LOGGER.error("Could not load contact list");
 			e.printStackTrace();
 		}
 		response.sendRedirect("/listContacts");
-	
 	}
-
 	
+	@Override
+	public void init() throws ServletException {
+		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
+				this.getServletContext());
+		serviceContact = (ContactService) context.getBean("contactService");
+	}
 }

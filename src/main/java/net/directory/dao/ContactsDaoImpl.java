@@ -49,7 +49,9 @@ public class ContactsDaoImpl implements ContactDao {
 	public void addContact(Entity entity) {
 		Contact contact = (Contact) entity;
 		Session ses  = sessionFactory.getCurrentSession();
-		User user = (User) ses.get(User.class, 12);
+		User user = (User) ses.get(User.class, this.user.getId());
+		contact.setUser(user);
+		ses.save(contact);
 		LOGGER.info("User " +user);
 		LOGGER.debug("Contact was successfully added " +contact);
 	}
@@ -59,12 +61,14 @@ public class ContactsDaoImpl implements ContactDao {
 		Session ses  = sessionFactory.getCurrentSession();
 		Contact contact = (Contact) ses.get(Contact.class,Integer.valueOf(attContact.get(0)));
 		contact.setFio(attContact.get(1));
+		if (!(attContact.get(2).equalsIgnoreCase("nop"))) {
+			contact.setPhone(attContact.get(2));
+		}
+		if (!(attContact.get(3).equalsIgnoreCase("noe"))) {
+			contact.setEmail(attContact.get(3));
+		}
 		LOGGER.debug("update contact "+contact);
 		LOGGER.info("update contact "+contact);
-		if (!(attContact.get(2).equalsIgnoreCase("nop")))
-				contact.setPhone(attContact.get(2));
-		if (!(attContact.get(3).equalsIgnoreCase("noe")))
-				contact.setEmail(attContact.get(3));
 		ses.update(contact);
 		return true;
 	}
@@ -74,12 +78,12 @@ public class ContactsDaoImpl implements ContactDao {
 		boolean result = false;
 		Session ses  = sessionFactory.getCurrentSession();
 		Contact contact = (Contact) ses.get(Contact.class, new Integer(id));
-		LOGGER.info("remove contact id"+ contact);
-		LOGGER.debug("remove contact id"+ contact);
 		if (contact != null){
 			ses.delete(contact);
 			result = true;
 		}
+		LOGGER.info("remove contact id"+ contact);
+		LOGGER.debug("remove contact id"+ contact);
 		return result;
 	}
 	
@@ -127,7 +131,7 @@ public class ContactsDaoImpl implements ContactDao {
 	@Override
 	public Set<Contact> getContacts() {
 		Session ses  = sessionFactory.getCurrentSession();
-		User user = (User) ses.get(User.class, 12);
+		User user = (User) ses.get(User.class, this.user.getId());
 		Set<Contact> listContacts = user.getListContacts();
 		user.getListContacts().size();
 		LOGGER.info("Get contacts "+listContacts);
@@ -175,9 +179,9 @@ public class ContactsDaoImpl implements ContactDao {
 		if (user != null && !user.getEnable()){
 			user.setEnable(true);
 			ses.update(user);
-			LOGGER.debug("authorization user "+ this.user);
-			LOGGER.info("authorization user "+ this.user);
 		}
+		LOGGER.debug("authorization user "+ this.user);
+		LOGGER.info("authorization user "+ this.user);
 		return user;
 	}
 	
@@ -186,10 +190,10 @@ public class ContactsDaoImpl implements ContactDao {
 		Session ses  = sessionFactory.getCurrentSession();
 		Contact contact = (Contact) ses.get(Contact.class, id);
 		if (contact != null){
-			LOGGER.debug("get contact "+ contact);
-			LOGGER.info("get contact "+ contact);
 			return contact;
 		}
+		LOGGER.debug("get contact "+ contact);
+		LOGGER.info("get contact "+ contact);
 		return  null;
 	}
 }

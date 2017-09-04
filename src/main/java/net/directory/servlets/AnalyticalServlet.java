@@ -1,8 +1,9 @@
 package net.directory.servlets;
 
 import net.directory.service.GroupService;
-import net.directory.service.GroupServiceImpl;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,23 +18,24 @@ import java.sql.SQLException;
 @WebServlet("/analyticalInf")
 public class AnalyticalServlet extends DispatcherServlet {
 	
+	private ApplicationContext context;
 	private static final Logger LOGGER = Logger.getLogger(AnalyticalServlet.class);
-	private GroupService groupService = new GroupServiceImpl();
+	private GroupService serviceGroup;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if(request.getParameter("users") != null){
-			GroupMapper.numberUsers(request,response, groupService);
+			GroupMapper.numberUsers(request,response, serviceGroup);
 		}else if (request.getParameter("ncon") != null){
-			GroupMapper.numberContacts(request,response,groupService);
+			GroupMapper.numberContacts(request,response,serviceGroup);
 		}else if (request.getParameter("grus") != null){
-			GroupMapper.quantityGroupsUser(request,response,groupService);
+			GroupMapper.quantityGroupsUser(request,response,serviceGroup);
 		}else if (request.getParameter("avrg") != null){
-			GroupMapper.averageNumberContactsGroups(request,response,groupService);
+			GroupMapper.averageNumberContactsGroups(request,response,serviceGroup);
 		}else if (request.getParameter("avru") != null){
-			GroupMapper.averageNumberContactsUser(request,response,groupService);
+			GroupMapper.averageNumberContactsUser(request,response,serviceGroup);
 		}else if (request.getParameter("min10") != null){
-			GroupMapper.userWithContactsMin_10(request,response,groupService);
+			GroupMapper.userWithContactsMin_10(request,response,serviceGroup);
 		}
 	}
 	
@@ -43,6 +45,12 @@ public class AnalyticalServlet extends DispatcherServlet {
 				.forward(request,response);
 	}
 	
+	@Override
+	public void init() throws ServletException {
+		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
+				this.getServletContext());
+		serviceGroup = (GroupService) context.getBean("groupService");
+	}
 	
 	static class GroupMapper{
 		

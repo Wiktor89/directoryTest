@@ -3,6 +3,8 @@ package net.directory.servlets;
 import net.directory.models.Contact;
 import net.directory.service.GroupService;
 import net.directory.service.GroupServiceImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,16 +22,17 @@ import java.util.Set;
 @WebServlet("/getContactsGroup")
 public class GetContactsGroups extends HttpServlet {
 	
-	private GroupService service = null;
+	private ApplicationContext context;
+	private GroupService serviceGroup;
 	
 	public GetContactsGroups() {
-		this.service = new GroupServiceImpl();
+		this.serviceGroup = new GroupServiceImpl();
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			Set<Contact> contacts = this.service.getContactsGroup(request.getParameter("gro"));
+			Set<Contact> contacts = this.serviceGroup.getContactsGroup(request.getParameter("gro"));
 			if (!contacts.isEmpty()){
 				PrintWriter out = response.getWriter();
 				out.print(getHtmlPage(contacts));
@@ -75,5 +78,12 @@ public class GetContactsGroups extends HttpServlet {
 
 		System.out.println(stringBuilder);
 		return stringBuilder;
+	}
+	
+	@Override
+	public void init() throws ServletException {
+		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
+				this.getServletContext());
+		serviceGroup = (GroupService) context.getBean("groupService");
 	}
 }

@@ -5,6 +5,8 @@ import net.directory.service.ContactService;
 import net.directory.service.ContactServiceImpl;
 import net.directory.utilits.HtmlPage;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,12 +26,13 @@ import java.util.Set;
 @WebServlet("/updateContact")
 public class UpdateContact extends HttpServlet {
 	
+	private ApplicationContext context;
 	private static final Logger LOGGER = Logger.getLogger(UpdateContact.class);
-	private ContactService service = null;
+	private ContactService serviceContact;
 	private Integer id;
 	
 	public UpdateContact() {
-		this.service = new ContactServiceImpl();
+		this.serviceContact = new ContactServiceImpl();
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -50,7 +53,7 @@ public class UpdateContact extends HttpServlet {
 				attrContact.add(3, "noe");
 			}
 			try {
-				service.updateContact(attrContact);
+				serviceContact.updateContact(attrContact);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -66,9 +69,9 @@ public class UpdateContact extends HttpServlet {
 			throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		try {
-			out.print(HtmlPage.getHtmlPageUpdateContacts(service.getContacts()));
+			out.print(HtmlPage.getHtmlPageUpdateContacts(serviceContact.getContacts()));
 			id = Integer.valueOf(request.getParameter("id"));
-			Set<Contact> contacts = service.getContacts();
+			Set<Contact> contacts = serviceContact.getContacts();
 			for (Contact contact : contacts){
 				if (contact.getId() == id){
 					out.print(HtmlPage.getHtmlPageUpdateContact(contact));
@@ -79,5 +82,12 @@ public class UpdateContact extends HttpServlet {
 			e.printStackTrace();
 		}
 		out.close();
+	}
+	
+	@Override
+	public void init() throws ServletException {
+		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
+				this.getServletContext());
+		serviceContact = (ContactService) context.getBean("contactService");
 	}
 }
