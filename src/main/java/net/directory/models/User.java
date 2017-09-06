@@ -1,5 +1,7 @@
 package net.directory.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -19,11 +21,12 @@ public class User extends IdentifiedEntity implements Comparable<User> {
 	@Column(name = "password")
 	private String password;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
 	
-	
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Contact> listContacts;
 

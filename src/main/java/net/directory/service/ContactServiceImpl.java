@@ -86,8 +86,8 @@ public class ContactServiceImpl implements ContactService{
     }
     
     @Override
-    public User authorizationPage(List<String> attr) throws SQLException {
-        return this.dao.authorizationPage(attr);
+    public User authorizationPage(String login) throws SQLException {
+        return this.dao.authorizationPage(login);
     }
     
     

@@ -54,7 +54,9 @@ public class UpdateGroup extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
+		request.setCharacterEncoding ("UTF-8");
 		try {
 			out.print(HtmlPage.getHtmlPageUpdate(serviceGroup.getGroups()));
 		} catch (SQLException e) {

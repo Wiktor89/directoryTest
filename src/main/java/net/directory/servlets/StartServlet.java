@@ -1,6 +1,5 @@
 package net.directory.servlets;
 
-import net.directory.models.User;
 import net.directory.service.ContactService;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -12,9 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -28,25 +24,21 @@ public class StartServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		List<String> attrUser = new ArrayList<>();
-		attrUser.add(0,request.getParameter("login"));
-		attrUser.add(1,request.getParameter("password"));
-			try {
-				User user = serviceContact.authorizationPage(attrUser);
-				if (user != null && user.getEnable()){
-					response.sendRedirect("/selection");
-				}else request.getRequestDispatcher("/WEB-INF/views/exception/exsPageLogin.html")
-						.forward(request,response);
-				
-				
-			} catch (SQLException e) {
-				LOGGER.error("Authorization of this user did not pass");
-				e.printStackTrace();
-			}
+//		List<String> attrUser = new ArrayList<>();
+//		attrUser.add(0,request.getParameter("login"));
+//		attrUser.add(1,request.getParameter("password"));
+//		Authentication aut = SecurityContextHolder.getContext().getAuthentication();
+////		aut.getAuthorities().;
+////		User user = userService.authenticate(aut);
+//		User user = new User();
+//		if (user != null && user.getEnable()) {
+//					response.sendRedirect("/selection");
+//				} else request.getRequestDispatcher("/WEB-INF/views/exception/exsPageLogin.html")
+//						.forward(request, response);
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/views/start-page/loginPage.html")
+		request.getRequestDispatcher("/loginPage.jsp")
 				.forward(request,response);
 	}
 	
@@ -54,6 +46,6 @@ public class StartServlet extends HttpServlet {
 	public void init() throws ServletException {
 		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
 				this.getServletContext());
-		serviceContact = (ContactService) context.getBean("contactService");
+		this.serviceContact = (ContactService) context.getBean("contactService");
 	}
 }

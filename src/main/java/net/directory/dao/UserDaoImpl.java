@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 /**
  *
  */
-@Repository
+@Repository("userDao")
 public class UserDaoImpl implements UserDao {
 	
 	static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
@@ -25,8 +25,11 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User getUser(String login) {
 		Session ses = sessionFactory.getCurrentSession();
-		Object o = ses.get(User.class, login);
-		User user = (User) o;
-		return user;
+		User user = (User) ses.get(User.class, login);
+		if (user.getLogin().equals(login)){
+			logger.info("user "+user.getLogin());
+			return user;
+		}
+		return null;
 	}
 }

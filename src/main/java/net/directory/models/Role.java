@@ -1,4 +1,6 @@
 package net.directory.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import java.util.Set;
@@ -16,6 +18,7 @@ public class Role extends IdentifiedEntity {
 	@Column(name = "description")
 	private String description;
 	
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
 	private Set<User> userList;
 	

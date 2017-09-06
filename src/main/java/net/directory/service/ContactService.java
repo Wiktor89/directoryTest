@@ -64,9 +64,9 @@ public interface ContactService {
     
     /**
      * Страница авторизации
-     * @param attr
+     * @param login
      */
-    User authorizationPage(List<String> attr) throws SQLException;
+    User authorizationPage(String login) throws SQLException;
 
 
 }

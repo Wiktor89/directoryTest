@@ -1,9 +1,6 @@
 package net.directory.dao;
 
-import net.directory.models.Contact;
-import net.directory.models.Entity;
-import net.directory.models.Group;
-import net.directory.models.User;
+import net.directory.models.*;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -23,23 +20,8 @@ import java.util.TreeSet;
 public class ContactsDaoImpl implements ContactDao {
 	
 	private static final Logger LOGGER = Logger.getLogger(ContactsDaoImpl.class);
-	private static volatile ContactsDaoImpl contactsDao;
 	private SessionFactory sessionFactory;
 	private User user;
-	
-	public static ContactsDaoImpl getContactsDaoImpl(){
-		if (contactsDao == null){
-			synchronized (ContactsDaoImpl.class){
-				if (contactsDao == null){
-					contactsDao = new ContactsDaoImpl();
-				}
-			}
-		}
-		return contactsDao;
-	}
-	
-	private ContactsDaoImpl() {
-	}
 	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -172,16 +154,16 @@ public class ContactsDaoImpl implements ContactDao {
 	}
 	
 	@Override
-	public User authorizationPage(List<String> attr) {
+	public User authorizationPage(String login) {
 		Session ses  = sessionFactory.getCurrentSession();
-		user = (User) ses.createQuery("from User where login =:login AND password =:password AND enable = false")
-				.setString("login", attr.get(0)).setParameter("password", attr.get(1)).uniqueResult();
+		Criteria criteria = ses.createCriteria(User.class);
+		user = (User) criteria.add(Restrictions.eq("login",login)).uniqueResult();
 		if (user != null && !user.getEnable()){
 			user.setEnable(true);
 			ses.update(user);
 		}
-		LOGGER.debug("authorization user "+ this.user);
 		LOGGER.info("authorization user "+ this.user);
+		LOGGER.debug("authorization user "+ this.user);
 		return user;
 	}
 	

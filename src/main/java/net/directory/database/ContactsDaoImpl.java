@@ -200,11 +200,11 @@ public class ContactsDaoImpl extends Observable implements ContactDao {
 	}
 	
 	@Override
-	public User authorizationPage(List<String> attr) throws SQLException {
+	public User authorizationPage(String login) throws SQLException {
 		try (Connection connection = ConnectingDataBase.getConnection();
 		     PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_user(?,?)")) {
-			statement.setString(1, attr.get(0));
-			statement.setString(2, attr.get(1));
+			statement.setString(1, login);
+			statement.setString(2, login);
 			user = ContactMapper.getUser(statement.executeQuery());
 			if (user != null && user.getEnable()) {
 				PreparedStatement statement1 = connection.prepareStatement("SELECT FROM update_users(?,?)");

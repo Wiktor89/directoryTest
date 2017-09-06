@@ -67,7 +67,9 @@ public class UpdateContact extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
+		request.setCharacterEncoding ("UTF-8");
 		try {
 			out.print(HtmlPage.getHtmlPageUpdateContacts(serviceContact.getContacts()));
 			id = Integer.valueOf(request.getParameter("id"));

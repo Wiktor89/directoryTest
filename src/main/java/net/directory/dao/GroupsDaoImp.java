@@ -6,11 +6,11 @@ import net.directory.models.Group;
 import net.directory.models.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -20,26 +20,11 @@ import java.util.TreeSet;
  *
  */
 @Repository
+@Transactional
 public class GroupsDaoImp implements GroupDao {
 	
 	private static final Logger LOGGER = Logger.getLogger(ContactsDaoImpl.class);
-	private static volatile GroupsDaoImp groupsDao;
 	private SessionFactory sessionFactory;
-	
-	public static GroupsDaoImp getGroupsDaoImpl(){
-//		if (groupsDao == null){
-//			synchronized (GroupsDaoImp.class){
-//				if (groupsDao == null){
-					groupsDao = new GroupsDaoImp();
-//				}
-//			}
-//		}
-		return groupsDao;
-	}
-	
-	
-	private GroupsDaoImp() {
-	}
 	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -128,11 +113,11 @@ public class GroupsDaoImp implements GroupDao {
 	@Override
 	public Integer numberContacts(String name)  {
 		Session ses = sessionFactory.getCurrentSession();
-		Query query = ses.createQuery("select listContacts from User where login = :login");
-		int contacts = query.setParameter("login", name).list().size();
-		LOGGER.info("Number contacts *"+contacts);
-		LOGGER.debug("Number contacts *"+contacts);
-		return contacts;
+		Criteria criteria = ses.createCriteria(User.class);
+		User user = (User) criteria.add(Restrictions.eq("login", name)).uniqueResult();
+		LOGGER.info("Number contacts *"+user.getListContacts().size());
+		LOGGER.debug("Number contacts *"+user.getListContacts().size());
+		return user.getListContacts().size();
 	}
 	
 	@Override
@@ -188,4 +173,5 @@ public class GroupsDaoImp implements GroupDao {
 		}
 		return users;
 	}
+
 }

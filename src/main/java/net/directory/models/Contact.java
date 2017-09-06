@@ -1,5 +1,7 @@
 package net.directory.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -25,7 +27,8 @@ public class Contact extends IdentifiedEntity implements Comparable<Contact> {
     @Column(name = "email")
     private String email;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     

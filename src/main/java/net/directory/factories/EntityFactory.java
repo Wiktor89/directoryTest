@@ -5,6 +5,7 @@ import net.directory.models.Entity;
 import net.directory.models.Group;
 import net.directory.models.User;
 import net.directory.utilits.TeamList;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,11 +14,15 @@ import java.util.List;
  *Фабрика для создания контактов и групп
  */
 public class EntityFactory {
-
+    
+    private static final Logger LOGGER = Logger.getLogger(EntityFactory.class);
     public EntityFactory() {
     }
 
     private static Entity getContact(List<String> attrEntity){
+        if (attrEntity.size() == 1){
+            return new Contact(attrEntity.get(0));
+        }
        Contact contact = new Contact(attrEntity.get(0));
        String phone = attrEntity.get(1);
        String email = attrEntity.get(2);
@@ -30,6 +35,7 @@ public class EntityFactory {
            contact.setEmail(email);
        }
         contact.setUser(new User());
+        LOGGER.info("add entity "+contact);
         return contact;
     }
 

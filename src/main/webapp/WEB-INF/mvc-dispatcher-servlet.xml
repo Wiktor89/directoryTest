@@ -13,6 +13,7 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <context:component-scan base-package="net.directory"/>
+    <!--<import resource="security.xml"/>-->
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>
@@ -58,18 +59,18 @@
         <property name="dao" ref="groupDao"/>
     </bean>
 
-    <bean id="contactDao" class="net.directory.dao.ContactsDaoImpl">
+    <bean id="contactDao" scope="singleton" class="net.directory.dao.ContactsDaoImpl">
         <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </bean>
     <bean id="contactService" class="net.directory.service.ContactServiceImpl">
         <property name="dao" ref="contactDao"/>
     </bean>
 
-    <bean id="userDao" class="net.directory.dao.UserDaoImpl">
+    <bean id="userDao" scope="singleton" class="net.directory.dao.UserDaoImpl">
         <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </bean>
     <bean id="userService" class="net.directory.service.UserServiceImpl">
-        <property name="dao" ref="userDao"/>
+        <property name="dao" ref="contactDao"/>
     </bean>
     <context:component-scan base-package="net.directory"/>
 

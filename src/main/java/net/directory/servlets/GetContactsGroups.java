@@ -34,7 +34,9 @@ public class GetContactsGroups extends HttpServlet {
 		try {
 			Set<Contact> contacts = this.serviceGroup.getContactsGroup(request.getParameter("gro"));
 			if (!contacts.isEmpty()){
+				response.setContentType("text/html; charset=UTF-8");
 				PrintWriter out = response.getWriter();
+				request.setCharacterEncoding ("UTF-8");
 				out.print(getHtmlPage(contacts));
 				out.close();
 			}else {

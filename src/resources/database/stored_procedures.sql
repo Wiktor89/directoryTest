@@ -50,7 +50,7 @@ AS $$
 DECLARE
 i INTEGER;
 BEGIN
-SELECT AVG(g) FROM (SELECT COUNT(*) AS g FROM public.contact_group GROUP BY group_id) AS x INTO i;
+SELECT AVG(g) FROM (SELECT COUNT(*) AS g FROM servlet.contact_group GROUP BY group_id) AS x INTO i;
 RETURN i;
 END;
 $$;
@@ -63,7 +63,7 @@ CREATE FUNCTION average_number_contacts_user () RETURNS integer
 DECLARE
 i INTEGER;
 BEGIN
-SELECT AVG(cont) FROM (SELECT COUNT(*) AS cont FROM public.contacts GROUP BY user_id) AS x INTO i;
+SELECT AVG(cont) FROM (SELECT COUNT(*) AS cont FROM servlet.contacts GROUP BY user_id) AS x INTO i;
 RETURN i;
 END;
 $$;
@@ -259,17 +259,6 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
 UPDATE users SET enable = _enable WHERE id = _id;
-END;
-$$;
---  Функция обновляет users
-
---  Функция обновляет users***
-CREATE FUNCTION update_users (_id INTEGER, _enable BOOLEAN)
-  RETURNS VOID
-LANGUAGE plpgsql
-AS $$
-BEGIN
-  UPDATE users SET enable = _enable WHERE id = _id;
 END;
 $$;
 --  Функция обновляет users

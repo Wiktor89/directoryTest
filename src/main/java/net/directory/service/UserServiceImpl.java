@@ -1,28 +1,38 @@
 package net.directory.service;
 
-import net.directory.dao.UserDao;
+import net.directory.dao.ContactDao;
 import net.directory.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
+
 /**
  *
  */
-@Service
+@Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
-	private UserDao dao;
+	
+	private ContactDao dao;
 	
 	@Autowired(required = true)
-	@Qualifier("userDao")
-	public void setDao(UserDao dao) {
+	@Qualifier("contactDao")
+	public void setDao(ContactDao dao) {
 		this.dao = dao;
 	}
+
 	
 	@Override
 	public User getUser(String login) {
-		return dao.getUser(login);
+		try {
+			return this.dao.authorizationPage(login);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
+
 }

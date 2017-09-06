@@ -12,6 +12,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             /WEB-INF/mvc-dispatcher-servlet.xml
+            /WEB-INF/security.xml
         </param-value>
     </context-param>
     <context-param>
@@ -58,7 +59,16 @@
         <servlet-name>mvc-dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    <!--<  С * не грузит страницы >-->
 
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
 
-
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--< /* Без * Не находит j_spring_security_check >-->
 </web-app>

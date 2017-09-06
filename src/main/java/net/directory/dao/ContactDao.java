@@ -65,7 +65,7 @@ public interface ContactDao {
      * Страница авторизации
      * @param attr
      */
-    User authorizationPage(List<String> attr) throws SQLException;
+    User authorizationPage(String login) throws SQLException;
     
     /**
      *Возвращает контакт

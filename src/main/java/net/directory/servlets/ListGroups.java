@@ -46,6 +46,9 @@ public class ListGroups extends HttpServlet {
 			request.getRequestDispatcher("/addGroup")
 					.forward(request,response);
 		}
+		LOGGER.info("Groups "+ groups);
+		response.setContentType("text/html; charset=UTF-8");
+		request.setCharacterEncoding ("UTF-8");
 		PrintWriter out = response.getWriter();
 		out.print(HtmlPage.getHtmlPage(groups));
 		out.close();

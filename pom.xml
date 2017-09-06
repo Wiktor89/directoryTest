@@ -14,8 +14,8 @@
 
     <properties>
         <java-version>1.7</java-version>
-        <springframework.version>4.2.5.RELEASE</springframework.version>
-        <springsecurity.version>4.0.4.RELEASE</springsecurity.version>
+        <springframework.version>4.0.5.RELEASE</springframework.version>
+        <springsecurity.version>4.1.0.RELEASE</springsecurity.version>
         <postgresql.version>42.0.0</postgresql.version>
 
         <org.slf4j-version>1.7.5</org.slf4j-version>
@@ -23,7 +23,7 @@
 
         <junit>4.11</junit>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson-databind.version>2.5.3</jackson-databind.version>
+        <jackson-databind.version>2.8.0</jackson-databind.version>
     </properties>
 
     <!--<build>-->

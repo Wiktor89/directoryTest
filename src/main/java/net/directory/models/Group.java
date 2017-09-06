@@ -1,5 +1,7 @@
 package net.directory.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -17,6 +19,7 @@ public class Group extends IdentifiedEntity implements Comparable<Group> {
     @Column(name = "title")
     private String name;
     
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
     private Set<Contact> contact;
 

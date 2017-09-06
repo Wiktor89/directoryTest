@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=utf8" pageEncoding="utf8"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html >
 <head>
@@ -163,7 +166,7 @@
 </head>
 
 <body>
-<form action="/startServlet" method="post" onsubmit="return validate();">
+<form id="/"  action="<c:url value="/j_spring_security_check"/>" method="POST" onsubmit="validate()">
   <div class="login-form">
      <h1>Authorization page</h1>
      <div class="form-group ">
@@ -178,6 +181,7 @@
       <a class="link" href="#">Lost your password?</a>
       <input type="submit" name="Log in">
    </div>
+<%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />--%>
 </form>
 </body>
 </html>
