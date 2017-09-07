@@ -9,6 +9,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +21,15 @@ import java.util.TreeSet;
 /**
  *
  */
-@Repository
+@Repository("groupDao")
 @Transactional
 public class GroupsDaoImp implements GroupDao {
 	
 	private static final Logger LOGGER = Logger.getLogger(ContactsDaoImpl.class);
 	private SessionFactory sessionFactory;
 	
+	@Autowired(required = true)
+	@Qualifier(value = "hibernate")
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

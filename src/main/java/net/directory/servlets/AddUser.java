@@ -1,6 +1,9 @@
 package net.directory.servlets;
 
+import net.directory.models.Role;
+import net.directory.models.User;
 import net.directory.service.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -14,25 +17,27 @@ import java.io.IOException;
 /**
  *
  */
-@WebServlet("/listUsers")
-public class ListUsers extends HttpServlet {
+@WebServlet("/addUser")
+public class AddUser extends HttpServlet {
 	
 	private ApplicationContext context;
 	private UserService userService;
+	private static final Logger LOGGER = Logger.getLogger(AddContact.class);
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(request.getParameter("onclick"));
-		System.out.println(request.getParameter("login"));
-		if(request.getParameter("login").equalsIgnoreCase("login")){
-		}
-		response.sendRedirect("/listUsers");
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		User user = new User(username,password,new Role("ROLE_USER"));
+		LOGGER.info("add user "+user);
+		LOGGER.debug("add user "+user);
+		userService.addUser(user);
+		request.getRequestDispatcher("/loginPage.jsp").forward(request,response);
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.setAttribute("users", userService.getUser());
-		request.getRequestDispatcher("/WEB-INF/views/show_lists/listUsers.jsp")
+		request.getRequestDispatcher("/WEB-INF/views/add/addUser.jsp")
 				.forward(request,response);
 	}
 	
@@ -40,6 +45,6 @@ public class ListUsers extends HttpServlet {
 	public void init() throws ServletException {
 		context = WebApplicationContextUtils.getRequiredWebApplicationContext(
 				this.getServletContext());
-		this.userService = (UserService) context.getBean("userService");
+		userService = (UserService) context.getBean("userService");
 	}
 }

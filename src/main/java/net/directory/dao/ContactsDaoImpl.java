@@ -6,6 +6,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -16,10 +18,13 @@ import java.util.TreeSet;
 /**
  *
  */
-@Repository
+@Repository("contactDao")
 public class ContactsDaoImpl implements ContactDao {
 	
 	private static final Logger LOGGER = Logger.getLogger(ContactsDaoImpl.class);
+	
+	@Autowired(required = true)
+	@Qualifier(value = "hibernate")
 	private SessionFactory sessionFactory;
 	private User user;
 	

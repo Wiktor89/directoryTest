@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  *Сервис для группы
  */
-@Service
+@Service("contactService")
 @Transactional
 public class ContactServiceImpl implements ContactService{
 

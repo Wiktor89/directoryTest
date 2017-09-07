@@ -27,11 +27,11 @@ import java.util.TreeSet;
  */
 @RequestMapping("/rest/users/")
 @RestController
-public class ContactController {
+public class UsersController {
 	
 	private GroupService groupService;
 	private ContactService contactService;
-	private static final Logger LOGGER = Logger.getLogger(ContactController.class);
+	private static final Logger LOGGER = Logger.getLogger(UsersController.class);
 	
 	@Autowired(required = true)
 	@Qualifier(value = "contactService")

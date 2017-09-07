@@ -155,7 +155,7 @@
     <script>
         function validate() {
             var  valid = true;
-            var name = document.getElementById("log");
+            var name = document.getElementsByName("login");
             if (name.value == ''){
                 alert("Заполните форму");
                 valid = false;
@@ -178,10 +178,10 @@
        <i class="fa fa-lock"></i>
      </div>
       <span class="alert">Invalid Credentials</span>
-      <a class="link" href="#">Lost your password?</a>
+      <a class="link" href="/addUser">register</a>
       <input type="submit" name="Log in">
    </div>
-<%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />--%>
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 </body>
 </html>

@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  *Сервис для контакта
  */
-@Service
+@Service("groupService")
 @Transactional
 public class GroupServiceImpl implements GroupService {
 
@@ -28,10 +28,7 @@ public class GroupServiceImpl implements GroupService {
      * net.directory.dao
      */
     GroupDao dao;
-    
-//    public GroupServiceImpl() {
-//        this.dao = GroupsDaoImp.getGroupsDaoImpl();
-//    }
+
     @Autowired(required = true)
     @Qualifier(value = "groupDao")
     public void setDao(GroupDao dao) {
