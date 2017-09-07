@@ -181,7 +181,7 @@
       <a class="link" href="/addUser">register</a>
       <input type="submit" name="Log in">
    </div>
-<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+<%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />--%>
 </form>
 </body>
 </html>
