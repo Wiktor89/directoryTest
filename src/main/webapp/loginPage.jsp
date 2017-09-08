@@ -155,7 +155,7 @@
     <script>
         function validate() {
             var  valid = true;
-            var name = document.getElementsByName("login");
+            var name = document.getElementById("log");
             if (name.value == ''){
                 alert("Заполните форму");
                 valid = false;
@@ -166,7 +166,7 @@
 </head>
 
 <body>
-<form id="/"  action="<c:url value="/j_spring_security_check"/>" method="POST" onsubmit="validate()">
+<form id="/" onsubmit="validate()" action="<c:url value="/j_spring_security_check"/>" method="POST" onsubmit="validate()">
   <div class="login-form">
      <h1>Authorization page</h1>
      <div class="form-group ">
@@ -178,10 +178,9 @@
        <i class="fa fa-lock"></i>
      </div>
       <span class="alert">Invalid Credentials</span>
-      <a class="link" href="/addUser">register</a>
+      <a class="link" href="/addUser" ><font size="2", color="#dc143c" face="Arial">register</font></a>
       <input type="submit" name="Log in">
    </div>
-<%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />--%>
 </form>
 </body>
 </html>

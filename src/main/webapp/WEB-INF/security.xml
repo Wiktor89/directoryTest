@@ -18,8 +18,8 @@
         <intercept-url pattern="/getContactsGroup" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
         <intercept-url pattern="/listContacts" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
         <intercept-url pattern="/listGroups" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
-        <intercept-url pattern="/updateContact" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/updateGroup" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/updateContact" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
+        <intercept-url pattern="/updateGroup" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
         <intercept-url pattern="/analyticalInf" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/selection" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
 
@@ -32,9 +32,8 @@
                 authentication-failure-url="/loginPage.jsp?login_error=1"/>
         <access-denied-handler error-page="/error403.jsp"/>
 
-        <logout
-                logout-success-url="/login.jsp"
-                delete-cookies="JSESSIONID" />
+        <logout logout-success-url="/logout.jsp"
+                logout-url="/j_spring_security_logout"/>
 
         <!--temporally disable csrf -->
         <csrf disabled="true"/>
