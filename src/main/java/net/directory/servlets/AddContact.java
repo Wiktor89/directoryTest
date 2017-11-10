@@ -27,11 +27,6 @@ public class AddContact extends HttpServlet {
 	private static final Logger LOGGER = Logger.getLogger(AddContact.class);
 	private ContactService serviceContact = null;
 	
-//	public AddContact() {
-//		this.serviceContact = new ContactServiceImpl();
-//		this.serviceGroup = new GroupServiceImpl();
-//	}
-	
 	protected void doPost(HttpServletRequest request,
 	                      HttpServletResponse response) throws ServletException, IOException {
 		List<String> attContact = new ArrayList<>();

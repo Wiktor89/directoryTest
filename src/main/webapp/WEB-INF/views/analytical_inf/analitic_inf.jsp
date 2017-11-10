@@ -10,6 +10,13 @@
             -webkit-box-sizing: border-box;
             font-family: arial;
         }
+        #centerLayer {
+            width: 600px; /* Ширина слоя в пикселах */
+            margin: 0 auto; /* Отступ слева и справа */
+            background: #acff85; /* Цвет фона */
+            padding: 10px; /* Поля вокруг текста */
+            text-align: start; /* Выравнивание содержимого слоя по левому краю */
+        }
 
         body {
             background: #88c135;
@@ -161,6 +168,7 @@
     </script>
 </head>
 <body>
+<div id="centerLayer">
         <form action="/analyticalInf" method="post">
             <h3>
             <input type="submit" name="users">
@@ -192,6 +200,6 @@
         <h5>
         <a href="/selection" >Назад</a>
         </h5>
-
+</div>
 </body>
 </html>

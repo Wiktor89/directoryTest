@@ -81,7 +81,7 @@ public class ContactsDaoImpl implements ContactDao {
 		Contact contact = (Contact) ses.get(Contact.class, getContact(attContact.get(0)).getId());
 		Criteria criteria = ses.createCriteria(Group.class);
 		Group group = (Group) criteria.add(Restrictions.eq("name", attContact.get(1))).uniqueResult();
-		if (group != null && group.getName().trim().equalsIgnoreCase(attContact.get(1))) {
+		if (group != null && group.getName().trim().equalsIgnoreCase(attContact.get(1)) && contact != null) {
 			if (contact.getGroups() != null){
 				contact.getGroups().add(group);
 			}else {

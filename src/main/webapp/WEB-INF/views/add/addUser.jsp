@@ -18,9 +18,6 @@
         <div style="display: inline-block;">
             Справочник контактов
         </div>
-        <div style="width: 100%; display: inline-block; text-align: right;">
-            <a href="<c:url value="/startServlet"/>" class="btn btn-default" role="button">Выйти</a>
-        </div>
     </h2>
     <form data-toggle="validator" role="form" action="<c:url value="/addUser"/>" method="post" style="width: 50%;">
         <div class="form-group">
@@ -30,17 +27,6 @@
         <div class="form-group">
             <label>Password:</label>
             <input type="password" class="form-control" name="password" placeholder="Enter password" required>
-        </div>
-        <div class="form-group">
-            <ul class="list-group">
-                <li class="list-group-item">
-                    Активный
-                    <div class="material-switch pull-right">
-                        <input id="enabled" name="enabled" type="checkbox"/>
-                        <label for="enabled" class="label-default"></label>
-                    </div>
-                </li>
-            </ul>
         </div>
         <span style="width: 100%; display: inline-block;">
             <button type="submit" class="btn btn-default">Сохранить</button>

@@ -10,10 +10,7 @@ import net.directory.service.GroupService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,7 +22,7 @@ import java.util.TreeSet;
 /**
  *
  */
-@RequestMapping("/rest/users/")
+@RequestMapping("/users/")
 @RestController
 public class UsersController {
 	
@@ -45,14 +42,15 @@ public class UsersController {
 		this.groupService = groupService;
 	}
 	
-	@RequestMapping(value = "/addContactRest", method = RequestMethod.GET)
-	public void addContact(@RequestParam("name") String name) {
+	@RequestMapping(value = "/addContactRest", method = RequestMethod.POST)
+	public void addContact(@RequestBody Contact contact) {
 		List<String> attContact = new ArrayList<>();
-		attContact.add(0,name);
+		attContact.add(0,contact.getFio());
+		attContact.add(1,contact.getPhone());
+		attContact.add(2,contact.getEmail());
 		try {
 			Entity entity = EntityFactory.create("con",attContact);
 			this.contactService.addContact(entity);
-			getContacts();
 		} catch (SQLException | IOException e) {
 			LOGGER.error("could not add contact");
 		}
@@ -69,13 +67,11 @@ public class UsersController {
 		return contacts;
 	}
 	
-	
-	@RequestMapping(value = "/appGroupContactRest", method = RequestMethod.GET)
-	public void removeGroupContact(@RequestParam("id") Integer id
-			,@RequestParam("name") String name) {
+	@RequestMapping(value = "/appGroupContactRest/{name}/{nameG}", method = RequestMethod.PUT)
+	public void removeGroupContact(@PathVariable("name") String name, @PathVariable("nameG") String nameG){
 		List<String> attr = new ArrayList<>();
-		attr.add(1,name);
-		attr.add(0, String.valueOf(id));
+		attr.add(0,name);
+		attr.add(1, nameG);
 		try {
 			this.contactService.appGroupContact(attr);
 		} catch (SQLException e) {
@@ -83,11 +79,11 @@ public class UsersController {
 		}
 	}
 	
-	@RequestMapping(value = "/addGroupRest", method = RequestMethod.GET)
-	public String addGroup(@RequestParam("name") String name){
-		if (name.trim().length() > 0){
+	@RequestMapping(value = "/addGroupRest", method = RequestMethod.POST, consumes="application/json")
+	public void addGroup(@RequestBody Group group){
+		if (group.getName().trim().length() > 0){
 			List<String> attr = new ArrayList<>();
-			attr.add(0,name);
+			attr.add(0,group.getName());
 			try {
 				Entity entity = EntityFactory.create("gro",attr);
 				groupService.addGroup(entity);
@@ -95,13 +91,12 @@ public class UsersController {
 				LOGGER.error("Could not add group");
 			}
 		}else {
-			return "No name group";
+
 		}
-		return name;
 	}
 	
-	@RequestMapping(value = "/getContactsGroupRest", method = RequestMethod.GET)
-	public Set<Contact> getContactsGroupsRest(@RequestParam("name") String name) {
+	@RequestMapping(value = "/getContactsGroupRest/{name}", method = RequestMethod.GET)
+	public Set<Contact> getContactsGroupsRest(@PathVariable("name") String name) {
 		Set<Contact> contacts = new TreeSet<>();
 		if (name.trim().length() > 0){
 			try {
@@ -122,6 +117,49 @@ public class UsersController {
 			LOGGER.error("could not display groups");
 		}
 		return groups;
+	}
+
+	@RequestMapping(value = "/updateContactRest/{id}", method = RequestMethod.PUT)
+	public void updateContact(@RequestBody Contact contact,
+							  @PathVariable(value = "id") String id) {
+		List<String> attContact = new ArrayList<>();
+		attContact.add(0, id);
+		attContact.add(1, contact.getFio());
+		attContact.add(2, contact.getPhone());
+		attContact.add(3, contact.getEmail());
+		try {
+			contactService.updateContact(attContact);
+		} catch (SQLException | IOException e) {
+			LOGGER.error("could not update contact");
+		}
+	}
+
+	@RequestMapping(value = "/removeContactRest/{id}", method = RequestMethod.DELETE)
+	public void removeContact(@PathVariable(value = "id") Integer id) {
+		try {
+			this.contactService.removeContact(id);
+		} catch (SQLException e) {
+			LOGGER.error("could not delete contact");
+		}
+	}
+
+	@RequestMapping(value = "/updateGroupRest/{id}", method = RequestMethod.PUT)
+	public void updateGroup(@PathVariable(value = "id") Integer id,
+							@RequestBody Group group) {
+		try {
+			this.groupService.updateGroup(id,group.getName());
+		} catch (SQLException e) {
+			LOGGER.error("could not update group");
+		}
+	}
+
+	@RequestMapping(value = "/removeGroupRest/{id}", method = RequestMethod.DELETE)
+	public void removeGroup(@PathVariable("id") String id){
+		try {
+			this.groupService.removeGroup(Integer.valueOf(id));
+		} catch (SQLException e) {
+			LOGGER.error("could not delete group");
+		}
 	}
 }
 

@@ -44,10 +44,13 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public void addUser(User user) {
 		Session ses = sessionFactory.getCurrentSession();
-		Criteria criteria = ses.createCriteria(Role.class);
-		Role role = (Role) criteria.add(Restrictions.eq("title","ROLE_USER")).uniqueResult();
-		user.setRole(role);
-		ses.save(user);
+		Criteria criteriaRole = ses.createCriteria(Role.class);
+		Role role = (Role) criteriaRole.add(Restrictions.eq("title","ROLE_USER")).uniqueResult();
+		Criteria criteriaUser = ses.createCriteria(User.class);
+		if(criteriaUser.add(Restrictions.eq("login", user.getLogin())).uniqueResult() == null){
+			user.setRole(role);
+			ses.save(user);
+		}
 		logger.info("get Users "+user);
 		logger.debug("get Users "+user);
 	}

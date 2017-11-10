@@ -15,22 +15,12 @@
 <div class="container">
     <h2>
         <div style="display: inline-block;">
-            <a style="text-decoration: none; color:inherit;" href="<c:url value="/users.do"/>">Список пользователей</a>
+            <a style="text-decoration: none; color:inherit;" href="<c:url value="/listUsers"/>">Список пользователей</a>
         </div>
         <div style="width: 100%; display: inline-block; text-align: right;">
             <a href="<c:url value="/selection"/>" class="btn btn-default" role="button">Назад</a>
         </div>
     </h2>
-    <form role="form" action="<c:url value="/listUsers"/>" method="get">
-        <div class="form-group">
-            <div style="display: inline-block;">
-                <input type="text" class="form-control" name="key" placeholder="Поиск:">
-            </div>
-            <div style="display: inline-block;">
-                <button type="submit" class="btn btn-default">Искать</button>
-            </div>
-        </div>
-    </form>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -45,19 +35,13 @@
             <tr valign="top">
             <tr>
             <tr>
-                <td><a style="text-decoration: none; color:inherit;" href="<c:url value="/user.do?id=${user.id}"/>"><c:out value="${user.login}"/></a></td>
-                <td><c:out value="${user.password}"/></td>
+                <td><a style="text-decoration: none; color:inherit;" href="<c:url value="/role.jsp?id=${user.id}"/>"><c:out value="${user.login}"/></a></td>
+                <td><c:out value="КОНФИДЕНЦИАЛЬНО"/></td>
                 <td><c:out value="${user.role.title}"/></td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
-    <p>
-        <span style="width: 100%; text-align: right; display: inline-block;">
-            <a href="<c:url value="/users/add.do"/>" class="btn btn-default" role="button">Добавить пользователя</a>&nbsp;
-            <a href="<c:url value="/roles.do"/>" class="btn btn-default" role="button">Добавить роль</a>
-        </span>
-    </p>
 </div>
 </body>
 </html>

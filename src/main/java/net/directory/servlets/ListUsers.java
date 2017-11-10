@@ -22,8 +22,6 @@ public class ListUsers extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(request.getParameter("onclick"));
-		System.out.println(request.getParameter("login"));
 		if(request.getParameter("login").equalsIgnoreCase("login")){
 		}
 		response.sendRedirect("/listUsers");

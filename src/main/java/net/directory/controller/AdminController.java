@@ -1,39 +1,28 @@
 package net.directory.controller;
 
 import net.directory.models.User;
-import net.directory.service.ContactService;
 import net.directory.service.GroupService;
+import net.directory.utilits.Util;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  *
  */
-@RequestMapping("/rest/admin/")
+@RequestMapping("/admin/")
 @RestController
 public class AdminController {
 	
-	private ContactService contactService;
 	private GroupService groupService;
 	private static final Logger LOGGER = Logger.getLogger(AdminController.class);
-	
-	@Autowired(required = true)
-	@Qualifier(value = "contactService")
-	public void setContactService(ContactService contactService) {
-		this.contactService = contactService;
-	}
 	
 	@Autowired(required = true)
 	@Qualifier(value = "groupService")
@@ -41,112 +30,81 @@ public class AdminController {
 		this.groupService = groupService;
 	}
 	
-	@RequestMapping(value = "/removeGroupRest", method = RequestMethod.GET)
-	public void removeGroup(@RequestParam("id") Integer id) {
-		try {
-			this.groupService.removeGroup(id);
-		} catch (SQLException e) {
-			LOGGER.error("could not delete group");
-		}
-	}
-	
-	@RequestMapping(value = "/updateGroupRest", method = RequestMethod.GET)
-	public void updateGroup(@RequestParam("id") Integer id, @RequestParam("name") String name) {
-		try {
-			this.groupService.updateGroup(id,name);
-		} catch (SQLException e) {
-			LOGGER.error("could not update group");
-		}
-	}
-	
 	@RequestMapping(value = "/numberUsersRest", method = RequestMethod.GET)
-	public Integer numberUsers() {
+	public String numberUsers() {
+		String s = null;
 		Integer count = 0;
 		try {
 			count = this.groupService.numberUsers();
+			s = Util.numberUsers(count);
 		} catch (SQLException e) {
 			LOGGER.error("could not display the number of users");
 		}
-		return count;
+		return s;
 	}
 	
-	@RequestMapping(value = "/numberContactsRest", method = RequestMethod.GET)
-	public Integer numberContacts(@RequestParam ("name") String name) {
+	@RequestMapping(value = "/numberContactsRest/{name}", method = RequestMethod.GET)
+	public String numberContacts(@PathVariable("name") String name) {
+		String s = null;
 		Integer count = 0;
 		try {
 			count = groupService.numberContacts(name);
+			s = Util.numberContact(count);
 		} catch (SQLException e) {
 			LOGGER.error("could not display the number of contacts from the user");
 		}
-		return count;
+		return s;
 	}
 	
-	@RequestMapping(value = "/quantityGroupsUserRest", method = RequestMethod.GET)
-	public Integer quantityGroupsUser(@RequestParam ("name") String name) {
+	@RequestMapping(value = "/quantityGroupsUserRest/{name}", method = RequestMethod.GET,consumes="application/json")
+	public String quantityGroupsUser(@PathVariable("name") String name) {
+		String s = null;
 		Integer count = 0;
 		try {
 			count = groupService.quantityGroupsUser(name);
+			s = Util.quantityGroupsUserRest(count);
 		} catch (SQLException e) {
 			LOGGER.error("could not display the number of user groups");
 		}
-		return count;
+		return s;
 	}
 	
 	@RequestMapping(value = "/averageNumberContactsGroupsRest", method = RequestMethod.GET)
-	public Integer averageNumberContactsGroups() {
+	public String averageNumberContactsGroups() {
+		String s = null;
 		Integer count = 0;
 		try {
 			count = groupService.averageNumberContactsGroups();
+			s = Util.averageNumberContactsGroupsRest(count);
 		} catch (SQLException e) {
 			LOGGER.error("unable to display the average number of contacts");
 		}
-		return count;
+		return s;
 	}
 	
 	@RequestMapping(value = "/averageNumberContactsUserRest", method = RequestMethod.GET)
-	public Integer averageNumberContactsUser() {
+	public String averageNumberContactsUser() {
+		String s = null;
 		Integer count = 0;
 		try {
 			count = groupService.averageNumberContactsUser();
+			s = Util.averageNumberContactsUser(count);
 		} catch (SQLException e) {
 			LOGGER.error("unable to display the average number of contacts");
 		}
-		return count;
+		return s;
 	}
 	
 	@RequestMapping(value = "/userWithContactsMin_10Rest", method = RequestMethod.GET)
-	public Set<User> userWithContactsMin_10() {
-		Set<User> users = new TreeSet<>();
+	public String userWithContactsMin_10() {
+		String s = null;
 		try {
-			users = this.groupService.userWithContactsMin_10();
-			System.out.println(users);
+			Set<User> users1 = this.groupService.userWithContactsMin_10();
+			s = Util.userWithContactsMin_10(users1.size());
 		} catch (SQLException e) {
 			LOGGER.error("unable to display users with number of contacts < 10");
 		}
-		return users;
+		return s;
 	}
-	
-	@RequestMapping(value = "/removeContactRest", method = RequestMethod.GET)
-	public void removeContact(@RequestParam("id") Integer id) {
-		try {
-			this.contactService.removeContact(id);
-		} catch (SQLException e) {
-			LOGGER.error("could not delete contact");
-		}
-	}
-	
-	@RequestMapping(value = "/updateContactRest", method = RequestMethod.GET)
-	public void updateContact(@RequestParam("id") Integer id, @RequestParam("newName") String newName,
-	                                  @RequestParam("phone") String phone, @RequestParam("email") String email) {
-		List<String> attContact = new ArrayList<>();
-		attContact.add(0, String.valueOf(id));
-		attContact.add(1, newName);
-		attContact.add(2, phone);
-		attContact.add(3, email);
-		try {
-			contactService.updateContact(attContact);
-		} catch (SQLException | IOException e) {
-			LOGGER.error("could not update contact");
-		}
-	}
+
 }

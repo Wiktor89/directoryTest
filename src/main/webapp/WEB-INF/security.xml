@@ -9,9 +9,10 @@
     <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/loginPage.jsp" access="permitAll"/>
         <intercept-url pattern="/addUser" access="permitAll"/>
-        <intercept-url pattern="/rest/admin/**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/listUsers" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/rest/users/**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
+        <intercept-url pattern="/users/**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
+        <intercept-url pattern="/users/getGroupsRest/**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
         <intercept-url pattern="/addContact" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
         <intercept-url pattern="/addGroup" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
         <intercept-url pattern="/appContactGroup" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
