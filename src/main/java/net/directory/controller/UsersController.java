@@ -79,7 +79,7 @@ public class UsersController {
 		}
 	}
 	
-	@RequestMapping(value = "/addGroupRest", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/addGroupRest", method = RequestMethod.POST)
 	public void addGroup(@RequestBody Group group){
 		if (group.getName().trim().length() > 0){
 			List<String> attr = new ArrayList<>();

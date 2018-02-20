@@ -173,7 +173,6 @@ public class GroupsDaoImp implements GroupDao {
     @Override
     public Integer averageNumberContactsUser() {
         Session ses = sessionFactory.getCurrentSession();
-        ;
         List users = ses.createQuery("from User ").list();
         List contacts = ses.createQuery("from Contact ").list();
         int i = contacts.size() / users.size();

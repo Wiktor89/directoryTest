@@ -14,6 +14,7 @@
             /WEB-INF/security.xml
         </param-value>
     </context-param>
+
     <context-param>
         <param-name>log4jConfigLocation</param-name>
         <param-value>/WEB-INF/log4j.properties</param-value>
@@ -29,12 +30,12 @@
             org.springframework.web.context.ContextLoaderListener
         </listener-class>
     </listener>
+
     <servlet>
         <servlet-name>mvc-dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>mvc-dispatcher</servlet-name>
         <url-pattern>/</url-pattern>

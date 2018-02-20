@@ -11,11 +11,7 @@ import java.sql.SQLException;
  */
 public class ConnectingDataBase {
 	
-	
-	
-	
 	public ConnectingDataBase(){
-	
 	}
 	
 	public static Connection getConnection() {
@@ -30,6 +26,5 @@ public class ConnectingDataBase {
 			e.printStackTrace();
 		}
 		return connection;
-		
 	}
 }
