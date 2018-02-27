@@ -3,7 +3,8 @@ package net.directory.servlets;
 import net.directory.models.Role;
 import net.directory.models.User;
 import net.directory.service.UserService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -22,7 +23,7 @@ public class AddUser extends HttpServlet {
 	
 	private ApplicationContext context;
 	private UserService userService;
-	private static final Logger LOGGER = Logger.getLogger(AddContact.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AddContact.class);
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

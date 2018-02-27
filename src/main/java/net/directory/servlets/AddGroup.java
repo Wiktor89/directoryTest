@@ -4,7 +4,8 @@ import net.directory.factories.EntityFactory;
 import net.directory.models.Entity;
 import net.directory.service.GroupService;
 import net.directory.service.GroupServiceImpl;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -23,9 +24,9 @@ import java.util.List;
  */
 @WebServlet("/addGroup")
 public class AddGroup extends HttpServlet {
-	
+
 	private ApplicationContext context;
-	private static final Logger LOGGER = Logger.getLogger(AddGroup.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AddGroup.class);
 	private GroupService serviceGroup;
 	
 	public AddGroup() {

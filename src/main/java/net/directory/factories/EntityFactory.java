@@ -5,7 +5,8 @@ import net.directory.models.Entity;
 import net.directory.models.Group;
 import net.directory.models.User;
 import net.directory.utilits.TeamList;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class EntityFactory {
     
-    private static final Logger LOGGER = Logger.getLogger(EntityFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityFactory.class);
     public EntityFactory() {
     }
 

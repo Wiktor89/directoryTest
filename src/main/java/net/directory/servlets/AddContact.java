@@ -3,7 +3,8 @@ package net.directory.servlets;
 import net.directory.factories.EntityFactory;
 import net.directory.models.Entity;
 import net.directory.service.ContactService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -24,7 +25,7 @@ import java.util.List;
 public class AddContact extends HttpServlet {
 	
 	private ApplicationContext context;
-	private static final Logger LOGGER = Logger.getLogger(AddContact.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AddContact.class);
 	private ContactService serviceContact = null;
 	
 	protected void doPost(HttpServletRequest request,

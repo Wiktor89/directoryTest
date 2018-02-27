@@ -1,7 +1,8 @@
 package net.directory.servlets;
 
 import net.directory.service.ContactService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class StartServlet extends HttpServlet {
 	
 	private ApplicationContext context;
-	private static final Logger LOGGER = Logger.getLogger(StartServlet.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StartServlet.class);
 	private ContactService serviceContact;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

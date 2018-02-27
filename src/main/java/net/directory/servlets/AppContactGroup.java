@@ -1,7 +1,8 @@
 package net.directory.servlets;
 
 import net.directory.service.ContactService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -22,7 +23,7 @@ import java.util.List;
 public class AppContactGroup extends HttpServlet {
 	
 	private ApplicationContext context;
-	private static final Logger LOGGER = Logger.getLogger(AppContactGroup.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppContactGroup.class);
 	private ContactService serviceContact;
 	
 //	public AppContactGroup() {

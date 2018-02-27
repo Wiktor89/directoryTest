@@ -9,73 +9,77 @@ import java.sql.SQLException;
 import java.util.Set;
 
 /**
- *Интерфейс для группы
+ * Сервис группы
  */
 public interface GroupService {
 
     /**
-     *Список контактов опр. группы
+     * Список контактов опр. группы
      */
     Set<Contact> getContactsGroup(String name) throws SQLException;
 
     /**
-     *Список групп
+     * Список групп
      */
     Set<Group> getGroups() throws SQLException;
 
     /**
-     *Добавление группы
+     * Добавление группы
      */
     void addGroup(Entity entity) throws SQLException;
 
     /**
-     *Удаление группы
+     * Удаление группы
      */
     boolean removeGroup(Integer id) throws SQLException;
 
     /**
-     *Обновление  группы
+     * Обновление  группы
+     *
      * @param id
      * @param name
      */
     boolean updateGroup(Integer id, String name) throws SQLException;
 
     /**
-     *Смотрим есть группа в списке
+     * Смотрим есть группа в списке
+     *
      * @param id
      */
     boolean existGroup(Integer id) throws SQLException;
-    
+
     /**
      * Количество пользователей
      */
     Integer numberUsers() throws SQLException;
-    
+
     /**
      * Количество контактов каждого пользователя
+     *
      * @param name
      */
     Integer numberContacts(String name) throws SQLException;
-    
+
     /**
      * Количество групп каждого пользователя
+     *
      * @param name
      */
     Integer quantityGroupsUser(String name) throws SQLException;
-    
+
     /**
      * Среднее количество контактов в группах
      */
     Integer averageNumberContactsGroups() throws SQLException;
-    
+
     /**
      * Среднее количество контактов у пользователя
      */
     Integer averageNumberContactsUser() throws SQLException;
-    
+
     /**
      * Пользователь с количеством контактов < 10
      */
     Set<User> userWithContactsMin_10() throws SQLException;
-    
+
 }

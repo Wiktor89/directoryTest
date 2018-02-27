@@ -1,7 +1,8 @@
 package net.directory.servlets;
 
 import net.directory.service.GroupService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -19,7 +20,7 @@ import java.sql.SQLException;
 public class AnalyticalServlet extends DispatcherServlet {
 	
 	private ApplicationContext context;
-	private static final Logger LOGGER = Logger.getLogger(AnalyticalServlet.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticalServlet.class);
 	private GroupService serviceGroup;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
