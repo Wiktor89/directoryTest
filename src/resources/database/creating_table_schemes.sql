@@ -24,7 +24,7 @@ CREATE UNIQUE INDEX role_title_uindex
   ON public.role (title);
 
 INSERT INTO public.role (title, description) VALUES
-  ('ANONYMUS', 'ананимный'),
+  ('ANONYMUS', 'анонимный'),
   ('ROLE_USER', 'зарегистрированный пользователь'),
   ('ROLE_ADMIN', 'администратор');
 
